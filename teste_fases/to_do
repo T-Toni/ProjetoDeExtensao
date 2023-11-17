@@ -1,0 +1,12 @@
+implementação correta do clique está nas fases individualmente: FEITO!!!
+corrigir para a fase botão ou main
+
+tirar as bobagens aleatórias q eu coloquei: FEITO!!!
+
+CRIAR UM LOOP DE ANIMAÇÃO DECENTE: FEITO!!!
+
+
+
+criar uma função da classe SpriteSheet que roda todos os frames de um spritesheet, independentemente do seu tamanho (podendo repetir ou não):
+E
+criar uma classe pai para botão, obl_animado e quaisquer objetos que possam se beneficiar (que contenham atributos semelhantes): FEITO!!! (na classe Obj Animado)
