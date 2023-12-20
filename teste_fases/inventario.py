@@ -23,7 +23,7 @@ class Inventario:
         if self.itens == None:
 
             #centraliza o objeto no inventario
-            item.x = self.x + (self.largura / (self.numeroDeItens + 2))
+            item.x = self.x + (self.largura / (self.numeroDeItens + 2)) - (item.largura / 2)
 
             #adiciona o objeto a lista
             self.itens = item
@@ -49,7 +49,7 @@ class Inventario:
             #roda o laço para centralizar todos os itens
             numeroDoItem = 1                                        #guarda o numero do item da esquerda para a direita
             while i != None:
-                i.x = self.x + (distancia * numeroDoItem)
+                i.x = self.x + (distancia * numeroDoItem) - (item.largura / 2)
                 numeroDoItem = numeroDoItem + 1
                 i = i.proximo
 
@@ -70,7 +70,7 @@ class Inventario:
 
 
 
-    def desenha(self):
+    def desenha(self, pressionado, mouseX, mouseY, dentro):
         #self.tela.blit(self.imagem, (self.x, self.y))
         pygame.draw.rect(self.tela, (30, 30, 30), (self.x, self.y, self.largura, self.altura))
 
@@ -81,10 +81,6 @@ class Inventario:
             i = self.itens
             while i != None:
                 i.desenha()
+                i.update(pressionado, mouseX, mouseY, dentro)
+
                 i = i.proximo
-
-
-
-
-
-

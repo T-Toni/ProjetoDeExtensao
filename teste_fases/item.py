@@ -20,9 +20,14 @@ class Item:
         self.tela.blit(self.imagem, (self.x, self.y))
 
     def update(self, pressionado, mouseX, mouseY, dentro): #pressionado = botão esquerdo do mouse pressionado
-        if pressionado:
-            self.x = mouseX + (self.largura / 2)
-            self.y = mouseY + (self.altura / 2)
-        else:
-            if dentro:
-                self.atingiuOAlvo = True
+
+        i = False   #variavel que vai garantir que o alvo so será atingido caso o item seja solto dentro dele
+
+        if mouseX > self.x and mouseX < self.x + self.largura and mouseY > self.y and mouseY < self.y + self.altura:    #confere se o cursor está dentro do item
+            if pressionado:     #confere se clicou
+                i = True
+                self.x = mouseX - (self.largura / 2)
+                self.y = mouseY - (self.altura / 2)
+            else:
+                if dentro and i:
+                    self.atingiuOAlvo = True

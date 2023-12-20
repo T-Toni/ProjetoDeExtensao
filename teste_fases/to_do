@@ -7,6 +7,18 @@ CRIAR UM LOOP DE ANIMAÇÃO DECENTE: FEITO!!!
 
 
 
-criar uma função da classe SpriteSheet que roda todos os frames de um spritesheet, independentemente do seu tamanho (podendo repetir ou não):
+criar uma função da classe SpriteSheet que roda todos os frames de um spritesheet, independentemente do seu tamanho (podendo repetir ou não): FEITO!!!
 E
-criar uma classe pai para botão, obl_animado e quaisquer objetos que possam se beneficiar (que contenham atributos semelhantes): FEITO!!! (na classe Obj Animado)
+criar uma classe pai para botão, obl_animado e quaisquer objetos que possam se beneficiar (que contenham atributos semelhantes): FEITO!!! (na classe Obj Animado): FEITO!!!
+
+
+concertar o inventario. Fazer a divisão dos slots antes e simplesmente centralizar os objetos nessas coordenadas: FEITO ( e de forma mais simples e chaad)
+
+
+
+
+CRIAR UMA FORMA DE REMOVER OS ITENS UMA VEZ QUE ELES ATINGIREM O OBJETIVO:
+
+FAZER COM QUE UM ITEM SEJA SELECIONADO POR VEZ:
+
+FAZER COM QUE UM ITEN, UMA VEZ QUE O MOUSE FOI PRESSIONADO SOBRE ELE, SIGA O MOUSE ATÉ QUE O BOTÃO SEJA LIBERADO:
