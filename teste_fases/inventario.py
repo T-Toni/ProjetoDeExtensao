@@ -3,16 +3,20 @@ import pygame
 class Inventario:
 
     def __init__ (self, tela):
-        self.tela = tela
+
+        #dimensões e coordenadas (fixas)
         self.largura = 1080
         self.altura = 100
         self.x = 100
         self.y = 620
 
+        #demais variaveis
         self.numeroDeItens = 0
-
-        self.itens = None
+        self.itens = None       #vetor que guarda os itens
         #self.imagem = pygame.image.load("caminhoDaImagem.png")
+
+        #necessário para desenhar na tela
+        self.tela = tela
 
 
     def adicionar_item(self, item):
@@ -54,33 +58,52 @@ class Inventario:
                 i = i.proximo
 
     #remove todos os itens que foram usados (atingiram o alvo)
-    def remover_itens(self):
-        if self.itens.atingiuOAlvo == True:
-            self.itens = self.itens.proximo
-            self.numeroDeItens -= 1
-        else:
-            item_atual = self.itens.proximo
-            item_anterior = self.itens
+    def remover_itens(self, item):
 
-            while item_atual != None:
-                if item_atual.atingiuOAlvo == True:
-                    item_anterior.proximo = item_atual.proximo
-                    item_atual = None
-                    self.numeroDeItens -= 1
+        #confere se a lista está vazia
+        if self.itens == None:
+            return
+
+        i = self.itens      #i recebe o primeiro item da lista
+
+        #confere se o primeiro item é o desejado
+        if i.nome == item.nome:
+            self.itens = self.itens.proximo     #avança na lista encadeada para não perder os demais itens
+            del item                            #exclui o item
+            return
+        else:
+            anterior = None     #guarda o item anterior ao i
+            while i != None and i.nome != item.nome:
+                anterior = i
+                i = i.proximo
+            if i == None:
+                #print("item não encontrado")
+                return
+            else:
+                anterior.proximo = i.proximo        #avança na lista encadeada para não perder os demais itens
+                del item                            #exclui o item
+        return
+
+
+
+
 
 
 
     def desenha(self, pressionado, mouseX, mouseY, dentro):
+
         #self.tela.blit(self.imagem, (self.x, self.y))
         pygame.draw.rect(self.tela, (30, 30, 30), (self.x, self.y, self.largura, self.altura))
 
-        #desenha todos os itens da lista
-        if self.itens.proximo == None:
-            self.itens.desenha()
-        else:
-            i = self.itens
-            while i != None:
-                i.desenha()
-                i.update(pressionado, mouseX, mouseY, dentro)
+        if self.itens != None:
+            #desenha todos os itens da lista
+            if self.itens.proximo == None:
+                self.itens.desenha()
+                self.itens.update(pressionado, mouseX, mouseY, dentro)
+            else:
+                i = self.itens
+                while i != None:
+                    i.desenha()
+                    i.update(pressionado, mouseX, mouseY, dentro)
 
-                i = i.proximo
+                    i = i.proximo

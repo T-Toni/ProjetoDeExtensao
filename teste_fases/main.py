@@ -3,6 +3,7 @@ from pygame.locals import *
 from sys import exit
 import gerenciador_de_fases
 import menu
+import mouse
 
 #Dados relevantes pra inicialização do pygame
 LARGURA, ALTURA = 1280, 720
@@ -16,13 +17,14 @@ class Jogo:
         self.clock = pygame.time.Clock()
         self.gerenciador = gerenciador_de_fases.GerenciadorDeFases(None)
         self.faseAtual = None
+        self.mouse = mouse.Mouse()
 
     def rodar(self):
 
-        self.faseAtual = menu.Menu(self.janela, self.gerenciador)       #inicializa a classe (fase) menu
+        self.faseAtual = menu.Menu(self.janela, self.gerenciador, self.mouse)       #inicializa a classe (fase) menu
         self.gerenciador.set_fase(self.faseAtual)                       #a atribui ao gerenciador de fases
 
-        BEM_pressionado = False    #Botão Esquerdo do Mouse Pressionado: serve para a logica do clique funcionar corretamente(não ficar clicando a cada iteração)
+        self.mouse.setPressionado(False)        #torna falso o pressionado para o clique funcionar corretamente
 
         while True:     #loop principal
 
@@ -32,19 +34,13 @@ class Jogo:
                     pygame.quit()
                     exit()
 
-            #inicialização e atualização de variaveis relevantes
-            mouseX, mouseY = pygame.mouse.get_pos()
-
 
             #inicializador e executor de fazes
             self.faseAtual = self.gerenciador.get_fase()                #recebe a fase do gerenciador
-            self.faseAtual.run(mouseX, mouseY, BEM_pressionado)         #roda a fase do gerenciador
+            self.faseAtual.run(self.mouse.getX(), self.mouse.getY(), self.mouse.getPressionado())         #roda a fase do gerenciador
 
-
-            if pygame.mouse.get_pressed()[0]:                           #guarda corretamente o estado do mouse (deve estar depois da função run da fase)
-                BEM_pressionado = True
-            else:
-                BEM_pressionado = False
+            #atualiza as informações do mouse (x, y e estado do botão esquerdo)
+            self.mouse.update()         #guarda corretamente o estado do mouse (deve estar depois da função run da fase)
 
             pygame.display.update()
             self.clock.tick(FPS)

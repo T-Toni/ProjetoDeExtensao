@@ -3,9 +3,10 @@ import menu
 from botao import Botao
 
 class Fase1:
-    def __init__(self, janela, gerenciador):
+    def __init__(self, janela, gerenciador, mouse):
         self.janela = janela
         self.gerenciador = gerenciador
+        self.mouse = mouse
 
         self.botao = Botao(100, 100, 200, 200, "imagens/botao_generico.jpg", self.janela, None)
 
@@ -15,7 +16,7 @@ class Fase1:
         self.botao.desenha()
 
         if self.botao.clicado(mouseX, mouseY, pressionado):
-            proximaFase = menu.Menu(self.janela, self.gerenciador)
+            proximaFase = menu.Menu(self.janela, self.gerenciador, self.mouse)
             self.gerenciador.set_fase(proximaFase)              #muda a fase do gerenciador para a proxima
 
 
