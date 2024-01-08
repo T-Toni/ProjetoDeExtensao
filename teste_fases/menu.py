@@ -43,7 +43,7 @@ class Menu:
 
 
 
-    def run(self, mouseX, mouseY, pressionado):
+    def run(self, mouseX, mouseY):
         #colore a tela
         self.janela.fill('blue')
 
@@ -58,7 +58,7 @@ class Menu:
 
 
         #teste para o inventario
-        self.inventario.desenha(pressionado, mouseX, mouseY, self.dentro)
+        self.inventario.desenha(self.mouse.getPressionado(), mouseX, mouseY, self.dentro)
 
 
         #confere individualmente se os itens atingiram o alvo
@@ -107,7 +107,7 @@ class Menu:
         #teste obj animado
 
         """
-        if pressionado:
+        if self.mouse.getPressionado():
             self.obj_fogo.anima()        #permite o loop de animacao
 
 
@@ -115,7 +115,7 @@ class Menu:
         """
 
         #teste para a mudança de fases e botao
-        if self.botao.clicado(mouseX, mouseY, pressionado):
+        if self.botao.clicado(mouseX, mouseY, self.mouse.getPressionado()):
             proximaFase = fase_1.Fase1(self.janela, self.gerenciador, self.mouse)
             self.gerenciador.set_fase(proximaFase)
 

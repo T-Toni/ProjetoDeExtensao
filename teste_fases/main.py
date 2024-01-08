@@ -24,8 +24,6 @@ class Jogo:
         self.faseAtual = menu.Menu(self.janela, self.gerenciador, self.mouse)       #inicializa a classe (fase) menu
         self.gerenciador.set_fase(self.faseAtual)                       #a atribui ao gerenciador de fases
 
-        self.mouse.setPressionado(False)        #torna falso o pressionado para o clique funcionar corretamente
-
         while True:     #loop principal
 
             #botão de fechar janela
@@ -37,7 +35,7 @@ class Jogo:
 
             #inicializador e executor de fazes
             self.faseAtual = self.gerenciador.get_fase()                #recebe a fase do gerenciador
-            self.faseAtual.run(self.mouse.getX(), self.mouse.getY(), self.mouse.getPressionado())         #roda a fase do gerenciador
+            self.faseAtual.run(self.mouse.getX(), self.mouse.getY())         #roda a fase do gerenciador
 
             #atualiza as informações do mouse (x, y e estado do botão esquerdo)
             self.mouse.update()         #guarda corretamente o estado do mouse (deve estar depois da função run da fase)
