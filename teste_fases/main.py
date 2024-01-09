@@ -35,7 +35,7 @@ class Jogo:
 
             #inicializador e executor de fazes
             self.faseAtual = self.gerenciador.get_fase()                #recebe a fase do gerenciador
-            self.faseAtual.run(self.mouse.getX(), self.mouse.getY())         #roda a fase do gerenciador
+            self.faseAtual.run()         #roda a fase do gerenciador
 
             #atualiza as informações do mouse (x, y e estado do botão esquerdo)
             self.mouse.update()         #guarda corretamente o estado do mouse (deve estar depois da função run da fase)
