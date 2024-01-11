@@ -47,4 +47,11 @@ class ObjAnimado:
     def loop(self):
         self.repetir = not self.repetir
 
+    def fim_da_animacao(self):
+        # confere se a animacao chegou ao fim
+        if self.spriteAtual + 0.1 >= self.sheet.numeroDeFrames:
+            return 1
+        else:
+            return 0
+
 
