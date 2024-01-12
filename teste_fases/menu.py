@@ -80,7 +80,7 @@ class Menu:
 
         if self.botao_fases.clicado(self.mouse.getX(), self.mouse.getY(), self.mouse.getPressionado()):
             # permite a animação
-            self.obj_fasesS.anima()
+            self.obj_fases.anima()
 
         if self.botao_sair.clicado(self.mouse.getX(), self.mouse.getY(), self.mouse.getPressionado()):
             # permite a animação
