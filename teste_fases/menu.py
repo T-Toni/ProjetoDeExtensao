@@ -37,9 +37,9 @@ class Menu:
         # atribui a imagem do spritesheet a variavel
         jogar_sheet_img = pygame.image.load("imagens/botao_jogar-sheet.png")
         # cria um objeto "SpriteSheet" (spritesheet, numero total de frames)
-        jogar_sheet_obj = SpriteSheet(jogar_sheet_img, 15)
+        jogar_sheet_obj = SpriteSheet(jogar_sheet_img, 16)
         # cria um objeto "ObjAnimado" que é capaz de rodar a animação                            #codigo do rosa usado para transparencia
-        self.obj_jogar = ObjAnimado(self.janela, jogar_sheet_obj, 63, 36, 8, (243, 97, 255), 0.2)
+        self.obj_jogar = ObjAnimado(self.janela, jogar_sheet_obj, 63, 36, 8, (243, 97, 255), 0.3)
 
         # OPÇÕES
         opcoes_sheet_img = pygame.image.load("imagens/botao_opcoes-sheet.png")
