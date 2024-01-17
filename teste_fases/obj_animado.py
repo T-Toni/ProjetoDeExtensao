@@ -18,6 +18,7 @@ class ObjAnimado:
         self.imagem = None              # variavel que aguarda o frame atual
         self.velocidade = velocidade    # velocidade da animação
         self.repetir = False            # determina se a animação vai ficar em loop
+        self.sendoSegurado = False      # determina se o objeto está sendo arrastado pelo mouse
 
         # necessário para desenhar na tela
         self.tela = tela
@@ -71,11 +72,15 @@ class ObjAnimado:
     def getY(self):
         return self.y
 
-    #função para arrastar
-    def update_movimentacao(self, pressionado, mouseX, mouseY):      #pressionado = botão esquerdo do mouse pressionado
-        if mouseX > self.x and mouseX < self.x + self.largura * self.escala  and mouseY > self.y and mouseY < self.y + self.altura * self.escala:    #confere se o cursor está dentro do item
-            if pressionado:             #confere se clico
-                self.x = mouseX - (self.largura * self.escala / 2)
-                self.y = mouseY - (self.altura * self.escala  / 2)
+    #função para arrastar                                   # se o mouse está segurando algo
+    def update_movimentacao(self, pressionado, mouseX, mouseY, mouseSegurandoAlgo):      #pressionado = botão esquerdo do mouse pressionado
+        if (mouseX > self.x and mouseX < self.x + self.largura * self.escala  and mouseY > self.y and mouseY < self.y + self.altura * self.escala) or self.sendoSegurado:    #confere se o cursor está dentro do item
+            if not mouseSegurandoAlgo or self.sendoSegurado:
+                if pressionado:             #confere se clico
+                    self.x = mouseX - (self.largura * self.escala / 2)
+                    self.y = mouseY - (self.altura * self.escala / 2)
+                    self.sendoSegurado = True
+                else:
+                    self.sendoSegurado = False
 
 

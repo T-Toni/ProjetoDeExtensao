@@ -1,35 +1,3 @@
-implementação correta do clique está nas fases individualmente: FEITO!!!
-corrigir para a fase botão ou main
+fazer outro medidor de agitação que vai ficar parado ao lado do tanque
 
-tirar as bobagens aleatórias q eu coloquei: FEITO!!!
-
-CRIAR UM LOOP DE ANIMAÇÃO DECENTE: FEITO!!!
-
-
-
-criar uma função da classe SpriteSheet que roda todos os frames de um spritesheet, independentemente do seu tamanho (podendo repetir ou não): FEITO!!!
-E
-criar uma classe pai para botão, obl_animado e quaisquer objetos que possam se beneficiar (que contenham atributos semelhantes): FEITO!!! (na classe Obj Animado): FEITO!!!
-
-
-concertar o inventario. Fazer a divisão dos slots antes e simplesmente centralizar os objetos nessas coordenadas: FEITO ( e de forma mais simples e chaad)
-
-
-
-
-CRIAR UMA FORMA DE REMOVER OS ITENS UMA VEZ QUE ELES ATINGIREM O OBJETIVO: FEITO!!!
-
-FAZER COM QUE UM ITEM SEJA SELECIONADO POR VEZ: FEITO!!!
-
-FAZER COM QUE UM ITEM, UMA VEZ QUE O MOUSE FOI PRESSIONADO SOBRE ELE, SIGA O MOUSE ATÉ QUE O BOTÃO SEJA LIBERADO: FEITO!!!
-
-não mudar "pressionado" para falso, mas alterar uma nova variavel a cada vez que o botão for solto, a fim de fazer os botões funcionarem: FEITO!!!!
-
-
-
-CRIAR MENU! feito!!!
-
-
-concertar função de movimentação do objeto animado
-
-
+fazer resto da fase de agitação
