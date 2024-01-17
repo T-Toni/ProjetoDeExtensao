@@ -72,25 +72,25 @@ class Menu:
         # inicia as animações dos botões
         if self.botao_jogar.clicado(self.mouse.getX(), self.mouse.getY(), self.mouse.getPressionado()):
             # permite a animação
-            self.obj_jogar.anima()  # permite o loop de animacao
+            self.obj_jogar.anima(8 * 92, 8 * 48)  # permite o loop de animacao
 
         if self.botao_opcoes.clicado(self.mouse.getX(), self.mouse.getY(), self.mouse.getPressionado()):
             # permite a animação
-            self.obj_opcoes.anima()
+            self.obj_opcoes.anima(8 * 13, 8 * 51)
 
         if self.botao_fases.clicado(self.mouse.getX(), self.mouse.getY(), self.mouse.getPressionado()):
             # permite a animação
-            self.obj_fases.anima()
+            self.obj_fases.anima(8 * 13, 8 * 36)
 
         if self.botao_sair.clicado(self.mouse.getX(), self.mouse.getY(), self.mouse.getPressionado()):
             # permite a animação
-            self.obj_sair.anima()
+            self.obj_sair.anima(8 * 13, 8 * 67)
 
         # atualiza os objetos animados
-        self.obj_jogar.update(8 * 92, 8 * 48)
-        self.obj_opcoes.update(8 * 13, 8 * 51)
-        self.obj_fases.update(8 * 13, 8 * 36)
-        self.obj_sair.update(8 * 13, 8 * 67)
+        self.obj_jogar.update()
+        self.obj_opcoes.update()
+        self.obj_fases.update()
+        self.obj_sair.update()
 
         # continua a funcionalidade dos botões pós animação
         if self.obj_jogar.fim_da_animacao():

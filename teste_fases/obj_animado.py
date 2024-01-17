@@ -22,13 +22,19 @@ class ObjAnimado:
         # necessário para desenhar na tela
         self.tela = tela
 
+        #coordenadas
+        self.x = None
+        self.y = None
+
 
     #permite a animacao
-    def anima(self):
+    def anima(self, x, y):
         self.animacao = True
+        self.x = x
+        self.y = y
 
     #atualiza a imagem
-    def update(self, x, y):
+    def update(self):
         if self.animacao == True:
             self.spriteAtual += self.velocidade
 
@@ -41,7 +47,9 @@ class ObjAnimado:
                     self.animacao = False
 
             self.imagem = self.sheet.get_image(self.spriteAtual, self.largura, self.altura, self.escala, self.cor)
-            self.tela.blit(self.imagem, (x, y))
+            self.tela.blit(self.imagem, (self.x, self.y))
+
+
 
     #inverte o valor de "repetir" para permitir ou cancelar o loop de animacao
     def loop(self):
@@ -53,5 +61,21 @@ class ObjAnimado:
             return 1
         else:
             return 0
+
+    def setFrame(self, frame):
+        self.spriteAtual = frame
+
+    def getX(self):
+        return self.x
+
+    def getY(self):
+        return self.y
+
+    #função para arrastar
+    def update_movimentacao(self, pressionado, mouseX, mouseY):      #pressionado = botão esquerdo do mouse pressionado
+        if mouseX > self.x and mouseX < self.x + self.largura * self.escala  and mouseY > self.y and mouseY < self.y + self.altura * self.escala:    #confere se o cursor está dentro do item
+            if pressionado:             #confere se clico
+                self.x = mouseX - (self.largura * self.escala / 2)
+                self.y = mouseY - (self.altura * self.escala  / 2)
 
 
