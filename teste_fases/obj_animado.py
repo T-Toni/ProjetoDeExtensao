@@ -69,18 +69,39 @@ class ObjAnimado:
     def getX(self):
         return self.x
 
+    def setX(self, x):
+        self.x = x
+
     def getY(self):
         return self.y
+
+    def setY(self, y):
+        self.y = y
 
     #função para arrastar                                   # se o mouse está segurando algo
     def update_movimentacao(self, pressionado, mouseX, mouseY, mouseSegurandoAlgo):      #pressionado = botão esquerdo do mouse pressionado
         if (mouseX > self.x and mouseX < self.x + self.largura * self.escala  and mouseY > self.y and mouseY < self.y + self.altura * self.escala) or self.sendoSegurado:    #confere se o cursor está dentro do item
             if not mouseSegurandoAlgo or self.sendoSegurado:
-                if pressionado:             #confere se clico
+                if pressionado:
                     self.x = mouseX - (self.largura * self.escala / 2)
                     self.y = mouseY - (self.altura * self.escala / 2)
                     self.sendoSegurado = True
                 else:
                     self.sendoSegurado = False
+
+    #define um loop personalizado
+    def altLoop(self, frameInicial, frameFinal, velocidade):
+        #zera a velocidade
+        if self.velocidade > 0:
+            self.velocidade = 0
+
+        # executa o loop
+        if self.spriteAtual < frameFinal - 0.1:
+            self.spriteAtual += velocidade
+        else:
+            self.spriteAtual = frameInicial
+
+
+
 
 

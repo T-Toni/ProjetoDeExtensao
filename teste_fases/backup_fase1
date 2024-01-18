@@ -49,7 +49,7 @@ class Fase1:
         self.Yinicial = 0
         self.agitacao = 0
         self.agitado = False    # se o tanque ja terminou de ser agitado
-        self.divisor = 1000  # numero que vai dividor a agitação para selecionar o frame
+        self.divisor = 200      # numero que vai dividor a agitação para selecionar o frame
 
     def run(self):
 
@@ -62,6 +62,7 @@ class Fase1:
         if self.agitado == False:
             self.tanque.update_movimentacao(self.mouse.getPressionado(), self.mouse.getX(), self.mouse.getY(), self.mouse.getItem())
         else:
+            # logica para retornar o tanque suavemente a sua posição original
             velocidadeDeRetornoX = 3
             if self.tanque.getX() < self.tanqueX:
                 if self.tanqueX - self.tanque.getX() > velocidadeDeRetornoX:
@@ -83,10 +84,10 @@ class Fase1:
                     self.tanque.setY(self.tanqueY)
 
             if self.tanque.getY() > self.tanqueY:
-                if self.tanque.getY() - self.tanqueY > velocidadeDeRetornoY:
-                    self.tanque.setY(self.tanque.getX() - velocidadeDeRetornoY)
+                if self.tanque.getX() - self.tanqueY > velocidadeDeRetornoY:
+                    self.tanque.setX(self.tanque.getX() - velocidadeDeRetornoY)
                 else:
-                    self.tanque.setY(self.tanqueY)
+                    self.tanque.setX(self.tanqueY)
 
 
 
@@ -94,9 +95,12 @@ class Fase1:
         if self.tanque.sendoSegurado:
             #só será executado na segunda vez que o código for rodado
             if self.sendoSegurado == True:
-                #adiciona o valor absoluto da diferença entre a posiçao anterior e a atual
-                self.agitacao += abs(self.Xinicial - self.mouse.getX())
-                self.agitacao += abs(self.Yinicial - self.mouse.getY())
+                if self.agitacao < self.tanque_sheet_obj.numeroDeFrames * self.divisor:
+                    #adiciona o valor absoluto da diferença entre a posiçao anterior e a atual
+                    self.agitacao += abs(self.Xinicial - self.mouse.getX())
+                    self.agitacao += abs(self.Yinicial - self.mouse.getY())
+                else:
+                    self.agitacao = self.tanque_sheet_obj.numeroDeFrames * self.divisor
             #atualiza as posições
             self.Xinicial = self.mouse.getX()
             self.Yinicial = self.mouse.getY()
@@ -104,18 +108,16 @@ class Fase1:
         else:
             self.sendoSegurado = False
 
+        print(self.agitacao)
+
         #muda o sprite conforme o valor da variavel agitacao
-        if self.tanque.spriteAtual < self.tanque_sheet_obj.numeroDeFrames - 1:
-            if self.agitacao / self.divisor < 21:
-                self.tanque.setFrame(self.agitacao / self.divisor)
-                self.medidor.setFrame(self.agitacao / self.divisor)
-            else:
-                self.tanque.setFrame(self.tanque_sheet_obj.numeroDeFrames - 1)
-                self.medidor.setFrame(self.tanque_sheet_obj.numeroDeFrames - 1)
+        if self.tanque.spriteAtual < self.tanque_sheet_obj.numeroDeFrames - 0.1:
+            self.tanque.setFrame(self.agitacao / self.divisor)
+            self.medidor.setFrame(self.agitacao / self.divisor)
 
         else:
             self.agitado = True
-            self.tanque.setFrame(self.tanque_sheet_obj.numeroDeFrames - 0.1)
+            self.tanque.setFrame(self.tanque_sheet_obj.numeroDeFrames)
             self.medidor.altLoop(23, 26, 0.1)
 
 
