@@ -19,6 +19,7 @@ class ObjAnimado:
         self.velocidade = velocidade    # velocidade da animação
         self.repetir = False            # determina se a animação vai ficar em loop
         self.sendoSegurado = False      # determina se o objeto está sendo arrastado pelo mouse
+        self.reverse = False            # ativada quando inicia-se a animação invertida
 
         # necessário para desenhar na tela
         self.tela = tela
@@ -100,6 +101,23 @@ class ObjAnimado:
             self.spriteAtual += velocidade
         else:
             self.spriteAtual = frameInicial
+
+    #anda por todos os frames as avessas
+    def revLoop(self, frameInicial, frameFinal, velocidade):
+        # zera a velocidade
+        if self.velocidade > 0:
+            self.velocidade = 0
+
+        #executa o loop invertido
+        if not self.reverse:
+            self.spriteAtual = frameFinal
+            self.reverse = True
+        elif self.spriteAtual > 0:
+            self.spriteAtual -= velocidade
+        else:
+            self.spriteAtual = 0
+
+
 
 
 
