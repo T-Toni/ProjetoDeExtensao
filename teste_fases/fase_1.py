@@ -53,7 +53,7 @@ class Fase1:
         self.Yinicial = 0
         self.agitacao = 0
         self.agitado = False    # se o tanque ja terminou de ser agitado
-        self.divisor = 1000  # numero que vai dividor a agitação para selecionar o frame
+        self.divisor = 1000     # numero que vai dividor a agitação para selecionar o frame
 
     def run(self):
 
@@ -65,6 +65,7 @@ class Fase1:
             self.medidor.update()
             self.canos.update()
 
+        #é executado após o fim da animação de inicio da fase
         else:
             if self.canos.velocidade != 0:
                 self.canos.velocidade = 0
@@ -80,30 +81,35 @@ class Fase1:
             #atualiza a posição do tanque
             if self.agitado == False:
                 self.tanque.update_movimentacao(self.mouse.getPressionado(), self.mouse.getX(), self.mouse.getY(), self.mouse.getItem())
+            #retorna o tanque a posição original
             else:
                 velocidadeDeRetornoX = 5
+                #caso x seja menor que o original
                 if self.tanque.getX() < self.tanqueX:
-                    if self.tanqueX - self.tanque.getX() > velocidadeDeRetornoX:
+                    if self.tanqueX - self.tanque.getX() >= velocidadeDeRetornoX:
                         self.tanque.setX(self.tanque.getX() + velocidadeDeRetornoX)
                     else:
                         self.tanque.setX(self.tanqueX)
-
+                # caso x seja maior que o original
                 if self.tanque.getX() > self.tanqueX:
-                    if self.tanque.getX() - self.tanqueX > velocidadeDeRetornoX:
+                    if self.tanque.getX() - self.tanqueX >= velocidadeDeRetornoX:
                         self.tanque.setX(self.tanque.getX() - velocidadeDeRetornoX)
                     else:
+                        print("bucetonica")
                         self.tanque.setX(self.tanqueX)
 
                 velocidadeDeRetornoY = 1.5
+                # caso Y seja menor que o original
                 if self.tanque.getY() < self.tanqueY:
-                    if self.tanqueY - self.tanque.getY() > velocidadeDeRetornoY:
+                    if self.tanqueY - self.tanque.getY() >= velocidadeDeRetornoY:
                         self.tanque.setY(self.tanque.getY() + velocidadeDeRetornoY)
                     else:
                         self.tanque.setY(self.tanqueY)
 
+                # caso Y seja maior que o original
                 if self.tanque.getY() > self.tanqueY:
-                    if self.tanque.getY() - self.tanqueY > velocidadeDeRetornoY:
-                        self.tanque.setY(self.tanque.getX() - velocidadeDeRetornoY)
+                    if self.tanque.getY() - self.tanqueY >= velocidadeDeRetornoY:
+                        self.tanque.setY(self.tanque.getY() - velocidadeDeRetornoY)
                     else:
                         self.tanque.setY(self.tanqueY)
 
