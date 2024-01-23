@@ -18,9 +18,6 @@ class Fase1:
         # backgound (tambem é um botão, mas não clicavel)
         self.background = Botao(0, 0, 1280, 720, "imagens/tijolo_background.png", self.janela, None)
 
-        # botão de trocar de fase
-        self.botao = Botao(0, 0, 200, 200, "imagens/botao_generico.jpg", self.janela, None)
-
         # tanque de agitação
         tanque_sheet_img = pygame.image.load("imagens/tanque_de_agitacao-sheet.png")
         # cria um objeto "SpriteSheet" (spritesheet, numero total de frames)
@@ -42,6 +39,12 @@ class Fase1:
         self.canos_sheet_obj = SpriteSheet(canos_sheet_img, 5)
         self.canos = ObjAnimado(self.janela, self.canos_sheet_obj, 160, 90, 8, (243, 97, 255), 0.05)
 
+        #botão para a proxima fase
+        self.botao = Botao(130 * 8, 45 * 8, 11*8, 11*8, "imagens/botao_cano.png", self.janela, (243, 97, 255))
+
+        #seta para sinalizar o botão
+        self.seta = Botao(128 * 8, 57 * 8, 15*8, 22*8, "imagens/seta_verde.png", self.janela, (243, 97, 255))
+
         #inicia o loop de animação
         self.tanque.anima(self.tanqueX, self.tanqueY)
         self.medidor.anima(122 * 8, 5 * 8)
@@ -54,6 +57,7 @@ class Fase1:
         self.agitacao = 0
         self.agitado = False    # se o tanque ja terminou de ser agitado
         self.divisor = 1000     # numero que vai dividor a agitação para selecionar o frame
+        self.i = 0              #usada pra animação da seta
 
     def run(self):
 
@@ -64,6 +68,7 @@ class Fase1:
             self.tanque.update()
             self.medidor.update()
             self.canos.update()
+            self.botao.desenha()
 
         #é executado após o fim da animação de inicio da fase
         else:
@@ -76,7 +81,9 @@ class Fase1:
             self.botao.desenha()
             self.medidor.update()
             self.canos.update()
+            self.botao.desenha()
             self.tanque.update()
+
 
             #atualiza a posição do tanque
             if self.agitado == False:
@@ -95,7 +102,6 @@ class Fase1:
                     if self.tanque.getX() - self.tanqueX >= velocidadeDeRetornoX:
                         self.tanque.setX(self.tanque.getX() - velocidadeDeRetornoX)
                     else:
-                        print("bucetonica")
                         self.tanque.setX(self.tanqueX)
 
                 velocidadeDeRetornoY = 1.5
@@ -142,17 +148,39 @@ class Fase1:
                 self.agitado = True
                 self.tanque.setFrame(self.tanque_sheet_obj.numeroDeFrames - 0.1)
                 self.medidor.altLoop(23, 26, 0.1)
+
+                #confere a posição do tanque para fazer  a animação dos canos se fechando
                 if self.tanque.getX() == self.tanqueX and self.tanque.getY() == self.tanqueY:
                     if self.medidor.spriteAtual > 0:
                         self.canos.revLoop(0, 4, 0.05)
                     else:
                         self.canos.setFrame(0)
 
+                    if self.canos.spriteAtual == 0:
+                        #permite o pressionamento do botão
+                        if self.botao.clicado(self.mouse.getX(), self.mouse.getY(), self.mouse.getPressionado()):
+                            proximaFase = menu.Menu(self.janela, self.gerenciador, self.mouse)
+                            self.gerenciador.set_fase(proximaFase)  # muda a fase do gerenciador para a proxima
+
+                        # desenha a seta
+                        self.seta.desenha()
+
+                        #logica para animação da seta
+                        if self.seta.y <= (57 * 8):
+                            self.i = 1
+                        if self.seta.y >= (67 * 8):
+                            self.i = 0
+
+                        if 1 == self.i:
+                            self.seta.y = self.seta.y + 2
+                        else:
+                            self.seta.y = self.seta.y - 2
 
 
-            if self.botao.clicado(self.mouse.getX(), self.mouse.getY(), self.mouse.getPressionado()):
-                proximaFase = menu.Menu(self.janela, self.gerenciador, self.mouse)
-                self.gerenciador.set_fase(proximaFase)              #muda a fase do gerenciador para a proxima
+
+
+
+
 
 
 
