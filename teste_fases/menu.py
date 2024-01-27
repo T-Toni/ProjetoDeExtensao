@@ -5,8 +5,7 @@ import fase_1
 from botao import Botao
 from SpriteSheet import SpriteSheet
 from obj_animado import ObjAnimado
-from inventario import Inventario
-from item import Item
+
 
 
 class Menu:
@@ -21,9 +20,9 @@ class Menu:
         self.mouse = mouse
 
         #backgound (tambem é um botão, mas não clicavel)
-        self.background = Botao(0, 0, 1280, 720, "imagens/tijolo_background.png", self.janela, None)
+        self.background = Botao(0, 0, 1280, 1440, "imagens/tijolo_background_longo.png", self.janela, None)
         #detalhes estéticos e titulo
-        self.canos = Botao(0, 0, 1280, 720, "imagens/detalhes_menu.png", self.janela, None)
+        self.canos = Botao(0, 0, 1280, 1440, "imagens/detalhes_menu+fases.png", self.janela, None)
 
         #botões                                                             OBS: cada pixel da pixel-art vale 8
         #                        X       Y     Largura  Altura              por isso a multiplicação na declaração
@@ -51,10 +50,30 @@ class Menu:
         fases_sheet_obj = SpriteSheet(fases_sheet_img, 16)
         self.obj_fases = ObjAnimado(self.janela, fases_sheet_obj, 54, 13, 8, (243, 97, 255), 0.3)
 
+        self.descendo = False       # caso fases seja clicado inicia a decida para o menu de fases
+        self.deslocamento = 0       # conta quantos pixels a tela desceu para poder determinar a parada
+
         # SAIR
         sair_sheet_img = pygame.image.load("imagens/botao_sair-sheet.png")
         sair_sheet_obj = SpriteSheet(sair_sheet_img, 16)
         self.obj_sair = ObjAnimado(self.janela, sair_sheet_obj, 54, 13, 8, (243, 97, 255), 0.3)
+
+        # TELA DAS FASES!!
+
+        #botões
+        self.botao_fase2 = Botao(13 * 8, 113 * 8, 8 * 46, 8 * 13, "imagens/botao_fase2.png", self.janela, None)
+        fase2_sheet_img = pygame.image.load("imagens/animacao_fases-sheet.png")
+        fase2_sheet_obj = SpriteSheet(fase2_sheet_img, 20)
+        self.obj_fase2 = ObjAnimado(self.janela, fase2_sheet_obj, 46, 13, 8, (243, 97, 255), 0)
+        self.obj_fase2.anima(self.botao_fase2.getX(), self.botao_fase2.getY())  # inicia a animação
+        #self.botao_fase2.setProximo(self.botao_fase3)
+
+        self.botao_fase1 = Botao(13 * 8, 97 * 8, 8 * 46, 8 * 13, "imagens/botao_fase1.png", self.janela, None)
+        fase1_sheet_img = pygame.image.load("imagens/animacao_fases-sheet.png")
+        fase1_sheet_obj = SpriteSheet(fase1_sheet_img, 20)
+        self.obj_fase1 = ObjAnimado(self.janela, fase1_sheet_obj, 46, 13, 8, (243, 97, 255), 0)
+        self.obj_fase1.anima(self.botao_fase1.getX(), self.botao_fase1.getY())      #inicia a animação
+        self.botao_fase1.setProximo(self.botao_fase2)
 
 
 
@@ -62,12 +81,22 @@ class Menu:
     def run(self):
 
         # desenha todos os objetos graficos
-        self.background.desenha()
-        self.canos.desenha()
-        self.botao_fases.desenha()
-        self.botao_opcoes.desenha()
-        self.botao_sair.desenha()
-        self.botao_jogar.desenha()
+        # menu
+        if self.deslocamento < 720:     #desenha caso eles estejam visiveis
+            self.background.desenha()
+            self.canos.desenha()
+            self.botao_fases.desenha()
+            self.botao_opcoes.desenha()
+            self.botao_sair.desenha()
+            self.botao_jogar.desenha()
+
+        # menu_fases
+        if self.descendo:
+            self.obj_fase1.update()
+            self.botao_fase1.desenha()
+            self.obj_fase2.update()
+            self.botao_fase2.desenha()
+
 
         # inicia as animações dos botões
         if self.botao_jogar.clicado(self.mouse.getX(), self.mouse.getY(), self.mouse.getPressionado()):
@@ -81,6 +110,7 @@ class Menu:
         if self.botao_fases.clicado(self.mouse.getX(), self.mouse.getY(), self.mouse.getPressionado()):
             # permite a animação
             self.obj_fases.anima(8 * 13, 8 * 36)
+            self.descendo = True
 
         if self.botao_sair.clicado(self.mouse.getX(), self.mouse.getY(), self.mouse.getPressionado()):
             # permite a animação
@@ -98,9 +128,38 @@ class Menu:
             self.gerenciador.set_fase(proximaFase)
 
         if self.obj_sair.fim_da_animacao():
-            # sair da fase
+            # sair do jogo
             pygame.quit()
             exit()
 
+        if self.descendo:
+            # desce tudo para a parte das fases
+            if self.deslocamento <= 360:
+                incremento = 16
+            elif self.deslocamento <= 540:
+                incremento = 12
+            else:
+                incremento = 8
+            self.deslocamento += incremento
+            if self.deslocamento <= 720:
+                #menu
+                self.background.setY(self.background.getY() - incremento)
+                self.canos.setY(self.canos.getY() - incremento)
+                self.botao_fases.setY(self.botao_fases.getY() - incremento)
+                self.obj_fases.setY(self.obj_fases.getY() - incremento)
+                self.botao_opcoes.setY(self.botao_opcoes.getY() - incremento)
+                if self.obj_opcoes.getY():
+                    self.obj_opcoes.setY(self.obj_opcoes.getY() - incremento)
+                self.botao_sair.setY(self.botao_sair.getY() - incremento)
+                if self.obj_sair.getY():
+                    self.obj_sair.setY(self.obj_sair.getY() - incremento)
+                self.botao_jogar.setY(self.botao_jogar.getY() - incremento)
+                if self.obj_jogar.getY():
+                    self.obj_jogar.setY(self.obj_jogar.getY() - incremento)
 
+                #fases
+                self.botao_fase1.setY(self.botao_fase1.getY() - incremento)
+                self.obj_fase1.setY(self.obj_fase1.getY() - incremento)
+                self.botao_fase2.setY(self.botao_fase2.getY() - incremento)
+                self.obj_fase2.setY(self.obj_fase2.getY() - incremento)
 

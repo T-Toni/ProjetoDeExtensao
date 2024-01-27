@@ -20,6 +20,9 @@ class Botao:
         #necessário para desenhar na tela
         self.tela = tela
 
+        # para fazer uma lista encadeada ser possivel
+        self.proximo = None
+
         #bobagem
         #self.x = random.randrange(0, 1020)
         #self.y = random.randrange(0, 520)
@@ -47,3 +50,24 @@ class Botao:
 
     def desenha(self):
         self.tela.blit(self.imagem, (self.x, self.y))
+
+    def setX(self, x):
+        self.x = x
+
+    def getX(self):
+        return self.x
+
+    def setY(self, y):
+        self.y = y
+
+    def getY(self):
+        return self.y
+
+    def getProximo(self):
+        return self.proximo
+
+    def setProximo(self, proximo):
+        self.proximo = proximo
+
+    def getAltura(self):
+        return self.altura
