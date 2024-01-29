@@ -63,20 +63,65 @@ class Menu:
         self.ponteiro = None
 
         #botões
-        self.botao_fase2 = Botao(13 * 8, 113 * 8, 8 * 46, 8 * 13, "imagens/botao_fase2.png", self.janela, None)
-        fase2_sheet_img = pygame.image.load("imagens/animacao_fases-sheet.png")
-        fase2_sheet_obj = SpriteSheet(fase2_sheet_img, 20)
-        self.obj_fase2 = ObjAnimado(self.janela, fase2_sheet_obj, 46, 13, 8, (243, 97, 255), 0)
-        self.obj_fase2.anima(self.botao_fase2.getX(), self.botao_fase2.getY())  # inicia a animação
-        #self.botao_fase2.setProximo(self.botao_fase3)
-
         self.botao_fase1 = Botao(13 * 8, 97 * 8, 8 * 46, 8 * 13, "imagens/botao_fase1.png", self.janela, None)
         fase1_sheet_img = pygame.image.load("imagens/animacao_fases-sheet.png")
         fase1_sheet_obj = SpriteSheet(fase1_sheet_img, 20)
         self.obj_fase1 = ObjAnimado(self.janela, fase1_sheet_obj, 46, 13, 8, (243, 97, 255), 0)
         self.obj_fase1.anima(self.botao_fase1.getX(), self.botao_fase1.getY())      #inicia a animação
-        self.botao_fase1.setProximo(self.botao_fase2)
 
+        self.botao_fase2 = Botao(13 * 8, 113 * 8, 8 * 46, 8 * 13, "imagens/botao_fase2.png", self.janela, None)
+        fase2_sheet_img = pygame.image.load("imagens/animacao_fases-sheet.png")
+        fase2_sheet_obj = SpriteSheet(fase2_sheet_img, 20)
+        self.obj_fase2 = ObjAnimado(self.janela, fase2_sheet_obj, 46, 13, 8, (243, 97, 255), 0)
+        self.obj_fase2.anima(self.botao_fase2.getX(), self.botao_fase2.getY())
+
+        self.botao_fase3 = Botao(13 * 8, 129 * 8, 8 * 46, 8 * 13, "imagens/botao_fase3.png", self.janela, None)
+        fase3_sheet_img = pygame.image.load("imagens/animacao_fases-sheet.png")
+        fase3_sheet_obj = SpriteSheet(fase3_sheet_img, 20)
+        self.obj_fase3 = ObjAnimado(self.janela, fase3_sheet_obj, 46, 13, 8, (243, 97, 255), 0)
+        self.obj_fase3.anima(self.botao_fase3.getX(), self.botao_fase3.getY())
+
+        self.botao_fase4 = Botao(13 * 8, 144 * 8, 8 * 46, 8 * 13, "imagens/botao_fase4.png", self.janela, None)
+        fase4_sheet_img = pygame.image.load("imagens/animacao_fases-sheet.png")
+        fase4_sheet_obj = SpriteSheet(fase4_sheet_img, 20)
+        self.obj_fase4 = ObjAnimado(self.janela, fase4_sheet_obj, 46, 13, 8, (243, 97, 255), 0)
+        self.obj_fase4.anima(self.botao_fase4.getX(), self.botao_fase4.getY())
+
+        self.botao_fase5 = Botao(13 * 8, 159 * 8, 8 * 46, 8 * 13, "imagens/botao_fase5.png", self.janela, None)
+        fase5_sheet_img = pygame.image.load("imagens/animacao_fases-sheet.png")
+        fase5_sheet_obj = SpriteSheet(fase5_sheet_img, 20)
+        self.obj_fase5 = ObjAnimado(self.janela, fase5_sheet_obj, 46, 13, 8, (243, 97, 255), 0)
+        self.obj_fase5.anima(self.botao_fase5.getX(), self.botao_fase5.getY())
+
+        self.botao_fase6 = Botao(101 * 8, 97 * 8, 8 * 46, 8 * 13, "imagens/botao_fase6.png", self.janela, None)
+        fase1_sheet_img = pygame.image.load("imagens/animacao_fases-sheet.png")
+        fase1_sheet_obj = SpriteSheet(fase1_sheet_img, 20)
+        self.obj_fase6 = ObjAnimado(self.janela, fase1_sheet_obj, 46, 13, 8, (243, 97, 255), 0)
+        self.obj_fase6.anima(self.botao_fase6.getX(), self.botao_fase6.getY())  # inicia a animação
+
+        self.botao_fase7 = Botao(101 * 8, 113 * 8, 8 * 46, 8 * 13, "imagens/botao_fase7.png", self.janela, None)
+        fase2_sheet_img = pygame.image.load("imagens/animacao_fases-sheet.png")
+        fase2_sheet_obj = SpriteSheet(fase2_sheet_img, 20)
+        self.obj_fase7 = ObjAnimado(self.janela, fase2_sheet_obj, 46, 13, 8, (243, 97, 255), 0)
+        self.obj_fase7.anima(self.botao_fase7.getX(), self.botao_fase7.getY())
+
+        self.botao_fase8 = Botao(101 * 8, 129 * 8, 8 * 46, 8 * 13, "imagens/botao_fase8.png", self.janela, None)
+        fase3_sheet_img = pygame.image.load("imagens/animacao_fases-sheet.png")
+        fase3_sheet_obj = SpriteSheet(fase3_sheet_img, 20)
+        self.obj_fase8 = ObjAnimado(self.janela, fase3_sheet_obj, 46, 13, 8, (243, 97, 255), 0)
+        self.obj_fase8.anima(self.botao_fase8.getX(), self.botao_fase8.getY())
+
+        self.botao_fase9 = Botao(101 * 8, 144 * 8, 8 * 46, 8 * 13, "imagens/botao_fase9.png", self.janela, None)
+        fase4_sheet_img = pygame.image.load("imagens/animacao_fases-sheet.png")
+        fase4_sheet_obj = SpriteSheet(fase4_sheet_img, 20)
+        self.obj_fase9 = ObjAnimado(self.janela, fase4_sheet_obj, 46, 13, 8, (243, 97, 255), 0)
+        self.obj_fase9.anima(self.botao_fase9.getX(), self.botao_fase9.getY())
+
+        self.botao_fase10 = Botao(101 * 8, 159 * 8, 8 * 46, 8 * 13, "imagens/botao_fase10.png", self.janela, None)
+        fase5_sheet_img = pygame.image.load("imagens/animacao_fases-sheet.png")
+        fase5_sheet_obj = SpriteSheet(fase5_sheet_img, 20)
+        self.obj_fase10 = ObjAnimado(self.janela, fase5_sheet_obj, 46, 13, 8, (243, 97, 255), 0)
+        self.obj_fase10.anima(self.botao_fase10.getX(), self.botao_fase10.getY())
 
 
 
@@ -94,10 +139,31 @@ class Menu:
 
         # menu_fases
         if self.descendo:
+            #metade esquerda
             self.obj_fase1.update()
             self.botao_fase1.desenha()
             self.obj_fase2.update()
             self.botao_fase2.desenha()
+            self.obj_fase3.update()
+            self.botao_fase3.desenha()
+            self.obj_fase4.update()
+            self.botao_fase4.desenha()
+            self.obj_fase5.update()
+            self.botao_fase5.desenha()
+
+            #botão do meio
+
+            #metade direita
+            self.obj_fase6.update()
+            self.botao_fase6.desenha()
+            self.obj_fase7.update()
+            self.botao_fase7.desenha()
+            self.obj_fase8.update()
+            self.botao_fase8.desenha()
+            self.obj_fase9.update()
+            self.botao_fase9.desenha()
+            self.obj_fase10.update()
+            self.botao_fase10.desenha()
 
 
         # inicia as animações dos botões
@@ -162,4 +228,22 @@ class Menu:
                 self.obj_fase1.setY(self.obj_fase1.getY() - incremento)
                 self.botao_fase2.setY(self.botao_fase2.getY() - incremento)
                 self.obj_fase2.setY(self.obj_fase2.getY() - incremento)
+                self.botao_fase3.setY(self.botao_fase3.getY() - incremento)
+                self.obj_fase3.setY(self.obj_fase3.getY() - incremento)
+                self.botao_fase4.setY(self.botao_fase4.getY() - incremento)
+                self.obj_fase4.setY(self.obj_fase4.getY() - incremento)
+                self.botao_fase5.setY(self.botao_fase5.getY() - incremento)
+                self.obj_fase5.setY(self.obj_fase5.getY() - incremento)
+
+                self.botao_fase6.setY(self.botao_fase6.getY() - incremento)
+                self.obj_fase6.setY(self.obj_fase6.getY() - incremento)
+                self.botao_fase7.setY(self.botao_fase7.getY() - incremento)
+                self.obj_fase7.setY(self.obj_fase7.getY() - incremento)
+                self.botao_fase8.setY(self.botao_fase8.getY() - incremento)
+                self.obj_fase8.setY(self.obj_fase8.getY() - incremento)
+                self.botao_fase9.setY(self.botao_fase9.getY() - incremento)
+                self.obj_fase9.setY(self.obj_fase9.getY() - incremento)
+                self.botao_fase10.setY(self.botao_fase10.getY() - incremento)
+                self.obj_fase10.setY(self.obj_fase10.getY() - incremento)
+
 
