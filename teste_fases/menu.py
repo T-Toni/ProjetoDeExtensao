@@ -5,6 +5,7 @@ import fase_1
 from botao import Botao
 from SpriteSheet import SpriteSheet
 from obj_animado import ObjAnimado
+import math
 
 
 
@@ -59,6 +60,7 @@ class Menu:
         self.obj_sair = ObjAnimado(self.janela, sair_sheet_obj, 54, 13, 8, (243, 97, 255), 0.3)
 
         # TELA DAS FASES!!
+        self.ponteiro = None
 
         #botões
         self.botao_fase2 = Botao(13 * 8, 113 * 8, 8 * 46, 8 * 13, "imagens/botao_fase2.png", self.janela, None)
@@ -134,12 +136,10 @@ class Menu:
 
         if self.descendo:
             # desce tudo para a parte das fases
-            if self.deslocamento <= 360:
-                incremento = 16
-            elif self.deslocamento <= 540:
-                incremento = 12
-            else:
-                incremento = 8
+
+            #função para determinar o valor do incremento
+            incremento = math.ceil((720 - self.deslocamento) / 45)
+
             self.deslocamento += incremento
             if self.deslocamento <= 720:
                 #menu
