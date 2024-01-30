@@ -60,7 +60,7 @@ class Menu:
         self.obj_sair = ObjAnimado(self.janela, sair_sheet_obj, 54, 13, 8, (243, 97, 255), 0.3)
 
         # TELA DAS FASES!!
-        self.ponteiro = None
+        self.vel_botoes = 0.2   #determina a velocidade da animação dos botões
 
         #botões
         self.botao_fase1 = Botao(13 * 8, 97 * 8, 8 * 46, 8 * 13, "imagens/botao_fase1.png", self.janela, None)
@@ -223,7 +223,7 @@ class Menu:
                 if self.obj_jogar.getY():
                     self.obj_jogar.setY(self.obj_jogar.getY() - incremento)
 
-                #fases
+                #botões das fases
                 self.botao_fase1.setY(self.botao_fase1.getY() - incremento)
                 self.obj_fase1.setY(self.obj_fase1.getY() - incremento)
                 self.botao_fase2.setY(self.botao_fase2.getY() - incremento)
@@ -245,5 +245,47 @@ class Menu:
                 self.obj_fase9.setY(self.obj_fase9.getY() - incremento)
                 self.botao_fase10.setY(self.botao_fase10.getY() - incremento)
                 self.obj_fase10.setY(self.obj_fase10.getY() - incremento)
+
+                #pressionamento dos botões
+                if self.deslocamento == 720:
+                    if self.botao_fase1.clicado(self.mouse.getX(), self.mouse.getY(), self.mouse.getPressionado()):
+                        self.obj_fase1.letAnima()
+                        self.obj_fase1.setVelocidade(self.vel_botoes)
+
+                    if self.botao_fase2.clicado(self.mouse.getX(), self.mouse.getY(), self.mouse.getPressionado()):
+                        self.obj_fase2.letAnima()
+                        self.obj_fase2.setVelocidade(self.vel_botoes)
+
+                    if self.botao_fase3.clicado(self.mouse.getX(), self.mouse.getY(), self.mouse.getPressionado()):
+                        self.obj_fase3.letAnima()
+                        self.obj_fase3.setVelocidade(self.vel_botoes)
+
+                    if self.botao_fase4.clicado(self.mouse.getX(), self.mouse.getY(), self.mouse.getPressionado()):
+                        self.obj_fase4.letAnima()
+                        self.obj_fase4.setVelocidade(self.vel_botoes)
+
+                    if self.botao_fase5.clicado(self.mouse.getX(), self.mouse.getY(), self.mouse.getPressionado()):
+                        self.obj_fase5.letAnima()
+                        self.obj_fase5.setVelocidade(self.vel_botoes)
+
+                    if self.botao_fase6.clicado(self.mouse.getX(), self.mouse.getY(), self.mouse.getPressionado()):
+                        self.obj_fase6.letAnima()
+                        self.obj_fase6.setVelocidade(self.vel_botoes)
+
+                    if self.botao_fase7.clicado(self.mouse.getX(), self.mouse.getY(), self.mouse.getPressionado()):
+                        self.obj_fase7.letAnima()
+                        self.obj_fase7.setVelocidade(self.vel_botoes)
+
+                    if self.botao_fase8.clicado(self.mouse.getX(), self.mouse.getY(), self.mouse.getPressionado()):
+                        self.obj_fase8.letAnima()
+                        self.obj_fase8.setVelocidade(self.vel_botoes)
+
+                    if self.botao_fase9.clicado(self.mouse.getX(), self.mouse.getY(), self.mouse.getPressionado()):
+                        self.obj_fase9.letAnima()
+                        self.obj_fase9.setVelocidade(self.vel_botoes)
+
+                    if self.botao_fase10.clicado(self.mouse.getX(), self.mouse.getY(), self.mouse.getPressionado()):
+                        self.obj_fase10.letAnima()
+                        self.obj_fase10.setVelocidade(self.vel_botoes)
 
 

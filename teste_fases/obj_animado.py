@@ -117,9 +117,14 @@ class ObjAnimado:
         else:
             self.spriteAtual = 0
 
+    def setVelocidade(self, velocidade):
+        self.velocidade = velocidade
 
+    def getVelocidade(self):
+        return self.velocidade
 
-
+    def letAnima(self):
+        self.animacao = True;
 
 
 
