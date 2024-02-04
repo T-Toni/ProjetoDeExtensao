@@ -93,6 +93,12 @@ class Menu:
         self.obj_fase5 = ObjAnimado(self.janela, fase5_sheet_obj, 46, 13, 8, (243, 97, 255), 0)
         self.obj_fase5.anima(self.botao_fase5.getX(), self.botao_fase5.getY())
 
+        self.botao_central = Botao(75 * 8, 110 * 8, 8 * 10, 8 * 46, "imagens/botao_central.png", self.janela, None)
+        fase5_sheet_img = pygame.image.load("imagens/botao_central-sheet.png")
+        fase5_sheet_obj = SpriteSheet(fase5_sheet_img, 49)
+        self.obj_central = ObjAnimado(self.janela, fase5_sheet_obj, 10, 46, 8, (243, 97, 255), 0)
+        self.obj_central.anima(self.botao_central.getX(), self.botao_central.getY())
+
         self.botao_fase6 = Botao(101 * 8, 97 * 8, 8 * 46, 8 * 13, "imagens/botao_fase6.png", self.janela, None)
         fase1_sheet_img = pygame.image.load("imagens/animacao_fases-sheet.png")
         fase1_sheet_obj = SpriteSheet(fase1_sheet_img, 20)
@@ -152,6 +158,8 @@ class Menu:
             self.botao_fase5.desenha()
 
             #botão do meio
+            self.obj_central.update()
+            self.botao_central.desenha()
 
             #metade direita
             self.obj_fase6.update()
@@ -235,6 +243,9 @@ class Menu:
                 self.botao_fase5.setY(self.botao_fase5.getY() - incremento)
                 self.obj_fase5.setY(self.obj_fase5.getY() - incremento)
 
+                self.botao_central.setY(self.botao_central.getY() - incremento)
+                self.obj_central.setY(self.obj_central.getY() - incremento)
+
                 self.botao_fase6.setY(self.botao_fase6.getY() - incremento)
                 self.obj_fase6.setY(self.obj_fase6.getY() - incremento)
                 self.botao_fase7.setY(self.botao_fase7.getY() - incremento)
@@ -267,6 +278,10 @@ class Menu:
                     if self.botao_fase5.clicado(self.mouse.getX(), self.mouse.getY(), self.mouse.getPressionado()):
                         self.obj_fase5.letAnima()
                         self.obj_fase5.setVelocidade(self.vel_botoes)
+
+                    if self.botao_central.clicado(self.mouse.getX(), self.mouse.getY(), self.mouse.getPressionado()):
+                        self.obj_central.letAnima()
+                        self.obj_central.setVelocidade(self.vel_botoes)
 
                     if self.botao_fase6.clicado(self.mouse.getX(), self.mouse.getY(), self.mouse.getPressionado()):
                         self.obj_fase6.letAnima()
