@@ -129,6 +129,12 @@ class Menu:
         self.obj_fase10 = ObjAnimado(self.janela, fase5_sheet_obj, 46, 13, 8, (243, 97, 255), 0)
         self.obj_fase10.anima(self.botao_fase10.getX(), self.botao_fase10.getY())
 
+        self.botao_voltar = Botao(1 * 8, 90 * 8, 8 * 9, 8 * 10, "imagens/botao_voltar.png", self.janela, None)
+        fase5_sheet_img = pygame.image.load("imagens/botao_voltar-sheet.png")
+        fase5_sheet_obj = SpriteSheet(fase5_sheet_img, 12)
+        self.obj_botao_voltar = ObjAnimado(self.janela, fase5_sheet_obj, 9, 10, 8, (243, 97, 255), 0)
+        self.obj_botao_voltar.anima(self.botao_voltar.getX(), self.botao_voltar.getY())
+
 
 
     def run(self):
@@ -173,6 +179,9 @@ class Menu:
             self.obj_fase10.update()
             self.botao_fase10.desenha()
 
+            #botão voltar
+            self.botao_voltar.desenha()
+            self.obj_botao_voltar.update()
 
         # inicia as animações dos botões
         if self.botao_jogar.clicado(self.mouse.getX(), self.mouse.getY(), self.mouse.getPressionado()):
@@ -257,6 +266,9 @@ class Menu:
                 self.botao_fase10.setY(self.botao_fase10.getY() - incremento)
                 self.obj_fase10.setY(self.obj_fase10.getY() - incremento)
 
+                self.botao_voltar.setY(self.botao_voltar.getY() - incremento)
+                self.obj_botao_voltar.setY(self.obj_botao_voltar.getY() - incremento)
+
                 #pressionamento dos botões
                 if self.deslocamento == 720:
                     if self.botao_fase1.clicado(self.mouse.getX(), self.mouse.getY(), self.mouse.getPressionado()):
@@ -302,5 +314,9 @@ class Menu:
                     if self.botao_fase10.clicado(self.mouse.getX(), self.mouse.getY(), self.mouse.getPressionado()):
                         self.obj_fase10.letAnima()
                         self.obj_fase10.setVelocidade(self.vel_botoes)
+
+                    if self.botao_voltar.clicado(self.mouse.getX(), self.mouse.getY(), self.mouse.getPressionado()):
+                        self.obj_botao_voltar.letAnima()
+                        self.obj_botao_voltar.setVelocidade(self.vel_botoes)
 
 
