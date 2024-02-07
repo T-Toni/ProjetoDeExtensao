@@ -52,6 +52,7 @@ class Menu:
         self.obj_fases = ObjAnimado(self.janela, fases_sheet_obj, 54, 13, 8, (243, 97, 255), 0.3)
 
         self.descendo = False       # caso fases seja clicado inicia a decida para o menu de fases
+        self.subindo = False
         self.deslocamento = 0       # conta quantos pixels a tela desceu para poder determinar a parada
 
         # SAIR
@@ -196,6 +197,7 @@ class Menu:
             # permite a animação
             self.obj_fases.anima(8 * 13, 8 * 36)
             self.descendo = True
+            self.subindo = False
 
         if self.botao_sair.clicado(self.mouse.getX(), self.mouse.getY(), self.mouse.getPressionado()):
             # permite a animação
@@ -217,7 +219,7 @@ class Menu:
             pygame.quit()
             exit()
 
-        if self.descendo:
+        if self.descendo and not self.subindo:
             # desce tudo para a parte das fases
 
             #função para determinar o valor do incremento
@@ -318,5 +320,67 @@ class Menu:
                     if self.botao_voltar.clicado(self.mouse.getX(), self.mouse.getY(), self.mouse.getPressionado()):
                         self.obj_botao_voltar.letAnima()
                         self.obj_botao_voltar.setVelocidade(self.vel_botoes)
+                        self.subindo = True
+
+        if self.subindo:
+            # desce tudo para a parte das fases
+
+            #função para determinar o valor do incremento
+            incremento = math.ceil((self.deslocamento) / 45) * -1
+
+            self.deslocamento += incremento
+            if self.deslocamento > 0:
+                #menu
+                self.background.setY(self.background.getY() - incremento)
+                self.canos.setY(self.canos.getY() - incremento)
+                self.botao_fases.setY(self.botao_fases.getY() - incremento)
+                self.obj_fases.setY(self.obj_fases.getY() - incremento)
+                self.botao_opcoes.setY(self.botao_opcoes.getY() - incremento)
+                if self.obj_opcoes.getY():
+                    self.obj_opcoes.setY(self.obj_opcoes.getY() - incremento)
+                self.botao_sair.setY(self.botao_sair.getY() - incremento)
+                if self.obj_sair.getY():
+                    self.obj_sair.setY(self.obj_sair.getY() - incremento)
+                self.botao_jogar.setY(self.botao_jogar.getY() - incremento)
+                if self.obj_jogar.getY():
+                    self.obj_jogar.setY(self.obj_jogar.getY() - incremento)
+
+                #botões das fases
+                self.botao_fase1.setY(self.botao_fase1.getY() - incremento)
+                self.obj_fase1.setY(self.obj_fase1.getY() - incremento)
+                self.botao_fase2.setY(self.botao_fase2.getY() - incremento)
+                self.obj_fase2.setY(self.obj_fase2.getY() - incremento)
+                self.botao_fase3.setY(self.botao_fase3.getY() - incremento)
+                self.obj_fase3.setY(self.obj_fase3.getY() - incremento)
+                self.botao_fase4.setY(self.botao_fase4.getY() - incremento)
+                self.obj_fase4.setY(self.obj_fase4.getY() - incremento)
+                self.botao_fase5.setY(self.botao_fase5.getY() - incremento)
+                self.obj_fase5.setY(self.obj_fase5.getY() - incremento)
+
+                self.botao_central.setY(self.botao_central.getY() - incremento)
+                self.obj_central.setY(self.obj_central.getY() - incremento)
+
+                self.botao_fase6.setY(self.botao_fase6.getY() - incremento)
+                self.obj_fase6.setY(self.obj_fase6.getY() - incremento)
+                self.botao_fase7.setY(self.botao_fase7.getY() - incremento)
+                self.obj_fase7.setY(self.obj_fase7.getY() - incremento)
+                self.botao_fase8.setY(self.botao_fase8.getY() - incremento)
+                self.obj_fase8.setY(self.obj_fase8.getY() - incremento)
+                self.botao_fase9.setY(self.botao_fase9.getY() - incremento)
+                self.obj_fase9.setY(self.obj_fase9.getY() - incremento)
+                self.botao_fase10.setY(self.botao_fase10.getY() - incremento)
+                self.obj_fase10.setY(self.obj_fase10.getY() - incremento)
+
+                self.botao_voltar.setY(self.botao_voltar.getY() - incremento)
+                self.obj_botao_voltar.setY(self.obj_botao_voltar.getY() - incremento)
+
+                if self.deslocamento <= 0:
+                    self.descendo = False
+                    self.deslocamento = 0
+        print(self.deslocamento)
+
+
+
+
 
 
