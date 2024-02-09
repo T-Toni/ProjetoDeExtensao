@@ -187,7 +187,7 @@ class Menu:
         # inicia as animações dos botões
         if self.botao_jogar.clicado(self.mouse.getX(), self.mouse.getY(), self.mouse.getPressionado()):
             # permite a animação
-            self.obj_jogar.anima(8 * 92, 8 * 48)  # permite o loop de animacao
+            self.obj_jogar.anima(8 * 92, 8 * 48)
 
         if self.botao_opcoes.clicado(self.mouse.getX(), self.mouse.getY(), self.mouse.getPressionado()):
             # permite a animação
@@ -274,7 +274,7 @@ class Menu:
                 #pressionamento dos botões
                 if self.deslocamento == 720:
                     if self.botao_fase1.clicado(self.mouse.getX(), self.mouse.getY(), self.mouse.getPressionado()):
-                        self.obj_fase1.letAnima()
+                        self.obj_fase1.anima(self.obj_fase1.getX(), self.obj_fase1.getY())
                         self.obj_fase1.setVelocidade(self.vel_botoes)
 
                     if self.botao_fase2.clicado(self.mouse.getX(), self.mouse.getY(), self.mouse.getPressionado()):
@@ -321,6 +321,19 @@ class Menu:
                         self.obj_botao_voltar.letAnima()
                         self.obj_botao_voltar.setVelocidade(self.vel_botoes)
                         self.subindo = True
+
+                '''else:
+                    self.obj_fase1.setVelocidade(0)
+                    self.obj_fase2.setVelocidade(0)
+                    self.obj_fase3.setVelocidade(0)
+                    self.obj_fase4.setVelocidade(0)
+                    self.obj_fase5.setVelocidade(0)
+                    self.obj_central.setVelocidade(0)
+                    self.obj_fase6.setVelocidade(0)
+                    self.obj_fase7.setVelocidade(0)
+                    self.obj_fase8.setVelocidade(0)
+                    self.obj_fase9.setVelocidade(0)
+                    self.obj_fase10.setVelocidade(0)'''
 
         if self.subindo:
             # desce tudo para a parte das fases
