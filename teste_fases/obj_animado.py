@@ -28,6 +28,9 @@ class ObjAnimado:
         self.x = None
         self.y = None
 
+        # para fazer uma lista encadeada ser possivel
+        self.proximo = None
+
 
     #permite a animacao
     def anima(self, x, y):
@@ -66,6 +69,9 @@ class ObjAnimado:
 
     def setFrame(self, frame):
         self.spriteAtual = frame
+
+    def getFrame(self):
+        return self.spriteAtual
 
     def getX(self):
         return self.x

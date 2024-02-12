@@ -69,66 +69,77 @@ class Menu:
         fase1_sheet_obj = SpriteSheet(fase1_sheet_img, 20)
         self.obj_fase1 = ObjAnimado(self.janela, fase1_sheet_obj, 46, 13, 8, (243, 97, 255), 0)
         self.obj_fase1.anima(self.botao_fase1.getX(), self.botao_fase1.getY())      #inicia a animação
+        self.obj_fase1.proximo = None
 
         self.botao_fase2 = Botao(13 * 8, 113 * 8, 8 * 46, 8 * 13, "imagens/botao_fase2.png", self.janela, None)
         fase2_sheet_img = pygame.image.load("imagens/animacao_fases-sheet.png")
         fase2_sheet_obj = SpriteSheet(fase2_sheet_img, 20)
         self.obj_fase2 = ObjAnimado(self.janela, fase2_sheet_obj, 46, 13, 8, (243, 97, 255), 0)
         self.obj_fase2.anima(self.botao_fase2.getX(), self.botao_fase2.getY())
+        self.obj_fase2.proximo = self.obj_fase1
 
         self.botao_fase3 = Botao(13 * 8, 129 * 8, 8 * 46, 8 * 13, "imagens/botao_fase3.png", self.janela, None)
         fase3_sheet_img = pygame.image.load("imagens/animacao_fases-sheet.png")
         fase3_sheet_obj = SpriteSheet(fase3_sheet_img, 20)
         self.obj_fase3 = ObjAnimado(self.janela, fase3_sheet_obj, 46, 13, 8, (243, 97, 255), 0)
         self.obj_fase3.anima(self.botao_fase3.getX(), self.botao_fase3.getY())
+        self.obj_fase3.proximo = self.obj_fase2
 
         self.botao_fase4 = Botao(13 * 8, 144 * 8, 8 * 46, 8 * 13, "imagens/botao_fase4.png", self.janela, None)
         fase4_sheet_img = pygame.image.load("imagens/animacao_fases-sheet.png")
         fase4_sheet_obj = SpriteSheet(fase4_sheet_img, 20)
         self.obj_fase4 = ObjAnimado(self.janela, fase4_sheet_obj, 46, 13, 8, (243, 97, 255), 0)
         self.obj_fase4.anima(self.botao_fase4.getX(), self.botao_fase4.getY())
+        self.obj_fase4.proximo = self.obj_fase3
 
         self.botao_fase5 = Botao(13 * 8, 159 * 8, 8 * 46, 8 * 13, "imagens/botao_fase5.png", self.janela, None)
         fase5_sheet_img = pygame.image.load("imagens/animacao_fases-sheet.png")
         fase5_sheet_obj = SpriteSheet(fase5_sheet_img, 20)
         self.obj_fase5 = ObjAnimado(self.janela, fase5_sheet_obj, 46, 13, 8, (243, 97, 255), 0)
         self.obj_fase5.anima(self.botao_fase5.getX(), self.botao_fase5.getY())
+        self.obj_fase5.proximo = self.obj_fase4
 
         self.botao_central = Botao(75 * 8, 110 * 8, 8 * 10, 8 * 46, "imagens/botao_central.png", self.janela, None)
         fase5_sheet_img = pygame.image.load("imagens/botao_central-sheet.png")
         fase5_sheet_obj = SpriteSheet(fase5_sheet_img, 49)
         self.obj_central = ObjAnimado(self.janela, fase5_sheet_obj, 10, 46, 8, (243, 97, 255), 0)
         self.obj_central.anima(self.botao_central.getX(), self.botao_central.getY())
+        self.obj_central.proximo = self.obj_fase5
 
         self.botao_fase6 = Botao(101 * 8, 97 * 8, 8 * 46, 8 * 13, "imagens/botao_fase6.png", self.janela, None)
         fase1_sheet_img = pygame.image.load("imagens/animacao_fases-sheet.png")
         fase1_sheet_obj = SpriteSheet(fase1_sheet_img, 20)
         self.obj_fase6 = ObjAnimado(self.janela, fase1_sheet_obj, 46, 13, 8, (243, 97, 255), 0)
         self.obj_fase6.anima(self.botao_fase6.getX(), self.botao_fase6.getY())  # inicia a animação
+        self.obj_fase6.proximo = self.obj_central
 
         self.botao_fase7 = Botao(101 * 8, 113 * 8, 8 * 46, 8 * 13, "imagens/botao_fase7.png", self.janela, None)
         fase2_sheet_img = pygame.image.load("imagens/animacao_fases-sheet.png")
         fase2_sheet_obj = SpriteSheet(fase2_sheet_img, 20)
         self.obj_fase7 = ObjAnimado(self.janela, fase2_sheet_obj, 46, 13, 8, (243, 97, 255), 0)
         self.obj_fase7.anima(self.botao_fase7.getX(), self.botao_fase7.getY())
+        self.obj_fase7.proximo = self.obj_fase6
 
         self.botao_fase8 = Botao(101 * 8, 129 * 8, 8 * 46, 8 * 13, "imagens/botao_fase8.png", self.janela, None)
         fase3_sheet_img = pygame.image.load("imagens/animacao_fases-sheet.png")
         fase3_sheet_obj = SpriteSheet(fase3_sheet_img, 20)
         self.obj_fase8 = ObjAnimado(self.janela, fase3_sheet_obj, 46, 13, 8, (243, 97, 255), 0)
         self.obj_fase8.anima(self.botao_fase8.getX(), self.botao_fase8.getY())
+        self.obj_fase8.proximo = self.obj_fase7
 
         self.botao_fase9 = Botao(101 * 8, 144 * 8, 8 * 46, 8 * 13, "imagens/botao_fase9.png", self.janela, None)
         fase4_sheet_img = pygame.image.load("imagens/animacao_fases-sheet.png")
         fase4_sheet_obj = SpriteSheet(fase4_sheet_img, 20)
         self.obj_fase9 = ObjAnimado(self.janela, fase4_sheet_obj, 46, 13, 8, (243, 97, 255), 0)
         self.obj_fase9.anima(self.botao_fase9.getX(), self.botao_fase9.getY())
+        self.obj_fase9.proximo = self.obj_fase8
 
         self.botao_fase10 = Botao(101 * 8, 159 * 8, 8 * 46, 8 * 13, "imagens/botao_fase10.png", self.janela, None)
         fase5_sheet_img = pygame.image.load("imagens/animacao_fases-sheet.png")
         fase5_sheet_obj = SpriteSheet(fase5_sheet_img, 20)
         self.obj_fase10 = ObjAnimado(self.janela, fase5_sheet_obj, 46, 13, 8, (243, 97, 255), 0)
         self.obj_fase10.anima(self.botao_fase10.getX(), self.botao_fase10.getY())
+        self.obj_fase10.proximo = self.obj_fase9
 
         self.botao_voltar = Botao(1 * 8, 90 * 8, 8 * 9, 8 * 10, "imagens/botao_voltar.png", self.janela, None)
         fase5_sheet_img = pygame.image.load("imagens/botao_voltar-sheet.png")
@@ -136,6 +147,18 @@ class Menu:
         self.obj_botao_voltar = ObjAnimado(self.janela, fase5_sheet_obj, 9, 10, 8, (243, 97, 255), 0)
         self.obj_botao_voltar.anima(self.botao_voltar.getX(), self.botao_voltar.getY())
 
+    #função que percorre todos os objetos animados da tela de fases para conferir que nenhum está sendo animado
+    def podeDescer(self):
+        i = self.obj_fase10
+
+        while i != None:
+
+            if i.getFrame() != 0:
+                return False
+
+            i = i.proximo
+
+        return True
 
 
     def run(self):
@@ -318,9 +341,10 @@ class Menu:
                         self.obj_fase10.setVelocidade(self.vel_botoes)
 
                     if self.botao_voltar.clicado(self.mouse.getX(), self.mouse.getY(), self.mouse.getPressionado()):
-                        self.obj_botao_voltar.letAnima()
-                        self.obj_botao_voltar.setVelocidade(self.vel_botoes)
-                        self.subindo = True
+                        if self.podeDescer():
+                            self.obj_botao_voltar.letAnima()
+                            self.obj_botao_voltar.setVelocidade(self.vel_botoes)
+                            self.subindo = True
 
                 '''else:
                     self.obj_fase1.setVelocidade(0)
@@ -390,8 +414,6 @@ class Menu:
                 if self.deslocamento <= 0:
                     self.descendo = False
                     self.deslocamento = 0
-        print(self.deslocamento)
-
 
 
 
