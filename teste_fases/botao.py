@@ -13,9 +13,12 @@ class Botao:
         self.altura = altura
 
         #imagem
-        self.imagem = pygame.image.load(imagem)  #!!!DEVE SER CARREGADO ASSIM, CASO CONTRARIO SERÁ UMA STRING
-        self.imagem = pygame.transform.scale(self.imagem, (largura, altura))
-        self.imagem.set_colorkey(cor)   #torna transparente a cor dana no parametro
+        if (imagem):
+            self.imagem = pygame.image.load(imagem)  #!!!DEVE SER CARREGADO ASSIM, CASO CONTRARIO SERÁ UMA STRING
+            self.imagem = pygame.transform.scale(self.imagem, (largura, altura))
+            self.imagem.set_colorkey(cor)   #torna transparente a cor dana no parametro
+        else:
+            self.imagem = None
 
         #necessário para desenhar na tela
         self.tela = tela
@@ -49,7 +52,8 @@ class Botao:
 
 
     def desenha(self):
-        self.tela.blit(self.imagem, (self.x, self.y))
+        if self.imagem:
+            self.tela.blit(self.imagem, (self.x, self.y))
 
     def setX(self, x):
         self.x = x

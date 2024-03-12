@@ -15,8 +15,8 @@ class Item:
         self.InvY = -1   #guarda sua posição y inicial no inventario
 
         #caracteristicas estéticas
-        self.largura = 100
-        self.altura = 100
+        self.largura = 16 * 8
+        self.altura = 16 * 8
         self.imagem = pygame.image.load(imagem)     #!!!DEVE SER CARREGADO ASSIM, CASO CONTRARIO SERÁ UMA STRING
         self.imagem = pygame.transform.scale(self.imagem, (self.largura, self.altura))
         self.imagem.set_colorkey(cor)   #torna transparente a cor dada no parametro
@@ -24,7 +24,7 @@ class Item:
         #variaveis
         self.sendoSegurado = False      #guarda se o item está sendo arrastado pelo mouse
         self.atingiuOAlvo = False
-        self.proximo = None     #para poder fazer uma lista encadeada (assim como em c)
+        self.proximo = None             #para poder fazer uma lista encadeada (assim como em c)
 
         # ferramentas necessarias para o funcionamento
         self.tela = tela        #necessário para desenhar na tela
@@ -36,17 +36,17 @@ class Item:
             self.InvY = self.y
         self.tela.blit(self.imagem, (self.x, self.y))
 
-    def update(self, pressionado, mouseX, mouseY, dentro):      #pressionado = botão esquerdo do mouse pressionado
+    def update(self, dentro):      #pressionado = botão esquerdo do mouse pressionado
 
-        if mouseX > self.x and mouseX < self.x + self.largura and mouseY > self.y and mouseY < self.y + self.altura or self.sendoSegurado:    #confere se o cursor está dentro do item
+        if self.mouse.getX() > self.x and self.mouse.getX() < self.x + self.largura and self.mouse.getY() > self.y and self.mouse.getY() < self.mouse.getY() + self.altura or self.sendoSegurado:    #confere se o cursor está dentro do item
 
             if not self.mouse.getItem() or self.sendoSegurado:
-                if pressionado:             #confere se clicou
+                if self.mouse.pressionado:             #confere se clicou
                     i = True
                     self.mouse.setItem(True)
                     self.sendoSegurado = True
-                    self.x = mouseX - (self.largura / 2)
-                    self.y = mouseY - (self.altura / 2)
+                    self.x = self.mouse.getX() - (self.largura / 2)
+                    self.y = self.mouse.getY() - (self.altura / 2)
                 else:
                     self.mouse.setItem(False)
                     self.sendoSegurado = False

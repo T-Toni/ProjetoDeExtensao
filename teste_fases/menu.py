@@ -1,7 +1,10 @@
 import pygame
 from pygame import QUIT
 
+
 import fase_1
+import fase_2
+import fase_3
 from botao import Botao
 from SpriteSheet import SpriteSheet
 from obj_animado import ObjAnimado
@@ -345,6 +348,18 @@ class Menu:
                             self.obj_botao_voltar.letAnima()
                             self.obj_botao_voltar.setVelocidade(self.vel_botoes)
                             self.subindo = True
+
+            if self.obj_fase1.fim_da_animacao():
+                proximaFase = fase_1.Fase1(self.janela, self.gerenciador, self.mouse)
+                self.gerenciador.set_fase(proximaFase)
+
+            if self.obj_fase2.fim_da_animacao():
+                proximaFase = fase_2.Fase2(self.janela, self.gerenciador, self.mouse)
+                self.gerenciador.set_fase(proximaFase)
+
+            if self.obj_fase3.fim_da_animacao():
+                proximaFase = fase_3.Fase3(self.janela, self.gerenciador, self.mouse)
+                self.gerenciador.set_fase(proximaFase)
 
                 '''else:
                     self.obj_fase1.setVelocidade(0)
