@@ -4,8 +4,9 @@ from botao import Botao
 from SpriteSheet import SpriteSheet
 from obj_animado import ObjAnimado
 import fase_3
-import inventario
-import item
+from sujeira import Sujeira
+from cloro import Cloro
+from Rede_Neural import RedeNeural
 
 class Fase2:
     def __init__(self, janela, gerenciador, mouse):
@@ -42,6 +43,12 @@ class Fase2:
         self.animacao_cal.setRepetir()
         self.indo = True    #determina a direção do obj animado
 
+        """#animação da conclusão do uso do cal
+        brilho_sheet_img = pygame.image.load("imagens/brilho_cal-sheet.png")
+        self.brilho_sheet = SpriteSheet(brilho_sheet_img, 140)
+        self.brilho = ObjAnimado(self.janela, self.brilho_sheet, 96 * 8, 44 * 8, 8, (243, 97, 255), 0)
+        self.brilho.anima(37 * 8, 18 * 8)"""
+
         #canos
         self.canos = Botao(0, 0, 160 * 8, 90 * 8, "imagens/canos_fase2.png", self.janela, None)
 
@@ -75,6 +82,68 @@ class Fase2:
         self.permitir_transicao = False
         self.transicao = Botao(0, 0, 480*8, 90*8, "imagens/transicao_2-3.png", self.janela, (243, 97, 255))
 
+        #CLORO
+
+        #determina o limite de onde as sujeiras podem andar
+        limite_inferior = 62 * 8 - 8
+        limite_superior = 19 * 8 + 13 * 8 #soma para garantir que a parte superior do tanque esteja sem sujeiras
+        limite_esquerdo = 38 * 8 + 8
+        limite_direito = 133 * 8 - 8
+
+        sujeira1 = Sujeira(1*8, 1*8, "imagens/sujeira.png", self.janela, (243, 97, 255), limite_esquerdo, limite_direito, limite_superior, limite_inferior)
+        sujeira2 = Sujeira(1*8, 1*8, "imagens/sujeira.png", self.janela, (243, 97, 255), limite_esquerdo, limite_direito, limite_superior, limite_inferior)
+        sujeira3 = Sujeira(1*8, 1*8, "imagens/sujeira.png", self.janela, (243, 97, 255), limite_esquerdo, limite_direito, limite_superior, limite_inferior)
+        sujeira4 = Sujeira(1*8, 1*8, "imagens/sujeira.png", self.janela, (243, 97, 255), limite_esquerdo, limite_direito, limite_superior, limite_inferior)
+        sujeira5 = Sujeira(1*8, 1*8, "imagens/sujeira.png", self.janela, (243, 97, 255), limite_esquerdo, limite_direito, limite_superior, limite_inferior)
+        sujeira6 = Sujeira(1*8, 1*8, "imagens/sujeira.png", self.janela, (243, 97, 255), limite_esquerdo, limite_direito, limite_superior, limite_inferior)
+        sujeira7 = Sujeira(1*8, 1*8, "imagens/sujeira.png", self.janela, (243, 97, 255), limite_esquerdo, limite_direito, limite_superior, limite_inferior)
+        sujeira8 = Sujeira(1*8, 1*8, "imagens/sujeira.png", self.janela, (243, 97, 255), limite_esquerdo, limite_direito, limite_superior, limite_inferior)
+        sujeira9 = Sujeira(1*8, 1*8, "imagens/sujeira.png", self.janela, (243, 97, 255), limite_esquerdo, limite_direito, limite_superior, limite_inferior)
+        sujeira10 = Sujeira(1*8, 1*8, "imagens/sujeira.png", self.janela, (243, 97, 255), limite_esquerdo, limite_direito, limite_superior, limite_inferior)
+        #garda todas as sujeiras num vetor
+        self.vetor_sujeiras = [sujeira1, sujeira2, sujeira3, sujeira4, sujeira5, sujeira6, sujeira7, sujeira8, sujeira9, sujeira10]
+
+        cloro1 = Cloro(41 * 8, 22 * 8, 1 * 8, 1 * 8, "imagens/particula_cloro.png", janela, (243, 97, 255))
+        cloro2 = Cloro(41 * 8, 22 * 8, 1 * 8, 1 * 8, "imagens/particula_cloro.png", janela, (243, 97, 255))
+        cloro3 = Cloro(41 * 8, 22 * 8, 1 * 8, 1 * 8, "imagens/particula_cloro.png", janela, (243, 97, 255))
+        cloro4 = Cloro(41 * 8, 22 * 8, 1 * 8, 1 * 8, "imagens/particula_cloro.png", janela, (243, 97, 255))
+        cloro5 = Cloro(41 * 8, 22 * 8, 1 * 8, 1 * 8, "imagens/particula_cloro.png", janela, (243, 97, 255))
+        cloro6 = Cloro(41 * 8, 22 * 8, 1 * 8, 1 * 8, "imagens/particula_cloro.png", janela, (243, 97, 255))
+        cloro7 = Cloro(41 * 8, 22 * 8, 1 * 8, 1 * 8, "imagens/particula_cloro.png", janela, (243, 97, 255))
+        cloro8 = Cloro(41 * 8, 22 * 8, 1 * 8, 1 * 8, "imagens/particula_cloro.png", janela, (243, 97, 255))
+        cloro9 = Cloro(41 * 8, 22 * 8, 1 * 8, 1 * 8, "imagens/particula_cloro.png", janela, (243, 97, 255))
+        cloro10 = Cloro(41 * 8, 22 * 8, 1 * 8, 1 * 8, "imagens/particula_cloro.png", janela, (243, 97, 255))
+        #guarda todos os cloros num vetor
+        self.vetor_cloros = [cloro1, cloro2, cloro3, cloro4, cloro5, cloro6, cloro7, cloro8, cloro9, cloro10]
+        self.funcionamento_cloro = False    #determina se os cloros estão funcionando ainda na agua
+        self.redeNeural = RedeNeural()
+
+
+    def desenha_sujeiras(self):
+        for sujeira in self.vetor_sujeiras:
+            if sujeira:
+                sujeira.desenha()
+
+    def desenha_cloros(self):
+        for cloro in self.vetor_cloros:
+            if cloro:
+                cloro.desenha()
+
+    def move_cloros(self):
+        i = 0
+        velocidade = 3.5 #multiplicador no movimento do cloro
+        for cloro in self.vetor_cloros:
+            if cloro:
+                mov = self.redeNeural.encontra_direcao(cloro.x, cloro.y, self.vetor_sujeiras[i].x, self.vetor_sujeiras[i].y)
+                if abs(cloro.x - self.vetor_sujeiras[i].x) > velocidade:
+                    cloro.x = cloro.x + mov[0] * velocidade
+                    cloro.y = cloro.y + mov[1] * velocidade
+                else:
+                    cloro.x = cloro.x + mov[0]
+                    cloro.y = cloro.y + mov[1]
+            i+=1
+
+
     def run(self):
 
         #recebe todas a teclas pressionadas
@@ -97,13 +166,16 @@ class Fase2:
 
             self.medidor.desenha()
 
+            #desenha todas as sujeiras
+            self.desenha_sujeiras()
+
 
             if not self.cloro_usado:
                 self.cloro.desenha()
             if not self.cal_usado:
                 self.cal.desenha()
 
-            if self.selecionado == self.borda_cal:
+            if self.selecionado == self.borda_cal and not self.funcionamento_cloro:
 
                 #permite a animação do indicador do ph ideal
                 self.ph_ideal.setVelocidade(0.5)
@@ -119,10 +191,15 @@ class Fase2:
                         self.animacao_cal.setFrame(8)
                     self.animacao_cal.setX(self.animacao_cal.getX() + 6)
                     self.medidor.setY(self.medidor.getY() + 0.5)
+                    self.opacidade = self.opacidade - 0.6
+                    print(self.opacidade)
                 else:
                     if self.medidor.getY() >= 48 * 8:
                         self.animacao_cal.setRepetir()
                         self.animacao_cal.update()
+                        self.opacidade = 100
+                        """self.brilho.setVelocidade(10)
+                        self.brilho.update()"""
                     if teclas[pygame.K_RIGHT]:
                         self.selecionado = self.borda_cloro
             else:
@@ -130,7 +207,12 @@ class Fase2:
                 #inibe a animação do indicador do ph ideal
                 self.ph_ideal.setFrame(0)
 
-                if teclas[pygame.K_LEFT]:
+                if teclas[pygame.K_SPACE] or self.funcionamento_cloro:
+                    self.funcionamento_cloro = True
+                    self.desenha_cloros()
+                    self.move_cloros()
+
+                if teclas[pygame.K_LEFT] and not self.funcionamento_cloro:
                     self.selecionado = self.borda_cal
 
 
