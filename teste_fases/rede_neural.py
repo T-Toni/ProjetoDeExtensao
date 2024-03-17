@@ -1,49 +1,54 @@
-#copia do video rede de um neuronio
+
 import math
 
-#entrada
-input = 1
 
-#saida desejada
-output_desire = 0
+class RedeNeural:
 
-#peso da entrada
-input_weight = 0.5
+    """def __init__(self):
 
-#taxa de aprendizado
-learning_rate = 0.1
+        #entradas
+        self.input_cloro = (clorox, cloroy)
 
-def activation(sum):
-    if sum >= 0:
-        return 1
-    else:
-        return 0
+        self.input_sujeira = (sujeirax, sujeiray)"""
 
-#erro. Inicialmente recebe infinito, pois qualquer outro erro vai ser menor que infinito
-error = math.inf
+    def encontra_direcao(self, clorox, cloroy, sujeirax, sujeiray):
 
-#iterações
-iteration = 0
-#"soma" -- deve somar essa multipicação para todas as entradas
-while error != 0:
-    iteration += 1
-    sum = input * input_weight
+        #entradas
+        self.input_cloro = (clorox, cloroy)
 
-    #saida
-    output = activation(sum)
+        self.input_sujeira = (sujeirax, sujeiray)
 
-    print("entrada:", input, " saida:", output, " saida desejada:", output_desire)
+        #peso da entrada
+        cloro_weight = 0.5
+        sujeira_weight = 0.5
 
-    #erro = saidadesejada - saida
-    error = output_desire - output
+        def activation(sum_cloro, sum_sujeira):
+            movX = sum_sujeira[0] - sum_cloro[0]
+            movY = sum_sujeira[1] - sum_cloro[1]
 
-    print("erro:", error, " peso:", input_weight, " iteracoes:", iteration)
+            if movX > 0:
+                movX = 1
+            elif movX == 0:
+                movX = 0
+            else:
+                movX = -1
 
-    #ajuste relativo ao erro
-    if error != 0:
-        input_weight = input_weight + (learning_rate * input * error)
+            if movY > 0:
+                movY = 1
+            elif movY == 0:
+                movY = 0
+            else:
+                movY = -1
 
-print("aprendeu!")
+            return (movX, movY)
+
+        #"soma" -- deve somar essa multipicação para todas as entradas
+        sum_cloro = ((self.input_cloro[0] * cloro_weight), (self.input_cloro[1] * cloro_weight))
+        sum_sujeira = ((self.input_sujeira[0] * sujeira_weight), (self.input_sujeira[1] * sujeira_weight))
 
 
+        #saida
+        output = activation(sum_cloro, sum_sujeira)
 
+        print("output: ", output)
+        return output

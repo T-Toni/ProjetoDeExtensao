@@ -25,7 +25,6 @@ class Jogo:
         self.gerenciador.set_fase(self.faseAtual)                       #a atribui ao gerenciador de fases
 
         while True:     #loop principal
-
             #botão de fechar janela
             for evento in pygame.event.get():
                 if evento.type == QUIT:

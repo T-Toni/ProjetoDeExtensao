@@ -16,7 +16,7 @@ class Fase2:
         #necessário para açôes com o mouse
         self.mouse = mouse
 
-        self.proximaFase = fase_3.Fase3(self.janela, self.gerenciador, self.mouse)
+        self.proximaFase = None
 
         #OBJETOS DA FASE:
 
@@ -25,71 +25,135 @@ class Fase2:
 
         #tanque
         self.tanque = Botao(0, 0, 160 * 8, 90 * 8, "imagens/tanque_fase2.png", self.janela, None)
+        #indicador do medidor de ph
+        self.medidor = Botao(32 * 8, 42 * 8, 2 * 8, 1 * 8, "imagens/medidor_ph.png", self.janela, None)
+        #animação que evidencia o ph ideal
+        ph_ideal_sheet_img = pygame.image.load("imagens/ph_ideal-sheet.png")
+        self.ph_ideal_sheet = SpriteSheet(ph_ideal_sheet_img, 5)
+        self.ph_ideal = ObjAnimado(self.janela, self.ph_ideal_sheet, 160, 90, 8, (243, 97, 255), 0)
+        self.ph_ideal.anima(0, 0)
+        self.ph_ideal.setRepetir()  #permite o looping da animação
+
+        #animação do cal sendo despejado
+        cal_sheet_img = pygame.image.load("imagens/animacao_cal.png")
+        self.cal_sheet = SpriteSheet(cal_sheet_img, 20)
+        self.animacao_cal = ObjAnimado(self.janela, self.cal_sheet, 8, 8, 8, (243, 97, 255), 0)
+        self.animacao_cal.anima(47 * 8, 6 * 8)
+        self.animacao_cal.setRepetir()
+        self.indo = True    #determina a direção do obj animado
 
         #canos
         self.canos = Botao(0, 0, 160 * 8, 90 * 8, "imagens/canos_fase2.png", self.janela, None)
 
-        #cria o inventario
-        self.inventario = inventario.Inventario(janela, mouse)
+        #agua
+        self.agua = Botao(0, 0, 160 * 8, 90 * 8, "imagens/agua_fase2.png", self.janela, None)
+        #sujeira da agua
+        self.sujeira = Botao(0, 0, 160 * 8, 90 * 8, "imagens/sujeira_fase2.png", self.janela, None)
+        self.opacidade = 160    #255 totalmente opaco - 0 transparente"""
 
-        #parte transparente do tanque
-        self.alvo = Botao(37 * 8, 18 * 8, 96 * 8, 44 * 8, "imagens/canos_fase2.png", self.janela, None)
+        #borda dos itens selecionados
+        self.borda_cal = Botao(39 * 8, 74 * 8, 18 * 8, 17 * 8, "imagens/cal_selecionado.png", self.janela, None)
+        self.borda_cloro = Botao(105 * 8, 74 * 8, 18 * 8, 17 * 8, "imagens/cloro_selecionado.png", self.janela, None)
+        #indicador de que o item ja foi usado
+        self.concluido = Botao(39 * 8, 74 * 8, 18 * 8, 17 * 8, "imagens/concluido.png", self.janela, None)
 
-        #guarda o nome do ultimo item a ser retirado
-        self.item_retirado = None
+        #inventario (obs: não é um inventario da classe inventario)
+        self.inventario = Botao(10 * 8, 71 * 8, 140 * 8, 20 * 8, "imagens/inventario.png", self.janela, None)
 
-        #cria os itens
-        cal = item.Item("cal", "imagens/cal.png", janela, None, mouse)
-        cloro = item.Item("cloro", "imagens/cloro.png", janela, None, mouse)
+        #itens (obs: não são itens da classe item)
+        self.cal = Botao(40 * 8, 74 * 8, 16 * 8, 16 * 8, "imagens/cal.png", self.janela, None)
+        self.cloro = Botao(106 * 8, 74 * 8, 16 * 8, 16 * 8, "imagens/cloro.png", self.janela, None)
 
-        #adiciona os itens ao inventario
-        self.inventario.adicionar_item(cal)
-        self.inventario.adicionar_item(cloro)
+        #determina se os itens foram utilizados
+        self.cloro_usado = False
+        self.cal_usado = False
 
-        #guarda se o mouse está sobre o tanque
-        self.dentro = False
+        #seletor (determina o item selecionado)
+        self.selecionado = self.borda_cal
 
+        #transição entre essa fase e a proxima
         self.permitir_transicao = False
         self.transicao = Botao(0, 0, 480*8, 90*8, "imagens/transicao_2-3.png", self.janela, (243, 97, 255))
 
     def run(self):
 
+        #recebe todas a teclas pressionadas
+        teclas = pygame.key.get_pressed()
+
+        #aplica a opacidade a sujeira
+        self.sujeira.setAlpha(self.opacidade)
+
         if not self.permitir_transicao:
-            #confere se o mouse está sobre o tanque
-            if self.alvo.mouse_dentro(self.mouse.getX(), self.mouse.getY()):
-                self.dentro = True
-            else:
-                self.dentro = False
-
-            #remove todos os itens que atigiram o alvo
-
-            i = self.inventario.remover_itens()
-            if i != None:
-                self.item_retirado = i
-            if i == False:   #fim da fase
-                self.permitir_transicao = True
-
-
 
             #desenha
             self.background.desenha()
+            self.agua.desenha()
+            self.sujeira.desenha()
             self.tanque.desenha()
             self.canos.desenha()
-            self.inventario.desenha(self.dentro)
+            self.inventario.desenha()
 
-            print(self.item_retirado)
+            self.selecionado.desenha()
+
+            self.medidor.desenha()
+
+
+            if not self.cloro_usado:
+                self.cloro.desenha()
+            if not self.cal_usado:
+                self.cal.desenha()
+
+            if self.selecionado == self.borda_cal:
+
+                #permite a animação do indicador do ph ideal
+                self.ph_ideal.setVelocidade(0.5)
+                self.animacao_cal.setVelocidade(0.5)
+                if self.medidor.getY() < 48 * 8:
+                    self.ph_ideal.update()
+                else:
+                    self.concluido.desenha()
+
+                if teclas[pygame.K_SPACE] and self.medidor.getY() < 48 * 8:
+                    self.animacao_cal.update()
+                    if self.animacao_cal.getFrame() > 13:
+                        self.animacao_cal.setFrame(8)
+                    self.animacao_cal.setX(self.animacao_cal.getX() + 6)
+                    self.medidor.setY(self.medidor.getY() + 0.5)
+                else:
+                    if self.medidor.getY() >= 48 * 8:
+                        self.animacao_cal.setRepetir()
+                        self.animacao_cal.update()
+                    if teclas[pygame.K_RIGHT]:
+                        self.selecionado = self.borda_cloro
+            else:
+
+                #inibe a animação do indicador do ph ideal
+                self.ph_ideal.setFrame(0)
+
+                if teclas[pygame.K_LEFT]:
+                    self.selecionado = self.borda_cal
+
+
+
+
 
         #transição
         else:
             self.transicao.desenha()
             if self.transicao.getX() > (-320 * 8) - 1:
-                self.transicao.setX(self.transicao.getX() - 2.7)
+
+                #Verifica se a seta para a direita está sendo pressionada
+                if teclas[pygame.K_RIGHT]:
+                    self.transicao.setX(self.transicao.getX() - 3)
             else:
+                self.proximaFase = fase_3.Fase3(self.janela, self.gerenciador, self.mouse)
                 self.gerenciador.set_fase(self.proximaFase)
 
 
 
-
+"""if __name__ == "__fase_2__":  #roda a classe jogo
+    jogo = Fase2()
+    jogo.run()"""
 
 
 

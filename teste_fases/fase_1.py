@@ -49,7 +49,12 @@ class Fase1:
             self.permitir_transicao = True
             self.transicao.desenha()
             if self.transicao.getX() > (-320 * 8) - 1:
-                self.transicao.setX(self.transicao.getX() - 2.7)
+                teclas = pygame.key.get_pressed()
+
+                #Verifica se a seta para a direita está sendo pressionada
+                if teclas[pygame.K_RIGHT]:
+                    self.transicao.setX(self.transicao.getX() - 3)
+
             else:
                 self.gerenciador.set_fase(self.proximaFase)
 

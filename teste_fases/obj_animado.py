@@ -132,5 +132,8 @@ class ObjAnimado:
     def letAnima(self):
         self.animacao = True;
 
+    def setRepetir(self):
+        self.repetir = not self.repetir
+
 
 

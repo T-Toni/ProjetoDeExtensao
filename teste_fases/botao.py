@@ -75,3 +75,6 @@ class Botao:
 
     def getAltura(self):
         return self.altura
+
+    def setAlpha(self, opacidade):
+        self.imagem.set_alpha(opacidade)
