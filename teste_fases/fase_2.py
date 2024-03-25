@@ -62,7 +62,8 @@ class Fase2:
         self.borda_cal = Botao(39 * 8, 74 * 8, 18 * 8, 17 * 8, "imagens/cal_selecionado.png", self.janela, None)
         self.borda_cloro = Botao(105 * 8, 74 * 8, 18 * 8, 17 * 8, "imagens/cloro_selecionado.png", self.janela, None)
         #indicador de que o item ja foi usado
-        self.concluido = Botao(39 * 8, 74 * 8, 18 * 8, 17 * 8, "imagens/concluido.png", self.janela, None)
+        self.concluido_cal = Botao(39 * 8, 74 * 8, 18 * 8, 17 * 8, "imagens/concluido.png", self.janela, None)
+        self.concluido_cloro = Botao(105 * 8, 74 * 8, 18 * 8, 17 * 8, "imagens/concluido.png", self.janela, None)
 
         #inventario (obs: não é um inventario da classe inventario)
         self.inventario = Botao(10 * 8, 71 * 8, 140 * 8, 20 * 8, "imagens/inventario.png", self.janela, None)
@@ -133,15 +134,31 @@ class Fase2:
         i = 0
         velocidade = 3.5 #multiplicador no movimento do cloro
         for cloro in self.vetor_cloros:
-            if cloro:
+            if cloro and self.vetor_sujeiras[i]:
                 mov = self.redeNeural.encontra_direcao(cloro.x, cloro.y, self.vetor_sujeiras[i].x, self.vetor_sujeiras[i].y)
-                if abs(cloro.x - self.vetor_sujeiras[i].x) > velocidade:
+                if abs(cloro.x - self.vetor_sujeiras[i].x) > velocidade or abs(cloro.y - self.vetor_sujeiras[i].y) > velocidade:
                     cloro.x = cloro.x + mov[0] * velocidade
                     cloro.y = cloro.y + mov[1] * velocidade
                 else:
                     cloro.x = cloro.x + mov[0]
                     cloro.y = cloro.y + mov[1]
+
+                #apaga os cloros e as sujeiras quando se encontrarem
+                if abs(cloro.x - self.vetor_sujeiras[i].x) < 2 and abs(cloro.y - self.vetor_sujeiras[i].y) < 2:
+                    self.vetor_cloros[i] = None
+                    self.vetor_sujeiras[i] = None
+
             i+=1
+
+    #retorna true caso algum cloro ainda exista
+    def confere_cloros(self):
+        i = 0
+        for cloro in self.vetor_cloros:
+            if cloro:
+                i+=1
+
+        return i
+
 
 
     def run(self):
@@ -152,17 +169,22 @@ class Fase2:
         #aplica a opacidade a sujeira
         self.sujeira.setAlpha(self.opacidade)
 
-        if not self.permitir_transicao:
+        if not self.cloro_usado or not self.cal_usado:
 
             #desenha
             self.background.desenha()
             self.agua.desenha()
-            self.sujeira.desenha()
             self.tanque.desenha()
             self.canos.desenha()
             self.inventario.desenha()
+            self.cloro.desenha()
+            self.cal.desenha()
 
             self.selecionado.desenha()
+            if self.cal_usado:
+                self.concluido_cal.desenha()
+            if self.cloro_usado:
+                self.concluido_cloro.desenha()
 
             self.medidor.desenha()
 
@@ -170,10 +192,10 @@ class Fase2:
             self.desenha_sujeiras()
 
 
-            if not self.cloro_usado:
+            """if not self.cloro_usado:
                 self.cloro.desenha()
             if not self.cal_usado:
-                self.cal.desenha()
+                self.cal.desenha()"""
 
             if self.selecionado == self.borda_cal and not self.funcionamento_cloro:
 
@@ -183,7 +205,7 @@ class Fase2:
                 if self.medidor.getY() < 48 * 8:
                     self.ph_ideal.update()
                 else:
-                    self.concluido.desenha()
+                    self.cal_usado = True
 
                 if teclas[pygame.K_SPACE] and self.medidor.getY() < 48 * 8:
                     self.animacao_cal.update()
@@ -215,8 +237,13 @@ class Fase2:
                 if teclas[pygame.K_LEFT] and not self.funcionamento_cloro:
                     self.selecionado = self.borda_cal
 
+                if not self.confere_cloros():
+                    self.funcionamento_cloro = False
+                    self.cloro_usado = True
 
 
+            #desenha o filtro da sujeira depois de tudo para que ele afete os cloros tambem
+            self.sujeira.desenha()
 
 
         #transição
