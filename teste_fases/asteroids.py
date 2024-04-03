@@ -1,3 +1,5 @@
+import random
+
 import pygame
 from botao import Botao
 from SpriteSheet import SpriteSheet
@@ -21,26 +23,21 @@ class Asteroids:
 
         #determina a velocidade da rotação da nave
         self.vel_rotacao = 4
+        #determina a velocidade da nave
+        self.vel_movimentacao = 5
         #guarda se a tecla espaço foi apertada
         self.pressionada = False
 
-        sujeira1 = Asteroid()
-        sujeira2 = Asteroid()
-        sujeira3 = Asteroid()
-        sujeira4 = Asteroid()
-        sujeira5 = Asteroid()
-        sujeira6 = Asteroid()
-        sujeira7 = Asteroid()
-        sujeira8 = Asteroid()
-        sujeira9 = Asteroid()
-        sujeira10 = Asteroid()
+        #usada para determinar a criação de uma nova sujeira
+        self.timer = 0
+
+        self.tamanho_vetor = 12
+        self.vetor_sujeiras = self.cria_sujeiras()
 
 
-
-        self.vetor_sujeiras = [sujeira1, sujeira2, sujeira3, sujeira4, sujeira5, sujeira6, sujeira7, sujeira8, sujeira9, sujeira10]
-
-
-
+    def cria_sujeiras(self):
+        vetor_sujeiras = [Asteroid(None, None) for _ in range(self.tamanho_vetor)]
+        return vetor_sujeiras
 
     def run(self):
 
@@ -52,6 +49,7 @@ class Asteroids:
 
         self.nave.desenha()
 
+        #rotação da nave
         if teclas[pygame.K_RIGHT]:
             self.nave.rotaciona(-self.vel_rotacao)
         elif teclas[pygame.K_LEFT]:
@@ -59,24 +57,69 @@ class Asteroids:
         else:
             self.nave.rotaciona(0)
 
-        if teclas[pygame.K_SPACE] and not self.pressionada:
-            self.pressionada = True
-            self.nave.atirar()
-        elif not teclas[pygame.K_SPACE]:
-            self.pressionada = False
+        #movimentação para frente
+        if teclas[pygame.K_UP] or teclas[pygame.K_SPACE]:
+            self.nave.andar(self.vel_movimentacao)
 
         self.desenha_sujeiras()
         self.confere_colisao()
 
+        #incrementa o timer
+        self.timer += 1
+
+        if self.timer > 500 and len(self.vetor_sujeiras) != 0:
+            self.cria_sujeira()
+            self.timer = 0
+
+    def cria_sujeira(self):
+        #confere se o numero de sujeiras na tela é inferior ao limite
+        if len(self.vetor_sujeiras) < self.tamanho_vetor:
+            #cria uma nova sujeira a partir de uma existente
+            self.vetor_sujeiras.append(Asteroid(self.vetor_sujeiras[random.randint(0, len(self.vetor_sujeiras) - 1)].x, self.vetor_sujeiras[random.randint(0, len(self.vetor_sujeiras) - 1)].y))
+
+
 
     def desenha_sujeiras(self):
+
+        #serve para contar quantas sujeiras restam
+        num_sujeiras = 0
+
         for sujeira in self.vetor_sujeiras:
-            sujeira.desenha(self.janela)
-            sujeira.update(self.nave.escudo_mask, self.nave.escudo_rect.x, self.nave.escudo_rect.y)
+            #desenha as sujeiras
+            sujeira.desenha(self.janela, self.nave.offset)
+            sujeira.update()
+            #incrementa i para cada sujeira
+            num_sujeiras += 1
+
+        #desenha texto
+        #defina a cor do texto (em RGB)
+        cor_texto = (255, 255, 255)
+
+        #defina a fonte e o tamanho do texto
+        fonte = pygame.font.Font(None, 36)
+
+        #Renderize o texto
+        texto_renderizado = fonte.render("Sujeiras restantes: " + str(num_sujeiras), True, cor_texto)
+
+        #Obtém o retângulo do texto renderizado
+        texto_rect = texto_renderizado.get_rect()
+
+        #Determina a posição do texto
+        texto_rect.topleft = (0, 0)
+
+        #desenha o texto
+        self.janela.blit(texto_renderizado, texto_rect)
 
     def confere_colisao(self):
 
-        #percorre os 2 vetores
+        for sujeira in self.vetor_sujeiras:
+            if self.nave.mask.overlap(sujeira.mask, [sujeira.x - self.nave.imagem_rect.x, sujeira.y - self.nave.imagem_rect.y]):
+                self.vetor_sujeiras.remove(sujeira)
+                #reseta o timer
+                #self.timer = 0
+
+
+        """ #percorre os 2 vetores
         for projetil in self.nave.vetor_projeteis:
             for sujeira in self.vetor_sujeiras:
                 #confere a colisao
@@ -85,7 +128,7 @@ class Asteroids:
                         #destroi ambos
                         self.nave.vetor_projeteis.remove(projetil)
                         self.vetor_sujeiras.remove(sujeira)
-                        break
+                        break"""
 
 
 

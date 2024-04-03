@@ -26,9 +26,6 @@ class Fase3:
         self.tanque = ObjAnimado(self.janela, self.tanque_sheet_obj, 71, 37, 8, (243, 97, 255), 0)
 
         #coordenadas do tanque
-        self.tanqueXInicial = 43 * 8
-        self.tanqueYInicial = 22 * 8
-
         self.tanqueX = 43 * 8
         self.tanqueY = 22 * 8
 
@@ -54,7 +51,9 @@ class Fase3:
         self.canos.anima(0, 0)
 
         #variaveis para controlar a agitação
-        self.posicao = 0    #para controlar a movimentação do tanque pelas setas (1 = direita, 0 centro, -1 esquerda)
+        self.sendoSegurado = False
+        self.Xinicial = 0
+        self.Yinicial = 0
         self.agitacao = 0
         self.agitado = False    # se o tanque ja terminou de ser agitado
         self.divisor = 1000     # numero que vai dividor a agitação para selecionar o frame
@@ -88,55 +87,24 @@ class Fase3:
 
             #atualiza a posição do tanque
             if self.agitado == False:
-                # atualiza a posição do tanque
-                self.tanque.setX(self.tanqueX)
-
-                # logica para a movimentação do tanque
-                teclas = pygame.key.get_pressed()
-
-                offset = 6 * 8
-                incremento = 100
-
-                if teclas[pygame.K_LEFT] and self.posicao != -1:
-                    # adiciona somente metade do valor do offser caso seja a primeira movimentação
-                    if self.posicao == 0:
-                        self.tanqueX -= offset / 2
-                    else:
-                        self.tanqueX -= offset
-
-                    self.posicao = -1
-                    self.agitacao += incremento   # incrementa a variavel de agitação
-
-                if teclas[pygame.K_RIGHT] and self.posicao != 1:
-                    # adiciona somente metade do valor do offser caso seja a primeira movimentação
-                    if self.posicao == 0:
-                        self.tanqueX += offset / 2
-                    else:
-                        self.tanqueX += offset
-
-                    self.posicao = 1
-                    self.agitacao += incremento  # incrementa a variavel de agitação
-
-
-
-
+                self.tanque.update_movimentacao(self.mouse.getPressionado(), self.mouse.getX(), self.mouse.getY(), self.mouse.getItem())
             #retorna o tanque a posição original
             else:
-                velocidadeDeRetornoX = 1
+                velocidadeDeRetornoX = 5
                 #caso x seja menor que o original
-                if self.tanque.getX() < self.tanqueXInicial:
-                    if self.tanqueXInicial - self.tanque.getX() >= velocidadeDeRetornoX:
+                if self.tanque.getX() < self.tanqueX:
+                    if self.tanqueX - self.tanque.getX() >= velocidadeDeRetornoX:
                         self.tanque.setX(self.tanque.getX() + velocidadeDeRetornoX)
                     else:
                         self.tanque.setX(self.tanqueX)
                 # caso x seja maior que o original
-                if self.tanque.getX() > self.tanqueXInicial:
-                    if self.tanque.getX() - self.tanqueXInicial >= velocidadeDeRetornoX:
+                if self.tanque.getX() > self.tanqueX:
+                    if self.tanque.getX() - self.tanqueX >= velocidadeDeRetornoX:
                         self.tanque.setX(self.tanque.getX() - velocidadeDeRetornoX)
                     else:
                         self.tanque.setX(self.tanqueX)
 
-                """velocidadeDeRetornoY = 1.5
+                velocidadeDeRetornoY = 1.5
                 # caso Y seja menor que o original
                 if self.tanque.getY() < self.tanqueY:
                     if self.tanqueY - self.tanque.getY() >= velocidadeDeRetornoY:
@@ -149,9 +117,23 @@ class Fase3:
                     if self.tanque.getY() - self.tanqueY >= velocidadeDeRetornoY:
                         self.tanque.setY(self.tanque.getY() - velocidadeDeRetornoY)
                     else:
-                        self.tanque.setY(self.tanqueY)"""
+                        self.tanque.setY(self.tanqueY)
 
 
+
+            # logica para aumentar a variavel agitação conforme a movimentaçao do tanque
+            if self.tanque.sendoSegurado:
+                #só será executado na segunda vez que o código for rodado
+                if self.sendoSegurado == True:
+                    #adiciona o valor absoluto da diferença entre a posiçao anterior e a atual
+                    self.agitacao += abs(self.Xinicial - self.mouse.getX())
+                    self.agitacao += abs(self.Yinicial - self.mouse.getY())
+                #atualiza as posições
+                self.Xinicial = self.mouse.getX()
+                self.Yinicial = self.mouse.getY()
+                self.sendoSegurado = True
+            else:
+                self.sendoSegurado = False
 
             #muda o sprite conforme o valor da variavel agitacao
             if self.tanque.spriteAtual < self.tanque_sheet_obj.numeroDeFrames - 1:
@@ -168,7 +150,7 @@ class Fase3:
                 self.medidor.altLoop(23, 26, 0.1)
 
                 #confere a posição do tanque para fazer  a animação dos canos se fechando
-                if self.tanque.getX() == self.tanqueXInicial and self.tanque.getY() == self.tanqueYInicial:
+                if self.tanque.getX() == self.tanqueX and self.tanque.getY() == self.tanqueY:
                     if self.medidor.spriteAtual > 0:
                         self.canos.revLoop(0, 4, 0.05)
                     else:
@@ -193,3 +175,14 @@ class Fase3:
                             self.seta.y = self.seta.y + 2
                         else:
                             self.seta.y = self.seta.y - 2
+
+
+
+
+
+
+
+
+
+
+
