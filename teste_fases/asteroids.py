@@ -6,6 +6,7 @@ from SpriteSheet import SpriteSheet
 from obj_animado import ObjAnimado
 from nave import Nave
 from asteroid import Asteroid
+from asteroid import Particula
 
 
 class Asteroids:
@@ -33,6 +34,7 @@ class Asteroids:
 
         self.tamanho_vetor = 12
         self.vetor_sujeiras = self.cria_sujeiras()
+        self.vetor_particulas = self.cria_particulas()
 
 
     def cria_sujeiras(self):
@@ -61,6 +63,7 @@ class Asteroids:
         if teclas[pygame.K_UP] or teclas[pygame.K_SPACE]:
             self.nave.andar(self.vel_movimentacao)
 
+        self.desenha_particulas()
         self.desenha_sujeiras()
         self.confere_colisao()
 
@@ -75,9 +78,7 @@ class Asteroids:
         #confere se o numero de sujeiras na tela é inferior ao limite
         if len(self.vetor_sujeiras) < self.tamanho_vetor:
             #cria uma nova sujeira a partir de uma existente
-            self.vetor_sujeiras.append(Asteroid(self.vetor_sujeiras[random.randint(0, len(self.vetor_sujeiras) - 1)].x, self.vetor_sujeiras[random.randint(0, len(self.vetor_sujeiras) - 1)].y))
-
-
+            self.vetor_sujeiras.append(Asteroid(self.vetor_sujeiras[0].x, self.vetor_sujeiras[0].y))
 
     def desenha_sujeiras(self):
 
@@ -129,6 +130,15 @@ class Asteroids:
                         self.nave.vetor_projeteis.remove(projetil)
                         self.vetor_sujeiras.remove(sujeira)
                         break"""
+
+
+    def cria_particulas(self):
+        vetor_particulas = [Particula() for _ in range(20)]
+        return vetor_particulas
+
+    def desenha_particulas(self):
+        for particula in self.vetor_particulas:
+            particula.desenha(self.janela, self.nave.offset)
 
 
 

@@ -81,4 +81,46 @@ class Asteroid:
             self.direcaoy *= -1"""
 
 
+class Particula:
+
+    def __init__(self):
+
+        self.largura = 8
+        self.altura = 8
+
+        self.largura_tela = 1280
+        self.altura_tela = 720
+
+        acrecimoObjeto = 16 * 8 * 2 * 2
+        acrecimoComparacao = 16 * 8 * 2 * 2 + 1
+
+        self.x = random.randint(0 - acrecimoObjeto, self.largura_tela + acrecimoObjeto)
+        self.y = random.randint(0 - acrecimoObjeto, self.altura_tela + acrecimoObjeto)
+
+        self.imagem = pygame.image.load("imagens/particula_cloro.png")
+        self.imagem = pygame.transform.scale(self.imagem, (self.largura,self.altura))
+        self.imagem.set_colorkey([243, 97, 255])
+
+
+    def desenha(self, tela, offset):
+        #atualiza a posição com o offset
+        self.x -= offset.x
+        self.y -= offset.y
+
+        #desenha
+        tela.blit(self.imagem, (self.x, self.y))
+
+        acrecimoObjeto = 16 * 8 * 2 * 2
+        acrecimoComparacao = 16 * 8 * 2 * 2 + 1
+
+        #faz com que a sujeira volte em outro canto da tela
+        if self.x > self.largura_tela + acrecimoComparacao:
+            self.x -= self.largura_tela + acrecimoObjeto * 2      #esquerda
+        elif self.x < 0 - acrecimoComparacao:
+            self.x += self.largura_tela + acrecimoObjeto        #direita
+
+        if self.y > self.altura_tela + acrecimoComparacao:
+            self.y -= self.altura_tela + acrecimoObjeto * 2       #cima
+        elif self.y < 0 - acrecimoComparacao:
+            self.y += self.altura_tela + acrecimoObjeto         #baixo
 
