@@ -7,6 +7,7 @@ import fase_3
 from sujeira import Sujeira
 from cloro import Cloro
 from Rede_Neural import RedeNeural
+import transicao_2
 
 class Fase2:
     def __init__(self, janela, gerenciador, mouse):
@@ -249,13 +250,13 @@ class Fase2:
         #transição
         else:
             self.transicao.desenha()
-            if self.transicao.getX() > (-320 * 8) - 1:
+            if self.transicao.getX() > (-160 * 8) - 1:
 
                 #Verifica se a seta para a direita está sendo pressionada
                 if teclas[pygame.K_RIGHT]:
                     self.transicao.setX(self.transicao.getX() - 3)
             else:
-                self.proximaFase = fase_3.Fase3(self.janela, self.gerenciador, self.mouse)
+                self.proximaFase = transicao_2.Transicao_2(self.janela, self.gerenciador, self.mouse)
                 self.gerenciador.set_fase(self.proximaFase)
 
 

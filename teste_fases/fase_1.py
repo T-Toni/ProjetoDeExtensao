@@ -5,6 +5,8 @@ from SpriteSheet import SpriteSheet
 from obj_animado import ObjAnimado
 import fase_3
 import fase_2
+import transicao_1
+
 
 class Fase1:
     def __init__(self, janela, gerenciador, mouse):
@@ -15,7 +17,7 @@ class Fase1:
         #necessário para açôes com o mouse
         self.mouse = mouse
 
-        self.proximaFase = fase_2.Fase2(self.janela, self.gerenciador, self.mouse)
+        self.proximaFase = transicao_1.Transicao_1(self.janela, self.gerenciador, self.mouse)
 
         #OBJETOS DA FASE:
 
@@ -48,7 +50,10 @@ class Fase1:
         if self.represa.getFrame() >= self.represa_sheet_obj.numeroDeFrames - 1 or self.permitir_transicao:
             self.permitir_transicao = True
             self.transicao.desenha()
-            if self.transicao.getX() > (-320 * 8) - 1:
+
+            #confere se ja chegou na proxima tela
+
+            if self.transicao.getX() > (-160 * 8) - 1:
                 teclas = pygame.key.get_pressed()
 
                 #Verifica se a seta para a direita está sendo pressionada
