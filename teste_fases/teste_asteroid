@@ -10,7 +10,7 @@ from asteroid import Particula
 
 
 class Asteroids:
-    def __init__(self, janela, gerenciador, mouse):
+    def _init_(self, janela, gerenciador, mouse):
         #necessário pra desenhar
         self.janela = janela
         #necessario para a troca de fases
@@ -40,49 +40,27 @@ class Asteroids:
         self.tSujeiras = 0
 
 
+
+
     def comunica_sujeiras(self):
 
         for sujeira in self.vetor_sujeiras:
             for sujeira2 in self.vetor_sujeiras:
-                if sujeira.sensor(sujeira2.rect) and sujeira != sujeira2:
+                if sujeira.sensor(sujeira2.rect) and sujeira != sujeira2 and sujeira.contato == False:
 
-                    """pygame.draw.circle(self.janela, (0,128,0), (sujeira.x + sujeira.raio / 2, sujeira.y + sujeira.raio / 2), sujeira.raio, 4)
-                    pygame.draw.circle(self.janela, (0, 128, 0), (sujeira.x + sujeira.raio / 2, sujeira.y + sujeira.raio / 2), sujeira.raio, 4)"""
+                    sujeira.contato = True
+                    sujeira2.contato = True
 
-                    #confere qual sujeira viu a nave mais recentemetnte
+                    pygame.draw.circle(self.janela, (0,128,0), (sujeira.x + sujeira.raio / 2, sujeira.y + sujeira.raio / 2), sujeira.raio, 4)
+                    pygame.draw.circle(self.janela, (0, 128, 0), (sujeira.x + sujeira.raio / 2, sujeira.y + sujeira.raio / 2), sujeira.raio, 4)
+
                     if sujeira.ultimo_encontro > sujeira2.ultimo_encontro and not sujeira.sensor(self.nave.copia_rect):
-
-                        if sujeira.maior_valor >= sujeira2.maior_valor:
-                            sujeira2.maior_valor = sujeira.maior_valor
-
-                            pygame.draw.circle(self.janela, (0, 128, 0), (sujeira.x + sujeira.raio / 2, sujeira.y + sujeira.raio / 2), sujeira.raio, 4)
-
-
-                            #a sujeira que viu a nave mais recentemente compartilha a sua posição com a outra sujeira
-                            sujeira2.navex = sujeira.navex
-                            sujeira2.navey = sujeira.navey
-
-                            #incrementa aos poucos o valor do ultimo encontro para a movimentação ocorrer
-                            sujeira2.ultimo_encontro += 1
-
-                            #executa a alteração no movimento
-                            sujeira2.movimento_propagacao()
-
-
-
-                    if sujeira2.ultimo_encontro > sujeira.ultimo_encontro and not sujeira.sensor(self.nave.copia_rect) and sujeira.maior_valor == sujeira2.maior_valor:
-
-                        if sujeira2.maior_valor >= sujeira.maior_valor:
-
-                            sujeira.maior_valor = sujeira2.maior_valor
-
-                            pygame.draw.circle(self.janela, (0,128,0), (sujeira.x + sujeira.raio / 2, sujeira.y + sujeira.raio / 2), sujeira.raio, 4)
-
-                            sujeira.navex = sujeira2.navex
-                            sujeira.navey = sujeira2.navey
-
-                            sujeira.ultimo_encontro += 1
-                            sujeira.movimento_propagacao()
+                        sujeira2.movimento_propagacao(sujeira.navex, sujeira.navey)
+                    elif not sujeira.sensor(self.nave.copia_rect):
+                        sujeira.movimento_propagacao(sujeira2.navex, sujeira2.navey)
+                else:
+                    sujeira.contato = False
+                    sujeira2.contato = False
 
 
     def cria_sujeiras(self):
@@ -91,7 +69,7 @@ class Asteroids:
 
     def run(self):
 
-        #print("timer: " + str(self.timer))
+        print("timer: " + str(self.timer))
 
         #recebe todas a teclas pressionadas
         teclas = pygame.key.get_pressed()
@@ -140,24 +118,25 @@ class Asteroids:
         for sujeira in self.vetor_sujeiras:
             #desenha as sujeiras
             sujeira.desenha(self.janela, self.nave.offset, self.nave.copia_rect)
-            sujeira.update(self.nave.copia_rect, self.tSujeiras)
+            sujeira.update(self.nave.copia_rect, self.timer)
             #incrementa i para cada sujeira
             num_sujeiras += 1
+            print(str(sujeira.ultimo_encontro))
 
         #desenha texto
-        #define a cor do texto (em RGB)
+        #defina a cor do texto (em RGB)
         cor_texto = (255, 255, 255)
 
-        #define a fonte e o tamanho do texto
+        #defina a fonte e o tamanho do texto
         fonte = pygame.font.Font(None, 36)
 
-        #Renderiza o texto
+        #Renderize o texto
         texto_renderizado = fonte.render("Sujeiras restantes: " + str(num_sujeiras), True, cor_texto)
 
-        #pega o rect do texto renderizado
+        #Obtém o retângulo do texto renderizado
         texto_rect = texto_renderizado.get_rect()
 
-        #determine a posição do texto
+        #Determina a posição do texto
         texto_rect.topleft = (0, 0)
 
         #desenha o texto

@@ -4,7 +4,8 @@ import math
 
 class Asteroid:
 
-    def __init__(self, x, y, nave_rect):
+    def _init_(self, x, y, nave_rect):
+
         self.largura = 16 * 8
         self.altura = 16 * 8
 
@@ -45,10 +46,8 @@ class Asteroid:
         self.mask = pygame.mask.from_surface(self.imagem)
 
         # variaveis para o bom funcionamento da comunicação entre sujeiras
-        self.ultimo_encontro = 0            #guarda ultimo momento de detecção da nave
+        self.ultimo_encontro = 0
         self.nave_rect = nave_rect
-        self.maior_valor = 0                #guarda o maior valor de ultimo_encontro de qualquer sujeira que entrar em contato
-
         #variaveis que guardam as posições da nave com o offset
         self.navex = self.nave_rect.center[0]
         self.navey = self.nave_rect.center[1]
@@ -57,21 +56,18 @@ class Asteroid:
         self.raio = 16 * 8  #determina o raio do sensor
 
 
-
     def desenha(self, tela, offset, nave_rect):
         #atualiza a posição com o offset
         self.x -= offset.x
         self.y -= offset.y
 
-        #mantem o rect na mesa posição da imagem
         self.rect.x = self.x
         self.rect.y = self.y
 
-        #atualiza a posição do ultimo registro da nave tambem
         self.navex -= offset.x
         self.navey -= offset.y
 
-        print(str(self.ultimo_encontro))
+        print(str(self.nave_rect.center))
 
         cor = (255, 255, 255)
 
@@ -81,32 +77,8 @@ class Asteroid:
 
         pygame.draw.circle(tela, cor, (self.x + self.raio/2, self.y + self.raio/2), self.raio, 2)
 
-        pygame.draw.circle(tela, cor, (self.navex, self.navey + self.raio/2), self.raio/4, 2)
-
         #desenha
         tela.blit(self.imagem, (self.x, self.y))
-
-
-
-
-        #TEXTO
-        #define a cor do texto (em RGB)
-        cor_texto = (255, 255, 255)
-
-        #define a fonte e o tamanho do texto
-        fonte = pygame.font.Font(None, 36)
-
-        #Renderiza o texto
-        texto_renderizado = fonte.render(str(self.ultimo_encontro), True, cor_texto)
-
-        #pega o rect do texto renderizado
-        texto_rect = texto_renderizado.get_rect()
-
-        #determine a posição do texto
-        texto_rect.topleft = (self.x - self.largura/2, self.y - self.largura/2)
-
-        #desenha o texto
-        tela.blit(texto_renderizado, texto_rect)
 
     def sensor(self, nave_rect):
         #determina o centro do circulo
@@ -119,7 +91,7 @@ class Asteroid:
                       (nave_rect.left, nave_rect.bottom),
                       (nave_rect.right, nave_rect.bottom)]:
             #calcula uma reta a partir de todas as extremidades do retangulo
-            distancia = math.sqrt((centro_x - ponto[0]) ** 2 + (centro_y - ponto[1]) ** 2)
+            distancia = math.sqrt((centro_x - ponto[0]) * 2 + (centro_y - ponto[1]) * 2)
             #confere se essa reta é maior que o raio (indicando se está dentro ou não
             if distancia <= self.raio:
                 return True
@@ -156,6 +128,37 @@ class Asteroid:
         #funcionamento do movimento por propagação
         self.contato = False
 
+    def movimento_propagacao(self, navex, navey):
+
+        # determina a velocidade da alteração do trajeto
+        velocidade = 0.2
+        #determina um limite de velocidade menor do que o contato com a nave de fato
+        limite = 1.5
+
+        # ajusta a movimentação para o eixo x
+        if self.x < navex:
+            self.direcaox -= velocidade
+        else:
+            self.direcaox += velocidade
+
+        # ajusta a movimentação para o eixo x
+        if self.y < navey:
+            self.direcaoy -= velocidade
+        else:
+            self.direcaoy += velocidade
+
+        # ajusta as velocidades para estarem dentro do limite
+        if abs(self.direcaox) > limite:
+            if self.direcaox > 0:
+                self.direcaox = limite
+            else:
+                self.direcaox = limite
+
+        if abs(self.direcaoy) > limite:
+            if self.direcaoy > 0:
+                self.direcaoy = limite
+            else:
+                self.direcaoy = limite
 
     def funcionamento_sensor(self, nave_rect, timer):
 
@@ -164,8 +167,6 @@ class Asteroid:
             self.navex = self.nave_rect.center[0]
             self.navey = self.nave_rect.center[1]
 
-            #atualiza o maior valor
-            self.maior_valor = timer
             self.ultimo_encontro = timer
             #mudar para o rect
 
@@ -198,37 +199,6 @@ class Asteroid:
                     self.direcaoy = -self.limite
 
 
-    def movimento_propagacao(self):
-
-        # determina a velocidade da alteração do trajeto
-        velocidade = 0.1
-        #determina um limite de velocidade menor do que o contato com a nave de fato
-        limite = self.limite
-
-        # ajusta a movimentação para o eixo x
-        if self.x < self.navex:
-            self.direcaox -= velocidade
-        else:
-            self.direcaox += velocidade
-
-        # ajusta a movimentação para o eixo x
-        if self.y < self.navey:
-            self.direcaoy -= velocidade
-        else:
-            self.direcaoy += velocidade
-
-        # ajusta as velocidades para estarem dentro do limite
-        if abs(self.direcaox) > limite:
-            if self.direcaox > 0:
-                self.direcaox = limite
-            else:
-                self.direcaox = -limite
-
-        if abs(self.direcaoy) > limite:
-            if self.direcaoy > 0:
-                self.direcaoy = limite
-            else:
-                self.direcaoy = -limite
 
 
 
@@ -236,7 +206,7 @@ class Asteroid:
 
 class Particula:
 
-    def __init__(self):
+    def _init_(self):
 
         self.largura = 8
         self.altura = 8
@@ -276,4 +246,3 @@ class Particula:
             self.y -= self.altura_tela + acrecimoObjeto * 2       #cima
         elif self.y < 0 - acrecimoComparacao:
             self.y += self.altura_tela + acrecimoObjeto         #baixo
-
