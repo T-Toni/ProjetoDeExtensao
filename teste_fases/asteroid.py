@@ -1,5 +1,6 @@
 import pygame
 import random
+import math
 
 class Asteroid:
 
@@ -26,6 +27,8 @@ class Asteroid:
         self.direcaox = random.random()*-velocidade
         self.direcaoy = random.random()*velocidade
 
+        self.limite = 3
+
         """if self.x >= self.largura_tela / 2:
             self.direcaox = random.random()*-velocidade
         else:
@@ -42,17 +45,47 @@ class Asteroid:
         self.rect = self.imagem.get_rect()
         self.mask = pygame.mask.from_surface(self.imagem)
 
+        #variaveis para o bom funcionamento do sensor
+        self.raio = 16 * 8  #determina o raio do sensor
 
-    def desenha(self, tela, offset):
+
+    def desenha(self, tela, offset, nave_rect):
         #atualiza a posição com o offset
         self.x -= offset.x
         self.y -= offset.y
 
+        cor = (255, 255, 255)
+
+        #troca a cor para vermelho se o sensor detectar a nave
+        if self.sensor(nave_rect):
+            cor = (255, 0, 0)
+
+        pygame.draw.circle(tela, cor, (self.x + self.raio/2, self.y + self.raio/2), self.raio, 2)
+
         #desenha
         tela.blit(self.imagem, (self.x, self.y))
 
-    def update(self):
-        #acrescenta a direção a suaposição para que ele se mova
+    def sensor(self, nave_rect):
+        #determina o centro do circulo
+        centro_x = self.x + self.raio/2
+        centro_y = self.y + self.raio/2
+
+        #verifica se algum ponto da nave está dentro do circulo, utilizando os quatro cantos do seu retangulo
+        for ponto in [(nave_rect.left, nave_rect.top),
+                      (nave_rect.right, nave_rect.top),
+                      (nave_rect.left, nave_rect.bottom),
+                      (nave_rect.right, nave_rect.bottom)]:
+            #calcula uma reta a partir de todas as extremidades do retangulo
+            distancia = math.sqrt((centro_x - ponto[0]) ** 2 + (centro_y - ponto[1]) ** 2)
+            #confere se essa reta é maior que o raio (indicando se está dentro ou não
+            if distancia <= self.raio:
+                return True
+
+        # Se nenhum ponto estiver dentro do círculo, não há colisão
+        return False
+
+    def update(self, nave_rect):
+        #acrescenta a direção a sua posição para que ele se mova
         self.x += self.direcaox
         self.y += self.direcaoy
 
@@ -73,12 +106,47 @@ class Asteroid:
             self.y -= self.altura_tela + acrecimoObjeto * 2       #cima
         elif self.y < 0 - acrecimoComparacao:
             self.y += self.altura_tela + acrecimoObjeto         #baixo
+        
+        #funcionamento do sensor
+        self.funcionamento_sensor(nave_rect)
 
 
-        """#FUNCIONAMENTO DO ESCUDO
-        if self.mask.overlap(escudo_mask, [escudo_x - self.x, escudo_y - self.y]):
-            self.direcaox *= -1
-            self.direcaoy *= -1"""
+    def funcionamento_sensor(self, nave_rect):
+
+        if self.sensor(nave_rect):
+
+            #determina a velocidade da alteração do trajeto
+            velocidade = 0.2
+
+            #ajusta a movimentação para o eixo x
+            if self.x < nave_rect.center[0]:
+                    self.direcaox -= velocidade
+            else:
+                    self.direcaox += velocidade
+
+            #ajusta a movimentação para o eixo x
+            if self.y < nave_rect.center[1]:
+                    self.direcaoy -= velocidade
+            else:
+                    self.direcaoy += velocidade
+
+            #ajusta as velocidades para estarem dentro do limite
+            if abs(self.direcaox) > self.limite:
+                if self.direcaox > 0:
+                    self.direcaox = self.limite
+                else:
+                    self.direcaox = -self.limite
+
+            if abs(self.direcaoy) > self.limite:
+                if self.direcaoy > 0:
+                    self.direcaoy = self.limite
+                else:
+                    self.direcaoy = -self.limite
+
+
+
+
+
 
 
 class Particula:

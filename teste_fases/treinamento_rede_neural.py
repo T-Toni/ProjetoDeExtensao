@@ -52,7 +52,7 @@ print("aprendeu!")'''
 import math
 
 #entrada
-input_cloro = (10, 10)
+input_cloro = (12, -1)
 
 input_sujeira = (10, 8)
 
@@ -67,8 +67,8 @@ sujeira_weight = 0.5
 learning_rate = 0.1
 
 def activation(sum_cloro, sum_sujeira):
-    movX = sum_sujeira[0] - sum_cloro[0]
-    movY = sum_sujeira[1] - sum_cloro[1]
+    movX = sum_sujeira[0] * sujeira_weight - sum_cloro[0] * cloro_weight
+    movY = sum_sujeira[1] * sujeira_weight - sum_cloro[1] * cloro_weight
 
     if movX > 0:
         movX = 1

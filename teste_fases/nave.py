@@ -116,23 +116,6 @@ class Nave:
         for rastro in self.rastros:
             rastro.desenha()
 
-        """#desenha o escudo
-        self.tela.blit(self.escudo, self.escudo_rect)"""
-
-        """#determina a frente da nave
-        frente_x = self.copia_rect.centerx + (self.largura / 2) * math.cos(math.radians(-self.angulo))
-        frente_y = self.copia_rect.centery + (self.largura / 2) * math.sin(math.radians(-self.angulo))
-
-        # Desenha um quadrado vermelho na frente da nave
-                                                    #- 4 para que fique centralizado
-        pygame.draw.rect(self.tela, (255, 0, 0), (frente_x - 4, frente_y - 4, 10, 10))
-
-        # Atualiza a posição dos projéteis
-        for projetil in self.vetor_projeteis:
-            projetil.atualizar()
-
-            # Desenha os projéteis
-            projetil.desenhar(self.tela)"""
 
     def rotaciona(self, incremento):
         #adiciona incremento ao angulo

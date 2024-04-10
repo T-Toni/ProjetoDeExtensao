@@ -25,7 +25,7 @@ class Asteroids:
         #determina a velocidade da rotação da nave
         self.vel_rotacao = 4
         #determina a velocidade da nave
-        self.vel_movimentacao = 5
+        self.vel_movimentacao = 7
         #guarda se a tecla espaço foi apertada
         self.pressionada = False
 
@@ -87,8 +87,8 @@ class Asteroids:
 
         for sujeira in self.vetor_sujeiras:
             #desenha as sujeiras
-            sujeira.desenha(self.janela, self.nave.offset)
-            sujeira.update()
+            sujeira.desenha(self.janela, self.nave.offset, self.nave.copia_rect)
+            sujeira.update(self.nave.copia_rect)
             #incrementa i para cada sujeira
             num_sujeiras += 1
 
