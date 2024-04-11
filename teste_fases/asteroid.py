@@ -4,7 +4,7 @@ import math
 
 class Asteroid:
 
-    def __init__(self, x, y, nave_rect):
+    def __init__(self, x, y):
         self.largura = 16 * 8
         self.altura = 16 * 8
 
@@ -26,7 +26,7 @@ class Asteroid:
         self.direcaox = random.random()*-velocidade
         self.direcaoy = random.random()*velocidade
 
-        self.limite = 3
+        self.limite = random.uniform(2, 6)
 
         """if self.x >= self.largura_tela / 2:
             self.direcaox = random.random()*-velocidade
@@ -46,12 +46,12 @@ class Asteroid:
 
         # variaveis para o bom funcionamento da comunicação entre sujeiras
         self.ultimo_encontro = 0            #guarda ultimo momento de detecção da nave
-        self.nave_rect = nave_rect
+        #self.nave_rect = nave_rect
         self.maior_valor = 0                #guarda o maior valor de ultimo_encontro de qualquer sujeira que entrar em contato
 
         #variaveis que guardam as posições da nave com o offset
-        self.navex = self.nave_rect.center[0]
-        self.navey = self.nave_rect.center[1]
+        self.navex = None
+        self.navey = None
 
         #variaveis para o bom funcionamento do sensor
         self.raio = 16 * 8  #determina o raio do sensor
@@ -67,13 +67,34 @@ class Asteroid:
         self.rect.x = self.x
         self.rect.y = self.y
 
-        #atualiza a posição do ultimo registro da nave tambem
-        self.navex -= offset.x
-        self.navey -= offset.y
-
-        print(str(self.ultimo_encontro))
-
         cor = (255, 255, 255)
+
+        # TEXTO
+        # define a cor do texto (em RGB)
+        cor_texto = (255, 255, 255)
+
+        # define a fonte e o tamanho do texto
+        fonte = pygame.font.Font(None, 36)
+
+        # Renderiza o texto
+        texto_renderizado = fonte.render(str(self.ultimo_encontro), True, cor_texto)
+
+        # pega o rect do texto renderizado
+        texto_rect = texto_renderizado.get_rect()
+
+        # determine a posição do texto
+        texto_rect.topleft = (self.x - self.largura / 2, self.y - self.largura / 2)
+
+        # desenha o texto
+        tela.blit(texto_renderizado, texto_rect)
+        # FIM DO TEXTO
+
+        #atualiza a posição do ultimo registro da nave tambem
+        if self.navex:
+            self.navex -= offset.x
+            self.navey -= offset.y
+            pygame.draw.circle(tela, cor, (self.navex + self.raio / 4, self.navey + self.raio / 4), self.raio / 8, 2)
+            tela.blit(texto_renderizado, (self.navex + self.raio / 4, self.navey + self.raio / 4))
 
         #troca a cor para vermelho se o sensor detectar a nave
         if self.sensor(nave_rect):
@@ -81,32 +102,11 @@ class Asteroid:
 
         pygame.draw.circle(tela, cor, (self.x + self.raio/2, self.y + self.raio/2), self.raio, 2)
 
-        pygame.draw.circle(tela, cor, (self.navex, self.navey + self.raio/2), self.raio/4, 2)
 
         #desenha
         tela.blit(self.imagem, (self.x, self.y))
 
 
-
-
-        #TEXTO
-        #define a cor do texto (em RGB)
-        cor_texto = (255, 255, 255)
-
-        #define a fonte e o tamanho do texto
-        fonte = pygame.font.Font(None, 36)
-
-        #Renderiza o texto
-        texto_renderizado = fonte.render(str(self.ultimo_encontro), True, cor_texto)
-
-        #pega o rect do texto renderizado
-        texto_rect = texto_renderizado.get_rect()
-
-        #determine a posição do texto
-        texto_rect.topleft = (self.x - self.largura/2, self.y - self.largura/2)
-
-        #desenha o texto
-        tela.blit(texto_renderizado, texto_rect)
 
     def sensor(self, nave_rect):
         #determina o centro do circulo
@@ -151,35 +151,36 @@ class Asteroid:
             self.y += self.altura_tela + acrecimoObjeto         #baixo
 
         #funcionamento do sensor
-        self.funcionamento_sensor(nave_rect, timer)
+        self.movimentacao(nave_rect, timer)
 
         #funcionamento do movimento por propagação
         self.contato = False
 
 
-    def funcionamento_sensor(self, nave_rect, timer):
+    def movimentacao(self, nave_rect, timer):
 
         if self.sensor(nave_rect):
 
-            self.navex = self.nave_rect.center[0]
-            self.navey = self.nave_rect.center[1]
+            self.navex = nave_rect.center[0] - 7*4
+            self.navey = nave_rect.center[1] - 5*4
 
             #atualiza o maior valor
             self.maior_valor = timer
             self.ultimo_encontro = timer
             #mudar para o rect
 
+        if self.navex != None:
             #determina a velocidade da alteração do trajeto
             velocidade = 0.2
 
             #ajusta a movimentação para o eixo x
-            if self.x < nave_rect.center[0]:
+            if self.x < self.navex:
                     self.direcaox -= velocidade
             else:
                     self.direcaox += velocidade
 
             #ajusta a movimentação para o eixo x
-            if self.y < nave_rect.center[1]:
+            if self.y < self.navey:
                     self.direcaoy -= velocidade
             else:
                     self.direcaoy += velocidade
@@ -198,7 +199,7 @@ class Asteroid:
                     self.direcaoy = -self.limite
 
 
-    def movimento_propagacao(self):
+    """def movimento_propagacao(self):
 
         # determina a velocidade da alteração do trajeto
         velocidade = 0.1
@@ -228,7 +229,7 @@ class Asteroid:
             if self.direcaoy > 0:
                 self.direcaoy = limite
             else:
-                self.direcaoy = -limite
+                self.direcaoy = -limite"""
 
 
 
@@ -276,4 +277,3 @@ class Particula:
             self.y -= self.altura_tela + acrecimoObjeto * 2       #cima
         elif self.y < 0 - acrecimoComparacao:
             self.y += self.altura_tela + acrecimoObjeto         #baixo
-

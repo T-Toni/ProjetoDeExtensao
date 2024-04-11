@@ -1,178 +1,279 @@
-import random
-
 import pygame
-from botao import Botao
-from SpriteSheet import SpriteSheet
-from obj_animado import ObjAnimado
-from nave import Nave
-from asteroid import Asteroid
-from asteroid import Particula
+import random
+import math
 
+class Asteroid:
 
-class Asteroids:
-    def _init_(self, janela, gerenciador, mouse):
-        #necessário pra desenhar
-        self.janela = janela
-        #necessario para a troca de fases
-        self.gerenciador = gerenciador
-        #necessário para açôes com o mouse
-        self.mouse = mouse
+    def __init__(self, x, y, nave_rect):
+        self.largura = 16 * 8
+        self.altura = 16 * 8
 
-        self.proximaFase = None
+        self.largura_tela = 1280
+        self.altura_tela = 720
 
-        self.nave = Nave(1280 / 2, 720 / 2, 7 * 8, 5 * 8, "imagens/nave.png", self.janela, None)
-
-        #determina a velocidade da rotação da nave
-        self.vel_rotacao = 4
-        #determina a velocidade da nave
-        self.vel_movimentacao = 7
-        #guarda se a tecla espaço foi apertada
-        self.pressionada = False
-
-        #usada para determinar a criação de uma nova sujeira
-        self.timer = 0
-
-        self.tamanho_vetor = 12
-        self.vetor_sujeiras = self.cria_sujeiras()
-        self.vetor_particulas = self.cria_particulas()
-
-        #timer usado para o bom funcionamento da comunicação entre as sujeiras
-        self.tSujeiras = 0
-
-
-
-
-    def comunica_sujeiras(self):
-
-        for sujeira in self.vetor_sujeiras:
-            for sujeira2 in self.vetor_sujeiras:
-                if sujeira.sensor(sujeira2.rect) and sujeira != sujeira2 and sujeira.contato == False:
-
-                    sujeira.contato = True
-                    sujeira2.contato = True
-
-                    pygame.draw.circle(self.janela, (0,128,0), (sujeira.x + sujeira.raio / 2, sujeira.y + sujeira.raio / 2), sujeira.raio, 4)
-                    pygame.draw.circle(self.janela, (0, 128, 0), (sujeira.x + sujeira.raio / 2, sujeira.y + sujeira.raio / 2), sujeira.raio, 4)
-
-                    if sujeira.ultimo_encontro > sujeira2.ultimo_encontro and not sujeira.sensor(self.nave.copia_rect):
-                        sujeira2.movimento_propagacao(sujeira.navex, sujeira.navey)
-                    elif not sujeira.sensor(self.nave.copia_rect):
-                        sujeira.movimento_propagacao(sujeira2.navex, sujeira2.navey)
-                else:
-                    sujeira.contato = False
-                    sujeira2.contato = False
-
-
-    def cria_sujeiras(self):
-        vetor_sujeiras = [Asteroid(None, None, self.nave.copia_rect) for _ in range(self.tamanho_vetor)]
-        return vetor_sujeiras
-
-    def run(self):
-
-        print("timer: " + str(self.timer))
-
-        #recebe todas a teclas pressionadas
-        teclas = pygame.key.get_pressed()
-
-        #preenche o fundo da tela de preto
-        self.janela.fill((0, 0, 0))
-
-        self.nave.desenha()
-
-        #rotação da nave
-        if teclas[pygame.K_RIGHT]:
-            self.nave.rotaciona(-self.vel_rotacao)
-        elif teclas[pygame.K_LEFT]:
-            self.nave.rotaciona(self.vel_rotacao)
+        if x == None and y == None:
+            self.x = random.randint(0 - self.largura*5, 1280 + self.largura*5)
+            if self.x <= -self.largura or self.x >= 1280 + self.largura:
+                self.y = random.randint(0 - self.altura*5, 720 + self.altura*5)
+            else:
+                self.y = random.choice([random.randint(0 - self.altura*5, 0 - self.altura), random.randint(720 + self.altura, 720 + self.altura*5)])
         else:
-            self.nave.rotaciona(0)
+            self.x = x
+            self.y = y
 
-        #movimentação para frente
-        if teclas[pygame.K_UP] or teclas[pygame.K_SPACE]:
-            self.nave.andar(self.vel_movimentacao)
+        velocidade = 4
 
-        self.desenha_particulas()
-        self.desenha_sujeiras()
-        self.confere_colisao()
-        self.comunica_sujeiras()
+        self.direcaox = random.random()*-velocidade
+        self.direcaoy = random.random()*velocidade
 
-        #incrementa os timers
-        self.timer += 1
-        self.tSujeiras += 1
+        self.limite = 3
 
-        if self.timer > 500 and len(self.vetor_sujeiras) != 0:
-            self.cria_sujeira()
-            self.timer = 0
+        """if self.x >= self.largura_tela / 2:
+            self.direcaox = random.random()*-velocidade
+        else:
+            self.direcaox = random.random()*velocidade
 
-    def cria_sujeira(self):
-        #confere se o numero de sujeiras na tela é inferior ao limite
-        if len(self.vetor_sujeiras) < self.tamanho_vetor:
-            #cria uma nova sujeira a partir de uma existente
-            self.vetor_sujeiras.append(Asteroid(self.vetor_sujeiras[0].x, self.vetor_sujeiras[0].y, self.nave.copia_rect))
+        if self.y >= self.altura_tela / 2:
+            self.direcaoy = random.random()*-velocidade
+        else:
+            self.direcaoy = random.random()*velocidade"""
 
-    def desenha_sujeiras(self):
+        self.imagem = pygame.image.load("imagens/sujeira_grande.png")
+        self.imagem = pygame.transform.scale(self.imagem, (self.largura,self.altura))
+        self.imagem.set_colorkey([243, 97, 255])   #torna transparente a cor dana no parametro
+        self.rect = self.imagem.get_rect()
+        self.mask = pygame.mask.from_surface(self.imagem)
 
-        #serve para contar quantas sujeiras restam
-        num_sujeiras = 0
+        # variaveis para o bom funcionamento da comunicação entre sujeiras
+        self.ultimo_encontro = 0            #guarda ultimo momento de detecção da nave
+        self.nave_rect = nave_rect
+        self.maior_valor = 0                #guarda o maior valor de ultimo_encontro de qualquer sujeira que entrar em contato
 
-        for sujeira in self.vetor_sujeiras:
-            #desenha as sujeiras
-            sujeira.desenha(self.janela, self.nave.offset, self.nave.copia_rect)
-            sujeira.update(self.nave.copia_rect, self.timer)
-            #incrementa i para cada sujeira
-            num_sujeiras += 1
-            print(str(sujeira.ultimo_encontro))
+        #variaveis que guardam as posições da nave com o offset
+        self.navex = self.nave_rect.center[0]
+        self.navey = self.nave_rect.center[1]
 
-        #desenha texto
-        #defina a cor do texto (em RGB)
+        #variaveis para o bom funcionamento do sensor
+        self.raio = 16 * 8  #determina o raio do sensor
+
+
+
+    def desenha(self, tela, offset, nave_rect):
+        #atualiza a posição com o offset
+        self.x -= offset.x
+        self.y -= offset.y
+
+        #mantem o rect na mesa posição da imagem
+        self.rect.x = self.x
+        self.rect.y = self.y
+
+        #atualiza a posição do ultimo registro da nave tambem
+        self.navex -= offset.x
+        self.navey -= offset.y
+
+        print(str(self.ultimo_encontro))
+
+        cor = (255, 255, 255)
+
+        #troca a cor para vermelho se o sensor detectar a nave
+        if self.sensor(nave_rect):
+            cor = (255, 0, 0)
+
+        pygame.draw.circle(tela, cor, (self.x + self.raio/2, self.y + self.raio/2), self.raio, 2)
+
+        pygame.draw.circle(tela, cor, (self.navex, self.navey + self.raio/2), self.raio/4, 2)
+
+        #desenha
+        tela.blit(self.imagem, (self.x, self.y))
+
+
+
+
+        #TEXTO
+        #define a cor do texto (em RGB)
         cor_texto = (255, 255, 255)
 
-        #defina a fonte e o tamanho do texto
+        #define a fonte e o tamanho do texto
         fonte = pygame.font.Font(None, 36)
 
-        #Renderize o texto
-        texto_renderizado = fonte.render("Sujeiras restantes: " + str(num_sujeiras), True, cor_texto)
+        #Renderiza o texto
+        texto_renderizado = fonte.render(str(self.ultimo_encontro), True, cor_texto)
 
-        #Obtém o retângulo do texto renderizado
+        #pega o rect do texto renderizado
         texto_rect = texto_renderizado.get_rect()
 
-        #Determina a posição do texto
-        texto_rect.topleft = (0, 0)
+        #determine a posição do texto
+        texto_rect.topleft = (self.x - self.largura/2, self.y - self.largura/2)
 
         #desenha o texto
-        self.janela.blit(texto_renderizado, texto_rect)
+        tela.blit(texto_renderizado, texto_rect)
 
-    def confere_colisao(self):
+    def sensor(self, nave_rect):
+        #determina o centro do circulo
+        centro_x = self.x + self.raio/2
+        centro_y = self.y + self.raio/2
 
-        for sujeira in self.vetor_sujeiras:
-            if self.nave.mask.overlap(sujeira.mask, [sujeira.x - self.nave.imagem_rect.x, sujeira.y - self.nave.imagem_rect.y]):
-                self.vetor_sujeiras.remove(sujeira)
-                #reseta o timer
-                #self.timer = 0
+        #verifica se algum ponto da nave está dentro do circulo, utilizando os quatro cantos do seu retangulo
+        for ponto in [(nave_rect.left, nave_rect.top),
+                      (nave_rect.right, nave_rect.top),
+                      (nave_rect.left, nave_rect.bottom),
+                      (nave_rect.right, nave_rect.bottom)]:
+            #calcula uma reta a partir de todas as extremidades do retangulo
+            distancia = math.sqrt((centro_x - ponto[0]) ** 2 + (centro_y - ponto[1]) ** 2)
+            #confere se essa reta é maior que o raio (indicando se está dentro ou não
+            if distancia <= self.raio:
+                return True
+
+        # Se nenhum ponto estiver dentro do círculo, não há colisão
+        return False
+
+    def update(self, nave_rect, timer):
+        #acrescenta a direção a sua posição para que ele se mova
+        self.x += self.direcaox
+        self.y += self.direcaoy
+
+        """print(self.x)
+        print(self.y)"""
+
+        #MOVIMENTAÇÃO ESTILO ASTEROIDS
+        acrecimoObjeto = 16 * 8 * 2 * 2
+        acrecimoComparacao = 16 * 8 * 2 * 2 + 1
+
+        #faz com que a sujeira volte em outro canto da tela
+        if self.x > self.largura_tela + acrecimoComparacao:
+            self.x -= self.largura_tela + acrecimoObjeto * 2      #esquerda
+        elif self.x < 0 - acrecimoComparacao:
+            self.x += self.largura_tela + acrecimoObjeto        #direita
+
+        if self.y > self.altura_tela + acrecimoComparacao:
+            self.y -= self.altura_tela + acrecimoObjeto * 2       #cima
+        elif self.y < 0 - acrecimoComparacao:
+            self.y += self.altura_tela + acrecimoObjeto         #baixo
+
+        #funcionamento do sensor
+        self.funcionamento_sensor(nave_rect, timer)
+
+        #funcionamento do movimento por propagação
+        self.contato = False
 
 
-        """ #percorre os 2 vetores
-        for projetil in self.nave.vetor_projeteis:
-            for sujeira in self.vetor_sujeiras:
-                #confere a colisao
-                if projetil.x + projetil.largura >= sujeira.x and projetil.x <= sujeira.x + sujeira.largura:
-                    if projetil.y + projetil.altura>= sujeira.y and projetil.y <= sujeira.y + sujeira.altura:
-                        #destroi ambos
-                        self.nave.vetor_projeteis.remove(projetil)
-                        self.vetor_sujeiras.remove(sujeira)
-                        break"""
+    def funcionamento_sensor(self, nave_rect, timer):
+
+        if self.sensor(nave_rect):
+
+            self.navex = self.nave_rect.center[0]
+            self.navey = self.nave_rect.center[1]
+
+            #atualiza o maior valor
+            self.maior_valor = timer
+            self.ultimo_encontro = timer
+            #mudar para o rect
+
+            #determina a velocidade da alteração do trajeto
+            velocidade = 0.2
+
+            #ajusta a movimentação para o eixo x
+            if self.x < nave_rect.center[0]:
+                    self.direcaox -= velocidade
+            else:
+                    self.direcaox += velocidade
+
+            #ajusta a movimentação para o eixo x
+            if self.y < nave_rect.center[1]:
+                    self.direcaoy -= velocidade
+            else:
+                    self.direcaoy += velocidade
+
+            #ajusta as velocidades para estarem dentro do limite
+            if abs(self.direcaox) > self.limite:
+                if self.direcaox > 0:
+                    self.direcaox = self.limite
+                else:
+                    self.direcaox = -self.limite
+
+            if abs(self.direcaoy) > self.limite:
+                if self.direcaoy > 0:
+                    self.direcaoy = self.limite
+                else:
+                    self.direcaoy = -self.limite
 
 
-    def cria_particulas(self):
-        vetor_particulas = [Particula() for _ in range(20)]
-        return vetor_particulas
+    def movimento_propagacao(self):
 
-    def desenha_particulas(self):
-        for particula in self.vetor_particulas:
-            particula.desenha(self.janela, self.nave.offset)
+        # determina a velocidade da alteração do trajeto
+        velocidade = 0.1
+        #determina um limite de velocidade menor do que o contato com a nave de fato
+        limite = self.limite
+
+        # ajusta a movimentação para o eixo x
+        if self.x < self.navex:
+            self.direcaox -= velocidade
+        else:
+            self.direcaox += velocidade
+
+        # ajusta a movimentação para o eixo x
+        if self.y < self.navey:
+            self.direcaoy -= velocidade
+        else:
+            self.direcaoy += velocidade
+
+        # ajusta as velocidades para estarem dentro do limite
+        if abs(self.direcaox) > limite:
+            if self.direcaox > 0:
+                self.direcaox = limite
+            else:
+                self.direcaox = -limite
+
+        if abs(self.direcaoy) > limite:
+            if self.direcaoy > 0:
+                self.direcaoy = limite
+            else:
+                self.direcaoy = -limite
 
 
 
-"""a = Asteroids
-LARGURA, ALTURA = 1280, 720
-self.janela = pygame.display.set_mode((LARGURA, ALTURA))"""
+
+
+class Particula:
+
+    def __init__(self):
+
+        self.largura = 8
+        self.altura = 8
+
+        self.largura_tela = 1280
+        self.altura_tela = 720
+
+        acrecimoObjeto = 16 * 8 * 2 * 2
+        acrecimoComparacao = 16 * 8 * 2 * 2 + 1
+
+        self.x = random.randint(0 - acrecimoObjeto, self.largura_tela + acrecimoObjeto)
+        self.y = random.randint(0 - acrecimoObjeto, self.altura_tela + acrecimoObjeto)
+
+        self.imagem = pygame.image.load("imagens/particula_cloro.png")
+        self.imagem = pygame.transform.scale(self.imagem, (self.largura,self.altura))
+        self.imagem.set_colorkey([243, 97, 255])
+
+
+    def desenha(self, tela, offset):
+        #atualiza a posição com o offset
+        self.x -= offset.x
+        self.y -= offset.y
+
+        #desenha
+        tela.blit(self.imagem, (self.x, self.y))
+
+        acrecimoObjeto = 16 * 8 * 2 * 2
+        acrecimoComparacao = 16 * 8 * 2 * 2 + 1
+
+        #faz com que a sujeira volte em outro canto da tela
+        if self.x > self.largura_tela + acrecimoComparacao:
+            self.x -= self.largura_tela + acrecimoObjeto * 2      #esquerda
+        elif self.x < 0 - acrecimoComparacao:
+            self.x += self.largura_tela + acrecimoObjeto        #direita
+
+        if self.y > self.altura_tela + acrecimoComparacao:
+            self.y -= self.altura_tela + acrecimoObjeto * 2       #cima
+        elif self.y < 0 - acrecimoComparacao:
+            self.y += self.altura_tela + acrecimoObjeto         #baixo
+

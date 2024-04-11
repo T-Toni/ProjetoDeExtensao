@@ -25,7 +25,7 @@ class Asteroids:
         #determina a velocidade da rotação da nave
         self.vel_rotacao = 4
         #determina a velocidade da nave
-        self.vel_movimentacao = 7
+        self.vel_movimentacao = 10
         #guarda se a tecla espaço foi apertada
         self.pressionada = False
 
@@ -48,6 +48,8 @@ class Asteroids:
 
                     """pygame.draw.circle(self.janela, (0,128,0), (sujeira.x + sujeira.raio / 2, sujeira.y + sujeira.raio / 2), sujeira.raio, 4)
                     pygame.draw.circle(self.janela, (0, 128, 0), (sujeira.x + sujeira.raio / 2, sujeira.y + sujeira.raio / 2), sujeira.raio, 4)"""
+                    pygame.draw.circle(self.janela, (0, 128, 0), (sujeira.x + sujeira.raio / 2, sujeira.y + sujeira.raio / 2), sujeira.raio, 4)
+
 
                     #confere qual sujeira viu a nave mais recentemetnte
                     if sujeira.ultimo_encontro > sujeira2.ultimo_encontro and not sujeira.sensor(self.nave.copia_rect):
@@ -55,18 +57,15 @@ class Asteroids:
                         if sujeira.maior_valor >= sujeira2.maior_valor:
                             sujeira2.maior_valor = sujeira.maior_valor
 
-                            pygame.draw.circle(self.janela, (0, 128, 0), (sujeira.x + sujeira.raio / 2, sujeira.y + sujeira.raio / 2), sujeira.raio, 4)
-
-
                             #a sujeira que viu a nave mais recentemente compartilha a sua posição com a outra sujeira
                             sujeira2.navex = sujeira.navex
                             sujeira2.navey = sujeira.navey
 
                             #incrementa aos poucos o valor do ultimo encontro para a movimentação ocorrer
-                            sujeira2.ultimo_encontro += 1
+                            sujeira2.ultimo_encontro = sujeira.ultimo_encontro
 
                             #executa a alteração no movimento
-                            sujeira2.movimento_propagacao()
+                            #sujeira2.movimento_propagacao()
 
 
 
@@ -81,12 +80,12 @@ class Asteroids:
                             sujeira.navex = sujeira2.navex
                             sujeira.navey = sujeira2.navey
 
-                            sujeira.ultimo_encontro += 1
-                            sujeira.movimento_propagacao()
+                            sujeira.ultimo_encontro += sujeira2.ultimo_encontro
+                            #sujeira.movimento_propagacao()
 
 
     def cria_sujeiras(self):
-        vetor_sujeiras = [Asteroid(None, None, self.nave.copia_rect) for _ in range(self.tamanho_vetor)]
+        vetor_sujeiras = [Asteroid(None, None) for _ in range(self.tamanho_vetor)]
         return vetor_sujeiras
 
     def run(self):
@@ -130,7 +129,7 @@ class Asteroids:
         #confere se o numero de sujeiras na tela é inferior ao limite
         if len(self.vetor_sujeiras) < self.tamanho_vetor:
             #cria uma nova sujeira a partir de uma existente
-            self.vetor_sujeiras.append(Asteroid(self.vetor_sujeiras[0].x, self.vetor_sujeiras[0].y, self.nave.copia_rect))
+            self.vetor_sujeiras.append(Asteroid(self.vetor_sujeiras[0].x, self.vetor_sujeiras[0].y))
 
     def desenha_sujeiras(self):
 
