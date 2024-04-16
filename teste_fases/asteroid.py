@@ -21,12 +21,12 @@ class Asteroid:
             self.x = x
             self.y = y
 
-        velocidade = 4
+        velocidade = random.uniform(1, 5)
 
         self.direcaox = random.random()*-velocidade
         self.direcaoy = random.random()*velocidade
 
-        self.limite = random.uniform(2, 6)
+        self.limite = velocidade
 
         """if self.x >= self.largura_tela / 2:
             self.direcaox = random.random()*-velocidade

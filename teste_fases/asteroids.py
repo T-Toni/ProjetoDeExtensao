@@ -25,7 +25,7 @@ class Asteroids:
         #determina a velocidade da rotação da nave
         self.vel_rotacao = 4
         #determina a velocidade da nave
-        self.vel_movimentacao = 10
+        self.vel_movimentacao = 8
         #guarda se a tecla espaço foi apertada
         self.pressionada = False
 
