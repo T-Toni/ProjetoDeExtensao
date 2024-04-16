@@ -41,6 +41,18 @@ class Fase4:
         self.canos_sheet_obj = SpriteSheet(canos_sheet_img, 5)
         self.canos = ObjAnimado(self.janela, self.canos_sheet_obj, 160, 90, 8, (243, 97, 255), 0.05)
 
+        #ponteiro do medidor de velocidade
+        imagem_ponteiro = pygame.image.load("imagens/ponteiro.png")
+        self.ponteiro = pygame.transform.scale(imagem_ponteiro, (2*8, 20*8))
+        self.ponteiro_rect = self.ponteiro.get_rect(center=(18 * 8, 17 * 8))
+        #copia o ponteiro
+        self.copia = self.ponteiro.copy()
+        self.copia_rect = self.copia.get_rect(center=(18 * 8, 17 * 8))   #rect da copia do ponteiro
+
+        self.angulo = 0                 #controla o angulo da rotacao
+
+        self.ajuste_angulo = 0          #ajusta o angulo
+
         #inicia o loop de animação
         self.medidor_progressao.anima(0, 0)
         self.canos.anima(0, 0)
@@ -49,8 +61,9 @@ class Fase4:
         self.posicao = 0    #para controlar a movimentação do tanque pelas setas (1 = direita, 0 centro, -1 esquerda)
         self.agitacao = 0
         self.agitado = False    # se o tanque ja terminou de ser agitado
-        self.divisor = 1000     # numero que vai dividor a agitação para selecionar o frame
-        self.i = 0              #usada pra animação da seta
+        self.progresso = 0
+
+
 
     def run(self):
 
@@ -61,6 +74,7 @@ class Fase4:
             self.medidor_velocidade.desenha()
             self.canos.update()
             self.tanque.desenha()
+            self.janela.blit((self.copia), self.copia_rect.topleft)
 
         #é executado após o fim da animação de inicio da fase
         else:
@@ -74,6 +88,7 @@ class Fase4:
             self.medidor_velocidade.desenha()
             self.canos.update()
             self.tanque.desenha()
+            self.janela.blit((self.copia), self.copia_rect.topleft)
 
 
             #atualiza a posição do tanque
@@ -84,39 +99,75 @@ class Fase4:
                 # logica para a movimentação do tanque
                 teclas = pygame.key.get_pressed()
 
-                offset = 6 * 8
-                incremento = 1000
+                offset = 3 * 8
+                incremento = 100
+                divisor = 1.5         #valor que divide o offset para dar a velocidade de movimentacao do tanque
 
-                if teclas[pygame.K_UP] and self.posicao != -1:
-                    # adiciona somente metade do valor do offser caso seja a primeira movimentação
-                    if self.posicao == 0:
-                        self.tanque.y -= offset / 2
-                    else:
-                        self.tanque.y -= offset
+                print("agitacao: " + str(self.agitacao))
 
-                    self.posicao = -1
-                    self.agitacao += incremento   # incrementa a variavel de agitação
+                if teclas[pygame.K_UP] and self.posicao != -1 and not teclas[pygame.K_DOWN]:
 
-                elif teclas[pygame.K_DOWN] and self.posicao != 1:
-                    # adiciona somente metade do valor do offser caso seja a primeira movimentação
-                    if self.posicao == 0:
-                        self.tanque.y += offset / 2
-                    else:
-                        self.tanque.y += offset
+                    if self.tanque.y >= self.tanqueYInicial - offset:
 
-                    self.posicao = 1
-                    self.agitacao += incremento  # incrementa a variavel de agitação
+                        self.tanque.y -= offset / divisor
+                        self.agitacao += incremento     # incrementa a variavel de agitação
+
+                elif teclas[pygame.K_DOWN] and self.posicao != 1 and not teclas[pygame.K_UP]:
+
+                    if self.tanque.y <= self.tanqueYInicial + offset:
+                        self.tanque.y += offset / divisor
+                        self.agitacao += incremento
+
+
+                #limita a variavel de agitacao
+                limite = 5000
+
+                self.agitacao -= incremento / 2.5    #decresce a variavel de agitação
+                if self.agitacao > limite:
+                    self.agitacao = limite
+                if self.agitacao <= 0:
+                    self.agitacao = 0
+
+                #AJUSTE
+                i = self.agitacao / (limite / 2)
+
+                if i < 1 and i >= 0:
+                    ajuste = i
+                else:
+                    ajuste = abs(i - 2)
+
+                #print("ajuste: " + str(ajuste))
+
+                self.progresso += incremento/3 * ajuste
+
+                #("progresso: " + str(self.progresso))
 
                 #muda o sprite conforme o valor da variavel agitacao
                 if self.medidor_progressao.spriteAtual < self.medidor_progressao_sheet_obj.numeroDeFrames - 1:
-                    if self.agitacao / self.divisor < 21:
-                        self.medidor_progressao.setFrame(self.agitacao / self.divisor)
+
+                    divisor = 1000
+
+                    if self.progresso / divisor < self.medidor_progressao_sheet_obj.numeroDeFrames - 1:
+                        self.medidor_progressao.setFrame(self.progresso / divisor)
                     else:
                         self.medidor_progressao.setFrame(self.medidor_progressao_sheet_obj.numeroDeFrames - 1)
 
                 else:
                     self.agitado = True
                     #self.medidor_progressao.altLoop(21, 24, 0.1)
+
+
+                #ROTACIONA O PONTEIRO
+                if i < 1 and i >= 0:
+                    self.angulo = (i * 120) - 120
+                else:
+                    self.angulo = ((abs(i - 2) * 120) - 120) * -1
+
+
+                self.copia = pygame.transform.rotate(self.ponteiro, -self.angulo)
+                self.copia_rect = self.copia.get_rect(center = self.ponteiro_rect.center)
+
+
 
 
 
@@ -151,4 +202,11 @@ class Fase4:
                         self.gerenciador.set_fase(proximaFase)  # muda a fase do gerenciador para a proxima
 
 
+    """ def rotaciona_esq(self):
+        self.copia = pygame.transform.rotate(self.ponteiro, -90)
+        self.copia_rect = self.copia.get_rect(center = self.ponteiro_rect.center)
 
+    def rotaciona_dir(self):
+        print("dor")
+        self.copia = pygame.transform.rotate(self.ponteiro, 90)
+        self.copia_rect = self.copia.get_rect(center = self.ponteiro_rect.center)"""

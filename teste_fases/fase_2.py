@@ -6,7 +6,7 @@ from obj_animado import ObjAnimado
 import fase_3
 from sujeira import Sujeira
 from cloro import Cloro
-from Rede_Neural import RedeNeural
+from rede_neural import RedeNeural
 import transicao_2
 
 class Fase2:

@@ -97,7 +97,7 @@ class Fase3:
                 offset = 6 * 8
                 incremento = 100
 
-                if teclas[pygame.K_LEFT] and self.posicao != -1:
+                if teclas[pygame.K_LEFT] and self.posicao != -1 and not teclas[pygame.K_RIGHT]:
                     # adiciona somente metade do valor do offser caso seja a primeira movimentação
                     if self.posicao == 0:
                         self.tanqueX -= offset / 2
@@ -107,7 +107,7 @@ class Fase3:
                     self.posicao = -1
                     self.agitacao += incremento   # incrementa a variavel de agitação
 
-                if teclas[pygame.K_RIGHT] and self.posicao != 1:
+                if teclas[pygame.K_RIGHT] and self.posicao != 1 and not teclas[pygame.K_LEFT]:
                     # adiciona somente metade do valor do offser caso seja a primeira movimentação
                     if self.posicao == 0:
                         self.tanqueX += offset / 2
