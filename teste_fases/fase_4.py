@@ -100,7 +100,7 @@ class Fase4:
                 teclas = pygame.key.get_pressed()
 
                 offset = 3 * 8
-                incremento = 100
+                incremento = 120
                 divisor = 1.5         #valor que divide o offset para dar a velocidade de movimentacao do tanque
 
                 print("agitacao: " + str(self.agitacao))
@@ -143,25 +143,24 @@ class Fase4:
                 #("progresso: " + str(self.progresso))
 
                 #muda o sprite conforme o valor da variavel agitacao
-                if self.medidor_progressao.spriteAtual < self.medidor_progressao_sheet_obj.numeroDeFrames - 1:
+                if self.medidor_progressao.spriteAtual < self.medidor_progressao_sheet_obj.numeroDeFrames - 4:
 
                     divisor = 1000
 
-                    if self.progresso / divisor < self.medidor_progressao_sheet_obj.numeroDeFrames - 1:
+                    if self.progresso / divisor < self.medidor_progressao_sheet_obj.numeroDeFrames - 4:
                         self.medidor_progressao.setFrame(self.progresso / divisor)
                     else:
-                        self.medidor_progressao.setFrame(self.medidor_progressao_sheet_obj.numeroDeFrames - 1)
+                        self.medidor_progressao.setFrame(self.medidor_progressao_sheet_obj.numeroDeFrames - 4)
 
                 else:
                     self.agitado = True
-                    #self.medidor_progressao.altLoop(21, 24, 0.1)
 
 
                 #ROTACIONA O PONTEIRO
                 if i < 1 and i >= 0:
-                    self.angulo = (i * 120) - 120
+                    self.angulo = (i * 170) - 170
                 else:
-                    self.angulo = ((abs(i - 2) * 120) - 120) * -1
+                    self.angulo = ((abs(i - 2) * 170) - 170) * -1
 
 
                 self.copia = pygame.transform.rotate(self.ponteiro, -self.angulo)
@@ -174,6 +173,10 @@ class Fase4:
 
             #retorna o tanque a posição original
             else:
+                #inicia o loop alternativo de animação do medidor
+                self.medidor_progressao.altLoop(21, 24, 0.1)
+
+
                 velocidadeDeRetorno = 1
                 #caso x seja menor que o original
                 if self.tanque.getY() < self.tanqueYInicial:

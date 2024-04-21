@@ -1,5 +1,5 @@
 import pygame
-import menu
+import transicao_3
 from botao import Botao
 from SpriteSheet import SpriteSheet
 from obj_animado import ObjAnimado
@@ -60,7 +60,12 @@ class Fase3:
         self.divisor = 1000     # numero que vai dividor a agitação para selecionar o frame
         self.i = 0              #usada pra animação da seta
 
+        #fim da fase
+        self.fase_completa = False
+        self.transicao = Botao(0, 0, 480*8, 90*8, "imagens/transicao_3-4.png", self.janela, (243, 97, 255))
+
     def run(self):
+        teclas = pygame.key.get_pressed()
 
         #executa a animação dos canos ao inicio da fase
         if self.canos.spriteAtual < self.canos_sheet_obj.numeroDeFrames - 0.1 and self.canos.velocidade != 0:
@@ -72,7 +77,7 @@ class Fase3:
             self.botao.desenha()
 
         #é executado após o fim da animação de inicio da fase
-        else:
+        elif not self.fase_completa:
             if self.canos.velocidade != 0:
                 self.canos.velocidade = 0
                 self.canos.spriteAtual = self.canos_sheet_obj.numeroDeFrames - 1
@@ -86,36 +91,32 @@ class Fase3:
             self.tanque.update()
 
 
-            #atualiza a posição do tanque
+           #atualiza a posição do tanque
             if self.agitado == False:
                 # atualiza a posição do tanque
                 self.tanque.setX(self.tanqueX)
 
                 # logica para a movimentação do tanque
-                teclas = pygame.key.get_pressed()
 
                 offset = 6 * 8
-                incremento = 100
+                incremento = 50
+                divisor = 4
 
                 if teclas[pygame.K_LEFT] and self.posicao != -1 and not teclas[pygame.K_RIGHT]:
-                    # adiciona somente metade do valor do offser caso seja a primeira movimentação
-                    if self.posicao == 0:
-                        self.tanqueX -= offset / 2
-                    else:
-                        self.tanqueX -= offset
 
-                    self.posicao = -1
-                    self.agitacao += incremento   # incrementa a variavel de agitação
+                    if self.tanqueX >= self.tanqueXInicial - incremento / 2:
+
+                        self.tanqueX -= incremento / divisor
+                        self.agitacao += incremento
+
 
                 if teclas[pygame.K_RIGHT] and self.posicao != 1 and not teclas[pygame.K_LEFT]:
-                    # adiciona somente metade do valor do offser caso seja a primeira movimentação
-                    if self.posicao == 0:
-                        self.tanqueX += offset / 2
-                    else:
-                        self.tanqueX += offset
 
-                    self.posicao = 1
-                    self.agitacao += incremento  # incrementa a variavel de agitação
+                    if self.tanqueX <= self.tanqueXInicial + incremento / 2:
+
+                        self.tanqueX += incremento / divisor
+                        self.agitacao += incremento
+
 
 
 
@@ -175,21 +176,30 @@ class Fase3:
                         self.canos.setFrame(0)
 
                     if self.canos.spriteAtual == 0:
-                        #permite o pressionamento do botão
-                        if self.botao.clicado(self.mouse.getX(), self.mouse.getY(), self.mouse.getPressionado()):
-                            proximaFase = menu.Menu(self.janela, self.gerenciador, self.mouse)
-                            self.gerenciador.set_fase(proximaFase)  # muda a fase do gerenciador para a proxima
+                        self.fase_completa = True   #determina que a fase terminou
 
-                        # desenha a seta
-                        self.seta.desenha()
+        else:
 
-                        #logica para animação da seta
-                        if self.seta.y <= (57 * 8):
-                            self.i = 1
-                        if self.seta.y >= (67 * 8):
-                            self.i = 0
 
-                        if 1 == self.i:
-                            self.seta.y = self.seta.y + 2
-                        else:
-                            self.seta.y = self.seta.y - 2
+            self.medidor.altLoop(23, 26, 0.1)
+
+            self.transicao.desenha()
+            self.medidor.update()
+
+            #logica para transicao de fases
+            velocidade = 3
+
+            if self.transicao.getX() >= -160 * 8:
+                if teclas[pygame.K_RIGHT]:
+                    self.transicao.setX(self.transicao.getX() - velocidade)
+                    self.medidor.setX(self.medidor.getX() - velocidade)
+
+            else:
+                self.proximaFase = transicao_3.Transicao_3(self.janela, self.gerenciador, self.mouse)
+                self.gerenciador.set_fase(self.proximaFase)
+
+
+
+
+
+
