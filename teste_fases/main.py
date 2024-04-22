@@ -27,8 +27,8 @@ class Jogo:
     def rodar(self):
 
         self.faseAtual = menu.Menu(self.janela, self.gerenciador, self.mouse)       #inicializa a classe (fase) menu
-        #self.faseAtual = asteroids.Asteroids(self.janela, self.gerenciador, self.mouse)
-        self.faseAtual = transicao_3.Transicao_3(self.janela, self.gerenciador, self.mouse)
+        self.faseAtual = asteroids.Asteroids(self.janela, self.gerenciador, self.mouse)
+        #3self.faseAtual = transicao_3.Transicao_3(self.janela, self.gerenciador, self.mouse)
         #self.faseAtual = fase_3.Fase3(self.janela, self.gerenciador, self.mouse)
         self.gerenciador.set_fase(self.faseAtual)                       #a atribui ao gerenciador de fases
 
