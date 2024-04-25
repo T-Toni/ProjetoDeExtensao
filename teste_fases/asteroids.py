@@ -9,7 +9,7 @@ from asteroid import Particula
 
 
 class Asteroids:
-    def __init__(self, janela, gerenciador, mouse, opacidade):
+    def __init__(self, janela, gerenciador, mouse):
         #necessário pra desenhar
         self.janela = janela
         #necessario para a troca de fases
@@ -38,8 +38,6 @@ class Asteroids:
         #timer usado para o bom funcionamento da comunicação entre as sujeiras
         self.tSujeiras = 0
 
-        self.opacidade = opacidade
-
         self.sujeira = Botao(0, 0, 160 * 8, 90 * 8, "imagens/sujeira_asteroids.png", self.janela, None)
 
         #zoom
@@ -55,7 +53,7 @@ class Asteroids:
 
                     """pygame.draw.circle(self.janela, (0,128,0), (sujeira.x + sujeira.raio / 2, sujeira.y + sujeira.raio / 2), sujeira.raio, 4)
                     pygame.draw.circle(self.janela, (0, 128, 0), (sujeira.x + sujeira.raio / 2, sujeira.y + sujeira.raio / 2), sujeira.raio, 4)"""
-                    pygame.draw.circle(self.janela, (0, 128, 0), (sujeira.x + sujeira.raio / 2, sujeira.y + sujeira.raio / 2), sujeira.raio, 4)
+                    #pygame.draw.circle(self.janela, (0, 128, 0), (sujeira.x + sujeira.raio / 2, sujeira.y + sujeira.raio / 2), sujeira.raio, 4)
 
 
                     #confere qual sujeira viu a nave mais recentemetnte

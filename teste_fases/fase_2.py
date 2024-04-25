@@ -91,9 +91,6 @@ class Fase2:
         #funcionamento zoom
         #self.largura, self.altura = 1280, 720
 
-
-
-
     def run(self):
 
         if self.funcionamento_cloro == False:

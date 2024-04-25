@@ -56,7 +56,10 @@ class Asteroid:
         #variaveis para o bom funcionamento do sensor
         self.raio = 16 * 8  #determina o raio do sensor
 
-
+    def altera_sprite(self, nome):
+        self.imagem = pygame.image.load(nome)
+        self.imagem = pygame.transform.scale(self.imagem, (self.largura,self.altura))
+        self.imagem.set_colorkey([243, 97, 255])   #torna transparente a cor dana no parametro
 
     def desenha(self, tela, offset, nave_rect):
         #atualiza a posição com o offset
@@ -67,46 +70,44 @@ class Asteroid:
         self.rect.x = self.x
         self.rect.y = self.y
 
-        cor = (255, 255, 255)
+        #cor = (255, 255, 255)
 
         # TEXTO
         # define a cor do texto (em RGB)
-        cor_texto = (255, 255, 255)
+        #cor_texto = (255, 255, 255)
 
         # define a fonte e o tamanho do texto
-        fonte = pygame.font.Font(None, 36)
+        #fonte = pygame.font.Font(None, 36)
 
         # Renderiza o texto
-        texto_renderizado = fonte.render(str(self.ultimo_encontro), True, cor_texto)
+        #texto_renderizado = fonte.render(str(self.ultimo_encontro), True, cor_texto)
 
         # pega o rect do texto renderizado
-        texto_rect = texto_renderizado.get_rect()
+        #texto_rect = texto_renderizado.get_rect()
 
         # determine a posição do texto
-        texto_rect.topleft = (self.x - self.largura / 2, self.y - self.largura / 2)
+        #texto_rect.topleft = (self.x - self.largura / 2, self.y - self.largura / 2)
 
         # desenha o texto
-        tela.blit(texto_renderizado, texto_rect)
+        #tela.blit(texto_renderizado, texto_rect)
         # FIM DO TEXTO
 
         #atualiza a posição do ultimo registro da nave tambem
         if self.navex:
             self.navex -= offset.x
             self.navey -= offset.y
-            pygame.draw.circle(tela, cor, (self.navex + self.raio / 4, self.navey + self.raio / 4), self.raio / 8, 2)
-            tela.blit(texto_renderizado, (self.navex + self.raio / 4, self.navey + self.raio / 4))
+            #pygame.draw.circle(tela, cor, (self.navex + self.raio / 4, self.navey + self.raio / 4), self.raio / 8, 2)
+            #tela.blit(texto_renderizado, (self.navex + self.raio / 4, self.navey + self.raio / 4))
 
         #troca a cor para vermelho se o sensor detectar a nave
         if self.sensor(nave_rect):
             cor = (255, 0, 0)
 
-        pygame.draw.circle(tela, cor, (self.x + self.raio/2, self.y + self.raio/2), self.raio, 2)
+        #pygame.draw.circle(tela, cor, (self.x + self.raio/2, self.y + self.raio/2), self.raio, 2)
 
 
         #desenha
         tela.blit(self.imagem, (self.x, self.y))
-
-
 
     def sensor(self, nave_rect):
         #determina o centro do circulo
@@ -161,6 +162,8 @@ class Asteroid:
 
         if self.sensor(nave_rect):
 
+            self.altera_sprite("imagens/sujeira_apavorada.png")
+
             self.navex = nave_rect.center[0] - 7*4
             self.navey = nave_rect.center[1] - 5*4
 
@@ -168,6 +171,9 @@ class Asteroid:
             self.maior_valor = timer
             self.ultimo_encontro = timer
             #mudar para o rect
+        else:
+            if self.navex != None:
+                self.altera_sprite("imagens/sujeira_preocupada.png")
 
         if self.navex != None:
             #determina a velocidade da alteração do trajeto
@@ -197,39 +203,6 @@ class Asteroid:
                     self.direcaoy = self.limite
                 else:
                     self.direcaoy = -self.limite
-
-
-    """def movimento_propagacao(self):
-
-        # determina a velocidade da alteração do trajeto
-        velocidade = 0.1
-        #determina um limite de velocidade menor do que o contato com a nave de fato
-        limite = self.limite
-
-        # ajusta a movimentação para o eixo x
-        if self.x < self.navex:
-            self.direcaox -= velocidade
-        else:
-            self.direcaox += velocidade
-
-        # ajusta a movimentação para o eixo x
-        if self.y < self.navey:
-            self.direcaoy -= velocidade
-        else:
-            self.direcaoy += velocidade
-
-        # ajusta as velocidades para estarem dentro do limite
-        if abs(self.direcaox) > limite:
-            if self.direcaox > 0:
-                self.direcaox = limite
-            else:
-                self.direcaox = -limite
-
-        if abs(self.direcaoy) > limite:
-            if self.direcaoy > 0:
-                self.direcaoy = limite
-            else:
-                self.direcaoy = -limite"""
 
 
 class Particula:
