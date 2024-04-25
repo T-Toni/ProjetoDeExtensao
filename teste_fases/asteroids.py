@@ -3,14 +3,13 @@ import random
 import pygame
 from botao import Botao
 from SpriteSheet import SpriteSheet
-from obj_animado import ObjAnimado
 from nave import Nave
 from asteroid import Asteroid
 from asteroid import Particula
 
 
 class Asteroids:
-    def __init__(self, janela, gerenciador, mouse):
+    def __init__(self, janela, gerenciador, mouse, opacidade):
         #necessário pra desenhar
         self.janela = janela
         #necessario para a troca de fases
@@ -38,6 +37,14 @@ class Asteroids:
 
         #timer usado para o bom funcionamento da comunicação entre as sujeiras
         self.tSujeiras = 0
+
+        self.opacidade = opacidade
+
+        self.sujeira = Botao(0, 0, 160 * 8, 90 * 8, "imagens/sujeira_asteroids.png", self.janela, None)
+
+        #zoom
+        self.largura, self.altura = 1280, 720
+
 
 
     def comunica_sujeiras(self):
@@ -90,13 +97,13 @@ class Asteroids:
 
     def run(self):
 
-        #print("timer: " + str(self.timer))
+        self.janela.fill((62, 132, 119))
+        """#aplica a opacidade a sujeira
+        self.sujeira.setAlpha(self.opacidade)
+        self.sujeira.desenha()"""
 
         #recebe todas a teclas pressionadas
         teclas = pygame.key.get_pressed()
-
-        #preenche o fundo da tela de preto
-        self.janela.fill((0, 0, 0))
 
         self.nave.desenha()
 
@@ -113,7 +120,7 @@ class Asteroids:
             self.nave.andar(self.vel_movimentacao)
 
         self.desenha_particulas()
-        self.desenha_sujeiras()
+        sujeiras = self.desenha_sujeiras()
         self.confere_colisao()
         self.comunica_sujeiras()
 
@@ -124,6 +131,11 @@ class Asteroids:
         if self.timer > 500 and len(self.vetor_sujeiras) != 0:
             self.cria_sujeira()
             self.timer = 0
+
+        if sujeiras == 0:
+            return False
+        else:
+            return True
 
     def cria_sujeira(self):
         #confere se o numero de sujeiras na tela é inferior ao limite
@@ -161,6 +173,8 @@ class Asteroids:
 
         #desenha o texto
         self.janela.blit(texto_renderizado, texto_rect)
+
+        return num_sujeiras
 
     def confere_colisao(self):
 

@@ -232,9 +232,6 @@ class Asteroid:
                 self.direcaoy = -limite"""
 
 
-
-
-
 class Particula:
 
     def __init__(self):
@@ -251,7 +248,7 @@ class Particula:
         self.x = random.randint(0 - acrecimoObjeto, self.largura_tela + acrecimoObjeto)
         self.y = random.randint(0 - acrecimoObjeto, self.altura_tela + acrecimoObjeto)
 
-        self.imagem = pygame.image.load("imagens/particula_cloro.png")
+        self.imagem = pygame.image.load("imagens/particula_sujeira.png")
         self.imagem = pygame.transform.scale(self.imagem, (self.largura,self.altura))
         self.imagem.set_colorkey([243, 97, 255])
 

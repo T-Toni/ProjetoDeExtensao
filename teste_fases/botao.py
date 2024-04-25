@@ -12,6 +12,9 @@ class Botao:
         self.largura = largura
         self.altura = altura
 
+        self.largura_alternativa = largura
+        self.altura_alternativa = altura
+
         #imagem
         if (imagem):
             self.imagem = pygame.image.load(imagem)  #!!!DEVE SER CARREGADO ASSIM, CASO CONTRARIO SERÁ UMA STRING
@@ -52,8 +55,16 @@ class Botao:
 
 
     def desenha(self):
-        if self.imagem:
+        if self.imagem and self.largura >= self.largura_alternativa:
             self.tela.blit(self.imagem, (self.x, self.y))
+
+        elif self.imagem:
+            # Calcula as coordenadas do canto superior esquerdo do objeto redimensionado
+            pos_x = self.x - (self.largura_alternativa - self.largura) / 2
+            pos_y = self.y - (self.altura_alternativa - self.altura) / 2
+
+            # Desenha o objeto redimensionado
+            self.tela.blit(self.imagem, (pos_x, pos_y))
 
     def setX(self, x):
         self.x = x
@@ -78,3 +89,11 @@ class Botao:
 
     def setAlpha(self, opacidade):
         self.imagem.set_alpha(opacidade)
+
+    def redimencionar(self, valor):
+        if self.imagem:
+            self.largura_alternativa += int(self.largura * valor)
+            self.altura_alternativa += int(self.altura * valor)
+            self.imagem = pygame.transform.scale(self.imagem, (self.largura_alternativa, self.altura_alternativa))
+            #print(self.largura_alternativa / 8)
+
