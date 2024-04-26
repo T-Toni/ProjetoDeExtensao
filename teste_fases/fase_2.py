@@ -77,6 +77,8 @@ class Fase2:
         self.cloro_usado = False
         self.cal_usado = False
 
+        self.usando_cal = False     #serve para que o jogador tenha que apertar somente uma vez para a animação ocorrer
+
         #seletor (determina o item selecionado)
         self.selecionado = self.borda_cal
 
@@ -86,10 +88,10 @@ class Fase2:
 
         #CLORO
         self.funcionamento_cloro = False    #determina se os cloros estão funcionando ainda na agua
-        self.fase_cloro = asteroids.Asteroids(self.janela, self.gerenciador, self.mouse, self.opacidade)
+        self.fase_cloro = asteroids.Asteroids(self.janela, self.gerenciador, self.mouse)
 
         #funcionamento zoom
-        #self.largura, self.altura = 1280, 720
+        self.multiplicador = 1      #variavel que determina o aumento do tanque
 
     def run(self):
 
@@ -130,14 +132,17 @@ class Fase2:
                     else:
                         self.cal_usado = True
 
-                    if teclas[pygame.K_SPACE] and self.medidor.getY() < 48 * 8:
-                        self.animacao_cal.update()
-                        if self.animacao_cal.getFrame() > 13:
-                            self.animacao_cal.setFrame(8)
-                        self.animacao_cal.setX(self.animacao_cal.getX() + 6)
-                        self.medidor.setY(self.medidor.getY() + 0.5)
-                        self.opacidade = self.opacidade - 0.6
-                        print(self.opacidade)
+                    if teclas[pygame.K_SPACE] or self.usando_cal:
+                        if self.medidor.getY() < 48 * 8:
+                            self.usando_cal = True
+                            self.animacao_cal.update()
+                            if self.animacao_cal.getFrame() > 13:
+                                self.animacao_cal.setFrame(8)
+                            self.animacao_cal.setX(self.animacao_cal.getX() + 6)
+                            self.medidor.setY(self.medidor.getY() + 0.5)
+                            self.opacidade = self.opacidade - 0.6
+                        else:
+                            self.usando_cal = False
                     else:
                         if self.medidor.getY() >= 48 * 8:
                             self.animacao_cal.setRepetir()
@@ -153,8 +158,10 @@ class Fase2:
                     self.ph_ideal.setFrame(0)
 
                     if teclas[pygame.K_SPACE]:
-                        if not self.cloro_usado:
+                        if not self.cloro_usado and self.cal_usado:
                             self.funcionamento_cloro = True
+                        else:
+                            print("use o cal primeiro")
 
 
                     if teclas[pygame.K_LEFT] and not self.funcionamento_cloro:
@@ -163,31 +170,43 @@ class Fase2:
 
             #transição
             else:
-                self.transicao.desenha()
-                if self.transicao.getX() > (-160 * 8) - 1:
-
-                    #Verifica se a seta para a direita está sendo pressionada
-                    if teclas[pygame.K_RIGHT]:
-                        self.transicao.setX(self.transicao.getX() - 3)
+                if self.multiplicador > 1:
+                    #desenha os outros objetos da fase
+                    self.background.desenha()
+                    self.canos.desenha()
+                    self.inventario.desenha()
+                    self.cloro.desenha()
+                    self.cal.desenha()
+                    #desenha os objetos redimencionados
+                    self.agua.desenha()
+                    self.sujeira.desenha()
+                    self.tanque.desenha()
+                    #aplica a alteração no tamanho
+                    self.tanque.redimencionar(self.multiplicador)
+                    self.sujeira.redimencionar(self.multiplicador)
+                    self.agua.redimencionar(self.multiplicador)
+                    self.multiplicador -= 0.05
                 else:
-                    self.proximaFase = transicao_2.Transicao_2(self.janela, self.gerenciador, self.mouse)
-                    self.gerenciador.set_fase(self.proximaFase)
+                    self.transicao.desenha()
+                    if self.transicao.getX() > (-160 * 8) - 1:
+
+                        #Verifica se a seta para a direita está sendo pressionada
+                        if teclas[pygame.K_RIGHT]:
+                            self.transicao.setX(self.transicao.getX() - 3)
+                    else:
+                        self.proximaFase = transicao_2.Transicao_2(self.janela, self.gerenciador, self.mouse)
+                        self.gerenciador.set_fase(self.proximaFase)
 
         else:
-            if self.tanque.largura_alternativa/8 < 440 :
-                self.background.desenha()
-                self.canos.desenha()
-                self.inventario.desenha()
-                self.cloro.desenha()
-                self.cal.desenha()
-
-                self.agua.desenha()
-                self.sujeira.desenha()
-                self.tanque.desenha()
-                self.tanque.redimencionar(0.05)
-                self.agua.redimencionar(0.05)
-                self.sujeira.redimencionar(0.05)
-            else:
-                self.funcionamento_cloro = self.fase_cloro.run()
-                self.cloro_usado = not self.funcionamento_cloro
+                if self.multiplicador < 2.7:
+                    self.agua.desenha()
+                    self.sujeira.desenha()
+                    self.tanque.desenha()
+                    self.tanque.redimencionar(self.multiplicador)
+                    self.sujeira.redimencionar(self.multiplicador)
+                    self.agua.redimencionar(self.multiplicador)
+                    self.multiplicador += 0.05
+                else:
+                    self.funcionamento_cloro = self.fase_cloro.run()
+                    self.cloro_usado = not self.funcionamento_cloro
 

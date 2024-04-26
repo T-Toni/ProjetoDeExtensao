@@ -36,14 +36,14 @@ class Asteroids:
         self.vetor_particulas = self.cria_particulas()
 
         #timer usado para o bom funcionamento da comunicação entre as sujeiras
-        self.tSujeiras = 0
+        self.tSujeiras = 0.1
 
         self.sujeira = Botao(0, 0, 160 * 8, 90 * 8, "imagens/sujeira_asteroids.png", self.janela, None)
 
         #zoom
         self.largura, self.altura = 1280, 720
-
-
+        self.multiplicador = 0.01
+        self.inicio_da_fase = True
 
     def comunica_sujeiras(self):
 
@@ -88,7 +88,6 @@ class Asteroids:
                             sujeira.ultimo_encontro += sujeira2.ultimo_encontro
                             #sujeira.movimento_propagacao()
 
-
     def cria_sujeiras(self):
         vetor_sujeiras = [Asteroid(None, None) for _ in range(self.tamanho_vetor)]
         return vetor_sujeiras
@@ -96,44 +95,87 @@ class Asteroids:
     def run(self):
 
         self.janela.fill((62, 132, 119))
-        """#aplica a opacidade a sujeira
-        self.sujeira.setAlpha(self.opacidade)
-        self.sujeira.desenha()"""
 
-        #recebe todas a teclas pressionadas
-        teclas = pygame.key.get_pressed()
+        if self.multiplicador < 1 and self.inicio_da_fase:
+            #diminui a dimensão da nave (7 * 8, 5 * 8)
+            largura_alternativa_nave = (7 * 8 * self.multiplicador)
+            altura_alternativa_nave = (5 * 8 * self.multiplicador)
+            self.nave.copia = pygame.transform.scale(self.nave.imagem, (largura_alternativa_nave, altura_alternativa_nave))
 
-        self.nave.desenha()
+            #ajusta as posições e a dimensão das particulas (1 * 8, 1 * 8)
+            for particula in self.vetor_particulas:
+                largura_alternativa_part = (8 * self.multiplicador)
+                altura_alternativa_part = (8 * self.multiplicador)
+                particula.copia = pygame.transform.scale(particula.imagem, (largura_alternativa_part, altura_alternativa_part))
 
-        #rotação da nave
-        if teclas[pygame.K_RIGHT]:
-            self.nave.rotaciona(-self.vel_rotacao)
-        elif teclas[pygame.K_LEFT]:
-            self.nave.rotaciona(self.vel_rotacao)
+            """largura_alternativa = (self.largura * self.multiplicador)
+            altura_alternativa = (self.altura * self.multiplicador)
+            self.janela = pygame.transform.scale(self.janela, (largura_alternativa, altura_alternativa))"""
+
+            self.multiplicador += 0.01
+
+            self.nave.desenha()
+            self.desenha_particulas()
+            for sujeira in self.vetor_sujeiras:
+                sujeira.desenha(self.janela, self.nave.offset, self.nave.copia_rect)
+
         else:
-            self.nave.rotaciona(0)
+            self.inicio_da_fase = False
+            #apaga as copias das imagens das particulas para que seja desenhada a imagem original
+            if self.vetor_particulas[0].copia:
+                for particula in self.vetor_particulas:
+                    particula.copia = None
 
-        #movimentação para frente
-        if teclas[pygame.K_UP] or teclas[pygame.K_SPACE]:
+            #recebe todas a teclas pressionadas
+            teclas = pygame.key.get_pressed()
+
+            self.nave.desenha()
+
+            #rotação da nave
+            if teclas[pygame.K_RIGHT]:
+                self.nave.rotaciona(-self.vel_rotacao)
+            elif teclas[pygame.K_LEFT]:
+                self.nave.rotaciona(self.vel_rotacao)
+            else:
+                self.nave.rotaciona(0)
+
+            #movimentação para frente
+            #if teclas[pygame.K_UP] or teclas[pygame.K_SPACE]:
             self.nave.andar(self.vel_movimentacao)
 
-        self.desenha_particulas()
-        sujeiras = self.desenha_sujeiras()
-        self.confere_colisao()
-        self.comunica_sujeiras()
+            self.desenha_particulas()
+            sujeiras = self.desenha_sujeiras()
+            self.confere_colisao()
+            self.comunica_sujeiras()
 
-        #incrementa os timers
-        self.timer += 1
-        self.tSujeiras += 1
+            #incrementa os timers
+            self.timer += 1
+            self.tSujeiras += 1
 
-        if self.timer > 500 and len(self.vetor_sujeiras) != 0:
-            self.cria_sujeira()
-            self.timer = 0
+            if self.timer > 500 and len(self.vetor_sujeiras) != 0:
+                self.cria_sujeira()
+                self.timer = 0
 
-        if sujeiras == 0:
-            return False
-        else:
-            return True
+            if sujeiras == 0:
+                """if self.multiplicador > 0.01:
+                    #diminui a dimensão da nave (7 * 8, 5 * 8)
+                    largura_alternativa_nave = (7 * 8 * self.multiplicador)
+                    altura_alternativa_nave = (5 * 8 * self.multiplicador)
+                    self.nave.copia = pygame.transform.scale(self.nave.imagem, (largura_alternativa_nave, altura_alternativa_nave))
+
+                    #ajusta as posições e a dimensão das particulas (1 * 8, 1 * 8)
+                    for particula in self.vetor_particulas:
+                        largura_alternativa_part = (8 * self.multiplicador)
+                        altura_alternativa_part = (8 * self.multiplicador)
+                        particula.copia = pygame.transform.scale(particula.imagem, (largura_alternativa_part, altura_alternativa_part))
+
+                    self.multiplicador -= 0.01
+
+                    self.nave.desenha()
+                    self.desenha_particulas()"""
+                return False
+            else:
+                return True
 
     def cria_sujeira(self):
         #confere se o numero de sujeiras na tela é inferior ao limite
@@ -194,7 +236,6 @@ class Asteroids:
                         self.vetor_sujeiras.remove(sujeira)
                         break"""
 
-
     def cria_particulas(self):
         vetor_particulas = [Particula() for _ in range(20)]
         return vetor_particulas
@@ -204,7 +245,3 @@ class Asteroids:
             particula.desenha(self.janela, self.nave.offset)
 
 
-
-"""a = Asteroids
-LARGURA, ALTURA = 1280, 720
-self.janela = pygame.display.set_mode((LARGURA, ALTURA))"""

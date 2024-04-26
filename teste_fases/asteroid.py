@@ -100,8 +100,8 @@ class Asteroid:
             #tela.blit(texto_renderizado, (self.navex + self.raio / 4, self.navey + self.raio / 4))
 
         #troca a cor para vermelho se o sensor detectar a nave
-        if self.sensor(nave_rect):
-            cor = (255, 0, 0)
+        #if self.sensor(nave_rect):
+            #cor = (255, 0, 0)
 
         #pygame.draw.circle(tela, cor, (self.x + self.raio/2, self.y + self.raio/2), self.raio, 2)
 
@@ -204,7 +204,6 @@ class Asteroid:
                 else:
                     self.direcaoy = -self.limite
 
-
 class Particula:
 
     def __init__(self):
@@ -225,6 +224,9 @@ class Particula:
         self.imagem = pygame.transform.scale(self.imagem, (self.largura,self.altura))
         self.imagem.set_colorkey([243, 97, 255])
 
+        #para o bom funcionamento do zoom
+        self.copia = None
+
 
     def desenha(self, tela, offset):
         #atualiza a posição com o offset
@@ -232,7 +234,10 @@ class Particula:
         self.y -= offset.y
 
         #desenha
-        tela.blit(self.imagem, (self.x, self.y))
+        if not self.copia:
+            tela.blit(self.imagem, (self.x, self.y))
+        else:
+            tela.blit(self.copia, (self.x, self.y))
 
         acrecimoObjeto = 16 * 8 * 2 * 2
         acrecimoComparacao = 16 * 8 * 2 * 2 + 1
