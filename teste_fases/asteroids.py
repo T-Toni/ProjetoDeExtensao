@@ -44,6 +44,7 @@ class Asteroids:
         self.largura, self.altura = 1280, 720
         self.multiplicador = 0.01
         self.inicio_da_fase = True
+        self.fim_da_fase = False
 
     def comunica_sujeiras(self):
 
@@ -119,7 +120,7 @@ class Asteroids:
             for sujeira in self.vetor_sujeiras:
                 sujeira.desenha(self.janela, self.nave.offset, self.nave.copia_rect)
 
-        else:
+        elif not self.fim_da_fase:
             self.inicio_da_fase = False
             #apaga as copias das imagens das particulas para que seja desenhada a imagem original
             if self.vetor_particulas[0].copia:
@@ -173,9 +174,34 @@ class Asteroids:
 
                     self.nave.desenha()
                     self.desenha_particulas()"""
-                return False
+                self.fim_da_fase = True
             else:
                 return True
+        else:
+            if self.multiplicador > 0.01:
+                #diminui a dimensão da nave (7 * 8, 5 * 8)
+                largura_alternativa_nave = (7 * 8 * self.multiplicador)
+                altura_alternativa_nave = (5 * 8 * self.multiplicador)
+                self.nave.copia = pygame.transform.scale(self.nave.imagem, (largura_alternativa_nave, altura_alternativa_nave))
+
+                #ajusta as posições e a dimensão das particulas (1 * 8, 1 * 8)
+                for particula in self.vetor_particulas:
+                    largura_alternativa_part = (8 * self.multiplicador)
+                    altura_alternativa_part = (8 * self.multiplicador)
+                    particula.copia = pygame.transform.scale(particula.imagem, (largura_alternativa_part, altura_alternativa_part))
+
+                """largura_alternativa = (self.largura * self.multiplicador)
+                altura_alternativa = (self.altura * self.multiplicador)
+                self.janela = pygame.transform.scale(self.janela, (largura_alternativa, altura_alternativa))"""
+
+                self.multiplicador -= 0.01
+
+                self.nave.desenha()
+                self.desenha_particulas()
+                for sujeira in self.vetor_sujeiras:
+                    sujeira.desenha(self.janela, self.nave.offset, self.nave.copia_rect)
+            else:
+                return False
 
     def cria_sujeira(self):
         #confere se o numero de sujeiras na tela é inferior ao limite
