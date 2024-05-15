@@ -2,7 +2,7 @@ import pygame
 import random
 import math
 
-class Asteroid:
+class Sujeira:
 
     def __init__(self, x, y):
         self.largura = 16 * 8
@@ -38,7 +38,7 @@ class Asteroid:
         else:
             self.direcaoy = random.random()*velocidade"""
 
-        self.imagem = pygame.image.load("imagens/sujeira_grande.png")
+        self.imagem = pygame.image.load("imagens/mini_sujeira_tranquila.png")
         self.imagem = pygame.transform.scale(self.imagem, (self.largura,self.altura))
         self.imagem.set_colorkey([243, 97, 255])   #torna transparente a cor dana no parametro
         self.rect = self.imagem.get_rect()
@@ -54,7 +54,7 @@ class Asteroid:
         self.navey = None
 
         #variaveis para o bom funcionamento do sensor
-        self.raio = 16 * 8  #determina o raio do sensor
+        self.raio = 18 * 8  #determina o raio do sensor
 
     def altera_sprite(self, nome):
         self.imagem = pygame.image.load(nome)
@@ -139,8 +139,8 @@ class Asteroid:
         print(self.y)"""
 
         #MOVIMENTAÇÃO ESTILO ASTEROIDS
-        acrecimoObjeto = 16 * 8 * 2 * 2
-        acrecimoComparacao = 16 * 8 * 2 * 2 + 1
+        acrecimoObjeto = 16 * 8 * 2 * 2 * 1.5
+        acrecimoComparacao = 16 * 8 * 2 * 2 * 1.5 + 1
 
         #faz com que a sujeira volte em outro canto da tela
         if self.x > self.largura_tela + acrecimoComparacao:
@@ -159,12 +159,11 @@ class Asteroid:
         #funcionamento do movimento por propagação
         self.contato = False
 
-
     def movimentacao(self, nave_rect, timer):
 
         if self.sensor(nave_rect):
 
-            self.altera_sprite("imagens/sujeira_apavorada.png")
+            self.altera_sprite("imagens/mini_sujeira_apavorada.png")
 
             self.navex = nave_rect.center[0] - 7*4
             self.navey = nave_rect.center[1] - 5*4
@@ -175,11 +174,11 @@ class Asteroid:
             #mudar para o rect
         else:
             if self.navex != None:
-                self.altera_sprite("imagens/sujeira_preocupada.png")
+                self.altera_sprite("imagens/mini_sujeira_preocupada.png")
 
         if self.navex != None:
             #determina a velocidade da alteração do trajeto
-            velocidade = 0.2
+            velocidade = 0.6
 
             #ajusta a movimentação para o eixo x
             if self.x < self.navex:
@@ -206,51 +205,3 @@ class Asteroid:
                 else:
                     self.direcaoy = -self.limite
 
-class Particula:
-
-    def __init__(self):
-
-        self.largura = 8
-        self.altura = 8
-
-        self.largura_tela = 1280
-        self.altura_tela = 720
-
-        acrecimoObjeto = 16 * 8 * 2 * 2
-        acrecimoComparacao = 16 * 8 * 2 * 2 + 1
-
-        self.x = random.randint(0 - acrecimoObjeto, self.largura_tela + acrecimoObjeto)
-        self.y = random.randint(0 - acrecimoObjeto, self.altura_tela + acrecimoObjeto)
-
-        self.imagem = pygame.image.load("imagens/particula_sujeira.png")
-        self.imagem = pygame.transform.scale(self.imagem, (self.largura,self.altura))
-        self.imagem.set_colorkey([243, 97, 255])
-
-        #para o bom funcionamento do zoom
-        self.copia = None
-
-
-    def desenha(self, tela, offset):
-        #atualiza a posição com o offset
-        self.x -= offset.x
-        self.y -= offset.y
-
-        #desenha
-        if not self.copia:
-            tela.blit(self.imagem, (self.x, self.y))
-        else:
-            tela.blit(self.copia, (self.x, self.y))
-
-        acrecimoObjeto = 16 * 8 * 2 * 2
-        acrecimoComparacao = 16 * 8 * 2 * 2 + 1
-
-        #faz com que a sujeira volte em outro canto da tela
-        if self.x > self.largura_tela + acrecimoComparacao:
-            self.x -= self.largura_tela + acrecimoObjeto * 2      #esquerda
-        elif self.x < 0 - acrecimoComparacao:
-            self.x += self.largura_tela + acrecimoObjeto        #direita
-
-        if self.y > self.altura_tela + acrecimoComparacao:
-            self.y -= self.altura_tela + acrecimoObjeto * 2       #cima
-        elif self.y < 0 - acrecimoComparacao:
-            self.y += self.altura_tela + acrecimoObjeto         #baixo

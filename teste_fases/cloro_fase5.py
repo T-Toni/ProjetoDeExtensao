@@ -1,14 +1,13 @@
 import random
-
 import pygame
 from botao import Botao
 from SpriteSheet import SpriteSheet
 from nave import Nave
-from asteroid import Asteroid
+from sujeira_fase5 import Sujeira
 from asteroid import Particula
 
 
-class Asteroids:
+class Cloro:
     def __init__(self, janela, gerenciador, mouse):
         #necessário pra desenhar
         self.janela = janela
@@ -24,20 +23,19 @@ class Asteroids:
         #determina a velocidade da rotação da nave
         self.vel_rotacao = 4
         #determina a velocidade da nave
-        self.vel_movimentacao = 8
+        self.vel_movimentacao = 10
         #guarda se a tecla espaço foi apertada
         self.pressionada = False
 
         #usada para determinar a criação de uma nova sujeira
         self.timer = 0
 
-        self.tamanho_vetor = 12
+        self.tamanho_vetor = 20
         self.vetor_sujeiras = self.cria_sujeiras()
         self.vetor_particulas = self.cria_particulas()
 
         #timer usado para o bom funcionamento da comunicação entre as sujeiras
         self.tSujeiras = 0.1
-
 
         #zoom
         self.largura, self.altura = 1280, 720
@@ -89,7 +87,7 @@ class Asteroids:
                             #sujeira.movimento_propagacao()
 
     def cria_sujeiras(self):
-        vetor_sujeiras = [Asteroid(None, None) for _ in range(self.tamanho_vetor)]
+        vetor_sujeiras = [Sujeira(None, None) for _ in range(self.tamanho_vetor)]
         return vetor_sujeiras
 
     def run(self):
@@ -152,7 +150,7 @@ class Asteroids:
             self.timer += 1
             self.tSujeiras += 1
 
-            if self.timer > 500 and len(self.vetor_sujeiras) != 0:
+            if self.timer > 1500 and len(self.vetor_sujeiras) != 0:
                 self.cria_sujeira()
                 self.timer = 0
 
@@ -206,7 +204,7 @@ class Asteroids:
         #confere se o numero de sujeiras na tela é inferior ao limite
         if len(self.vetor_sujeiras) < self.tamanho_vetor:
             #cria uma nova sujeira a partir de uma existente
-            self.vetor_sujeiras.append(Asteroid(self.vetor_sujeiras[0].x, self.vetor_sujeiras[0].y))
+            self.vetor_sujeiras.append(Sujeira(self.vetor_sujeiras[0].x, self.vetor_sujeiras[0].y))
 
     def desenha_sujeiras(self):
 

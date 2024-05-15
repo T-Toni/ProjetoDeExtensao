@@ -3,7 +3,7 @@ import pygame
 from botao import Botao
 from SpriteSheet import SpriteSheet
 from obj_animado import ObjAnimado
-import asteroids
+import cloro_fase5
 from sujeira import Sujeira
 from cloro import Cloro
 from rede_neural import RedeNeural
@@ -82,7 +82,7 @@ class Fase5:
 
         #CLORO
         self.funcionamento_cloro = False    #determina se os cloros estão funcionando ainda na agua
-        self.fase_cloro = asteroids.Asteroids(self.janela, self.gerenciador, self.mouse)
+        self.fase_cloro = cloro_fase5.Cloro(self.janela, self.gerenciador, self.mouse)
 
         #funcionamento zoom
         self.multiplicador = 1      #variavel que determina o aumento do tanque
