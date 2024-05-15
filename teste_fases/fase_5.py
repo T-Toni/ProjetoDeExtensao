@@ -9,7 +9,7 @@ from cloro import Cloro
 from rede_neural import RedeNeural
 import transicao_2
 
-class Fase2:
+class Fase5:
     def __init__(self, janela, gerenciador, mouse):
         #necessário pra desenhar
         self.janela = janela
@@ -23,18 +23,12 @@ class Fase2:
         #OBJETOS DA FASE:
 
         # backgound (botão, mas não clicavel)
-        self.background = Botao(0, 0, 160 * 8, 90 * 8, "imagens/tijolo_background.png", self.janela, None)
+        self.background = Botao(0, 0, 160 * 8, 90 * 8, "imagens/tijolo_background5.png", self.janela, None)
 
         #tanque
-        self.tanque = Botao(0, 0, 160 * 8, 90 * 8, "imagens/tanque_fase2.png", self.janela, None)
+        self.tanque = Botao(0, 0, 160 * 8, 90 * 8, "imagens/tanque_fase5.png", self.janela, None)
         #indicador do medidor de ph
-        self.medidor = Botao(32 * 8, 42 * 8, 2 * 8, 1 * 8, "imagens/medidor_ph.png", self.janela, None)
-        #animação que evidencia o ph ideal
-        ph_ideal_sheet_img = pygame.image.load("imagens/ph_ideal-sheet.png")
-        self.ph_ideal_sheet = SpriteSheet(ph_ideal_sheet_img, 5)
-        self.ph_ideal = ObjAnimado(self.janela, self.ph_ideal_sheet, 160, 90, 8, (243, 97, 255), 0)
-        self.ph_ideal.anima(0, 0)
-        self.ph_ideal.setRepetir()  #permite o looping da animação
+        #self.medidor = Botao(32 * 8, 42 * 8, 2 * 8, 1 * 8, "imagens/medidor_ph.png", self.janela, None)
 
         #animação do cal sendo despejado
         cal_sheet_img = pygame.image.load("imagens/animacao_cal.png")
@@ -42,7 +36,7 @@ class Fase2:
         self.animacao_cal = ObjAnimado(self.janela, self.cal_sheet, 8, 8, 8, (243, 97, 255), 0)
         self.animacao_cal.anima(47 * 8, 6 * 8)
         self.animacao_cal.setRepetir()
-        self.indo = True    #determina a direção do obj animado
+        #self.indo = True    #determina a direção do obj animado
 
         """#animação da conclusão do uso do cal
         brilho_sheet_img = pygame.image.load("imagens/brilho_cal-sheet.png")
@@ -51,13 +45,13 @@ class Fase2:
         self.brilho.anima(37 * 8, 18 * 8)"""
 
         #canos
-        self.canos = Botao(0, 0, 160 * 8, 90 * 8, "imagens/canos_fase2.png", self.janela, None)
+        self.canos = Botao(0, 0, 160 * 8, 90 * 8, "imagens/canos_fase5.png", self.janela, None)
 
         #agua
         self.agua = Botao(0, 0, 160 * 8, 90 * 8, "imagens/agua_fase2.png", self.janela, None)
         #sujeira da agua
         self.sujeira = Botao(0, 0, 160 * 8, 90 * 8, "imagens/sujeira_fase2.png", self.janela, None)
-        self.opacidade = 160    #255 totalmente opaco - 0 transparente"""
+        self.opacidade = 50    #255 totalmente opaco - 0 transparente"""
 
         #borda dos itens selecionados
         self.borda_cal = Botao(39 * 8, 74 * 8, 18 * 8, 17 * 8, "imagens/cal_selecionado.png", self.janela, None)
@@ -120,42 +114,31 @@ class Fase2:
                 if self.cloro_usado:
                     self.concluido_cloro.desenha()
 
-                self.medidor.desenha()
 
                 if self.selecionado == self.borda_cal and not self.funcionamento_cloro:
 
-                    #permite a animação do indicador do ph ideal
-                    self.ph_ideal.setVelocidade(0.5)
                     self.animacao_cal.setVelocidade(0.5)
-                    if self.medidor.getY() < 48 * 8:
-                        self.ph_ideal.update()
-                    else:
-                        self.cal_usado = True
 
-                    if teclas[pygame.K_SPACE] or self.usando_cal:
-                        if self.medidor.getY() < 48 * 8:
+                    if (teclas[pygame.K_SPACE] or self.usando_cal) and not self.cal_usado:
+                        if self.opacidade > 25:
                             self.usando_cal = True
                             self.animacao_cal.update()
                             if self.animacao_cal.getFrame() > 13:
+                                print("sabado")
                                 self.animacao_cal.setFrame(8)
-                            self.animacao_cal.setX(self.animacao_cal.getX() + 6)
-                            self.medidor.setY(self.medidor.getY() + 0.5)
-                            self.opacidade = self.opacidade - 0.6
+                            self.opacidade = self.opacidade - 0.8
                         else:
+                            print("facada")
                             self.usando_cal = False
+                            self.cal_usado = True
                     else:
-                        if self.medidor.getY() >= 48 * 8:
+                        if self.opacidade <= 25:
                             self.animacao_cal.setRepetir()
                             self.animacao_cal.update()
-                            self.opacidade = 100
-                            """self.brilho.setVelocidade(10)
-                            self.brilho.update()"""
+                            self.opacidade = 20
                         if teclas[pygame.K_RIGHT]:
                             self.selecionado = self.borda_cloro
                 else:
-
-                    #inibe a animação do indicador do ph ideal
-                    self.ph_ideal.setFrame(0)
 
                     if teclas[pygame.K_SPACE]:
                         if not self.cloro_usado and self.cal_usado:

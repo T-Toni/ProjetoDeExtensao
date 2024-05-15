@@ -3,6 +3,7 @@ import menu
 from botao import Botao
 from SpriteSheet import SpriteSheet
 from obj_animado import ObjAnimado
+import fase_5
 
 class Fase4:
     def __init__(self, janela, gerenciador, mouse):
@@ -201,7 +202,7 @@ class Fase4:
                         self.canos.setFrame(0)
 
                     if self.canos.spriteAtual == 0:
-                        proximaFase = menu.Menu(self.janela, self.gerenciador, self.mouse)
+                        proximaFase = fase_5.Fase5(self.janela, self.gerenciador, self.mouse)
                         self.gerenciador.set_fase(proximaFase)  # muda a fase do gerenciador para a proxima
 
 
