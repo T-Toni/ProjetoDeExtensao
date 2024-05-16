@@ -92,7 +92,7 @@ class Cloro:
 
     def run(self):
 
-        self.janela.fill((62, 132, 119))
+        self.janela.fill((67, 147, 183))
 
         if self.multiplicador < 1 and self.inicio_da_fase:
             #diminui a dimensão da nave (7 * 8, 5 * 8)
@@ -260,7 +260,7 @@ class Cloro:
                         break"""
 
     def cria_particulas(self):
-        vetor_particulas = [Particula() for _ in range(20)]
+        vetor_particulas = [Particula() for _ in range(8)]
         return vetor_particulas
 
     def desenha_particulas(self):
