@@ -3,7 +3,7 @@ import menu
 from botao import Botao
 from SpriteSheet import SpriteSheet
 from obj_animado import ObjAnimado
-import fase_5
+import transicao_4
 
 class Fase4:
     def __init__(self, janela, gerenciador, mouse):
@@ -64,146 +64,180 @@ class Fase4:
         self.agitado = False    # se o tanque ja terminou de ser agitado
         self.progresso = 0
 
+        #transição:
+        self.permite_Transicao = False
+        self.transicao = Botao(0, 0, 480*8, 90*8, "imagens/transicao_4-5.png", self.janela, (243, 97, 255))
+        self.decrescimo = 0
+
 
 
     def run(self):
 
-        #executa a animação dos canos ao inicio da fase
-        if self.canos.spriteAtual < self.canos_sheet_obj.numeroDeFrames - 0.1 and self.canos.velocidade != 0:
-            self.background.desenha()
-            self.medidor_progressao.update()
-            self.medidor_velocidade.desenha()
-            self.canos.update()
-            self.tanque.desenha()
-            self.janela.blit((self.copia), self.copia_rect.topleft)
+        # logica para a movimentação do tanque
+        teclas = pygame.key.get_pressed()
 
-        #é executado após o fim da animação de inicio da fase
-        else:
-            if self.canos.velocidade != 0:
-                self.canos.velocidade = 0
-                self.canos.spriteAtual = self.canos_sheet_obj.numeroDeFrames - 1
+        if not self.permite_Transicao:
 
-            # desenha todos os objetos graficos
-            self.background.desenha()
-            self.medidor_progressao.update()
-            self.medidor_velocidade.desenha()
-            self.canos.update()
-            self.tanque.desenha()
-            self.janela.blit((self.copia), self.copia_rect.topleft)
+            #executa a animação dos canos ao inicio da fase
+            if self.canos.spriteAtual < self.canos_sheet_obj.numeroDeFrames - 0.1 and self.canos.velocidade != 0:
+                self.background.desenha()
+                self.medidor_progressao.update()
+                self.medidor_velocidade.desenha()
+                self.canos.update()
+                self.tanque.desenha()
+                self.janela.blit((self.copia), self.copia_rect.topleft)
 
-
-            #atualiza a posição do tanque
-            if self.agitado == False:
-                # atualiza a posição do tanque
-                self.tanque.setX(self.tanqueX)
-
-                # logica para a movimentação do tanque
-                teclas = pygame.key.get_pressed()
-
-                offset = 3 * 8
-                incremento = 120
-                divisor = 1.5         #valor que divide o offset para dar a velocidade de movimentacao do tanque
-
-                print("agitacao: " + str(self.agitacao))
-
-                if teclas[pygame.K_UP] and self.posicao != -1 and not teclas[pygame.K_DOWN]:
-
-                    if self.tanque.y >= self.tanqueYInicial - offset:
-
-                        self.tanque.y -= offset / divisor
-                        self.agitacao += incremento     # incrementa a variavel de agitação
-
-                elif teclas[pygame.K_DOWN] and self.posicao != 1 and not teclas[pygame.K_UP]:
-
-                    if self.tanque.y <= self.tanqueYInicial + offset:
-                        self.tanque.y += offset / divisor
-                        self.agitacao += incremento
-
-
-                #limita a variavel de agitacao
-                limite = 5000
-
-                self.agitacao -= incremento / 2.5    #decresce a variavel de agitação
-                if self.agitacao > limite:
-                    self.agitacao = limite
-                if self.agitacao <= 0:
-                    self.agitacao = 0
-
-                #AJUSTE
-                i = self.agitacao / (limite / 2)
-
-                if i < 1 and i >= 0:
-                    ajuste = i
-                else:
-                    ajuste = abs(i - 2)
-
-                #print("ajuste: " + str(ajuste))
-
-                self.progresso += incremento/3 * ajuste
-
-                #("progresso: " + str(self.progresso))
-
-                #muda o sprite conforme o valor da variavel agitacao
-                if self.medidor_progressao.spriteAtual < self.medidor_progressao_sheet_obj.numeroDeFrames - 4:
-
-                    divisor = 1000
-
-                    if self.progresso / divisor < self.medidor_progressao_sheet_obj.numeroDeFrames - 4:
-                        self.medidor_progressao.setFrame(self.progresso / divisor)
-                    else:
-                        self.medidor_progressao.setFrame(self.medidor_progressao_sheet_obj.numeroDeFrames - 4)
-
-                else:
-                    self.agitado = True
-
-
-                #ROTACIONA O PONTEIRO
-                if i < 1 and i >= 0:
-                    self.angulo = (i * 170) - 170
-                else:
-                    self.angulo = ((abs(i - 2) * 170) - 170) * -1
-
-
-                self.copia = pygame.transform.rotate(self.ponteiro, -self.angulo)
-                self.copia_rect = self.copia.get_rect(center = self.ponteiro_rect.center)
-
-
-
-
-
-
-            #retorna o tanque a posição original
+            #é executado após o fim da animação de inicio da fase
             else:
-                #inicia o loop alternativo de animação do medidor
-                self.medidor_progressao.altLoop(21, 24, 0.1)
+                if self.canos.velocidade != 0:
+                    self.canos.velocidade = 0
+                    self.canos.spriteAtual = self.canos_sheet_obj.numeroDeFrames - 1
+
+                # desenha todos os objetos graficos
+                self.background.desenha()
+                self.medidor_progressao.update()
+                self.medidor_velocidade.desenha()
+                self.canos.update()
+                self.tanque.desenha()
+                self.janela.blit((self.copia), self.copia_rect.topleft)
 
 
-                velocidadeDeRetorno = 1
-                #caso x seja menor que o original
-                if self.tanque.getY() < self.tanqueYInicial:
-                    if self.tanqueYInicial - self.tanque.getY() >= velocidadeDeRetorno:
-                        self.tanque.setY(self.tanque.getY() + velocidadeDeRetorno)
+                #atualiza a posição do tanque
+                if self.agitado == False:
+                    # atualiza a posição do tanque
+                    self.tanque.setX(self.tanqueX)
+
+                    offset = 3 * 8
+                    incremento = 120
+                    divisor = 1.5         #valor que divide o offset para dar a velocidade de movimentacao do tanque
+
+                    print("agitacao: " + str(self.agitacao))
+
+                    if teclas[pygame.K_UP] and self.posicao != -1 and not teclas[pygame.K_DOWN]:
+
+                        if self.tanque.y >= self.tanqueYInicial - offset:
+
+                            self.tanque.y -= offset / divisor
+                            self.agitacao += incremento     # incrementa a variavel de agitação
+
+                    elif teclas[pygame.K_DOWN] and self.posicao != 1 and not teclas[pygame.K_UP]:
+
+                        if self.tanque.y <= self.tanqueYInicial + offset:
+                            self.tanque.y += offset / divisor
+                            self.agitacao += incremento
+
+
+                    #limita a variavel de agitacao
+                    limite = 5000
+
+                    self.agitacao -= incremento / 2.5    #decresce a variavel de agitação
+                    if self.agitacao > limite:
+                        self.agitacao = limite
+                    if self.agitacao <= 0:
+                        self.agitacao = 0
+
+                    #AJUSTE
+                    i = self.agitacao / (limite / 2)
+
+                    if i < 1 and i >= 0:
+                        ajuste = i
                     else:
-                        self.tanque.setY(self.tanqueY)
-                # caso x seja maior que o original
-                if self.tanque.getY() > self.tanqueYInicial:
-                    if self.tanque.getY() - self.tanqueYInicial >= velocidadeDeRetorno:
-                        self.tanque.setY(self.tanque.getY() - velocidadeDeRetorno)
+                        ajuste = abs(i - 2)
+
+                    #print("ajuste: " + str(ajuste))
+
+                    self.progresso += incremento/3 * ajuste
+
+                    #("progresso: " + str(self.progresso))
+
+                    #muda o sprite conforme o valor da variavel agitacao
+                    if self.medidor_progressao.spriteAtual < self.medidor_progressao_sheet_obj.numeroDeFrames - 4:
+
+                        divisor = 1000
+
+                        if self.progresso / divisor < self.medidor_progressao_sheet_obj.numeroDeFrames - 4:
+                            self.medidor_progressao.setFrame(self.progresso / divisor)
+                        else:
+                            self.medidor_progressao.setFrame(self.medidor_progressao_sheet_obj.numeroDeFrames - 4)
+
                     else:
-                        self.tanque.setY(self.tanqueY)
+                        self.agitado = True
 
 
-
-                #confere a posição do tanque para fazer  a animação dos canos se fechando
-                if self.tanque.getX() == self.tanqueXInicial and self.tanque.getY() == self.tanqueYInicial:
-                    if self.canos.spriteAtual > 0:
-                        self.canos.revLoop(0, 4, 0.05)
+                    #ROTACIONA O PONTEIRO
+                    if i < 1 and i >= 0:
+                        self.angulo = (i * 170) - 170
                     else:
-                        self.canos.setFrame(0)
+                        self.angulo = ((abs(i - 2) * 170) - 170) * -1
 
-                    if self.canos.spriteAtual == 0:
-                        proximaFase = fase_5.Fase5(self.janela, self.gerenciador, self.mouse)
-                        self.gerenciador.set_fase(proximaFase)  # muda a fase do gerenciador para a proxima
+                    self.copia = pygame.transform.rotate(self.ponteiro, -self.angulo)
+                    self.copia_rect = self.copia.get_rect(center = self.ponteiro_rect.center)
+
+
+                #retorna o tanque a posição original
+                else:
+                    #inicia o loop alternativo de animação do medidor
+                    self.medidor_progressao.altLoop(21, 24, 0.1)
+
+                    #retorna o ponteiro para a sua posição inicial
+
+                    if self.angulo > -170:
+                        self.angulo = self.angulo - 3
+                        self.copia = pygame.transform.rotate(self.ponteiro, -self.angulo)
+                        self.copia_rect = self.copia.get_rect(center = self.ponteiro_rect.center)
+                    else:
+                        self.angulo = -170
+                        self.copia = pygame.transform.rotate(self.ponteiro, -self.angulo)
+                        self.copia_rect = self.copia.get_rect(center = self.ponteiro_rect.center)
+
+
+                    velocidadeDeRetorno = 1
+                    #caso x seja menor que o original
+                    if self.tanque.getY() < self.tanqueYInicial:
+                        if self.tanqueYInicial - self.tanque.getY() >= velocidadeDeRetorno:
+                            self.tanque.setY(self.tanque.getY() + velocidadeDeRetorno)
+                        else:
+                            self.tanque.setY(self.tanqueY)
+                    # caso x seja maior que o original
+                    if self.tanque.getY() > self.tanqueYInicial:
+                        if self.tanque.getY() - self.tanqueYInicial >= velocidadeDeRetorno:
+                            self.tanque.setY(self.tanque.getY() - velocidadeDeRetorno)
+                        else:
+                            self.tanque.setY(self.tanqueY)
+
+
+
+                    #confere a posição do tanque para fazer  a animação dos canos se fechando
+                    if self.tanque.getX() == self.tanqueXInicial and self.tanque.getY() == self.tanqueYInicial:
+                        if self.canos.spriteAtual > 0:
+                            self.canos.revLoop(0, 4, 0.05)
+                        else:
+                            self.canos.setFrame(0)
+
+                        if self.canos.spriteAtual == 0:
+                            self.permite_Transicao = True
+        else:
+            self.medidor_progressao.altLoop(21, 24, 0.05)
+            self.transicao.desenha()
+            self.medidor_progressao.update()
+            self.medidor_velocidade.desenha()
+            self.janela.blit((self.copia), (15 * 8 + self.decrescimo, 7 * 8))
+
+            if self.transicao.getX() > (-160 * 8) - 1:
+
+                #Verifica se a seta para a direita está sendo pressionada
+                if teclas[pygame.K_RIGHT]:
+                    velocidade = 3
+
+                    self.transicao.setX(self.transicao.getX() - velocidade)
+                    self.medidor_progressao.setX(self.medidor_progressao.getX() - velocidade)
+                    self.medidor_velocidade.setX(self.medidor_velocidade.getX() - velocidade)
+                    self.decrescimo -= velocidade
+
+            else:
+                proximaFase = transicao_4.Transicao_4(self.janela, self.gerenciador, self.mouse)
+                self.gerenciador.set_fase(proximaFase)  # muda a fase do gerenciador para a proxima
+
 
 
     """ def rotaciona_esq(self):

@@ -7,7 +7,7 @@ import cloro_fase5
 from sujeira import Sujeira
 from cloro import Cloro
 from rede_neural import RedeNeural
-import transicao_2
+import transicao_4
 
 class Fase5:
     def __init__(self, janela, gerenciador, mouse):
@@ -61,7 +61,7 @@ class Fase5:
         self.concluido_cloro = Botao(105 * 8, 74 * 8, 18 * 8, 17 * 8, "imagens/concluido.png", self.janela, None)
 
         #inventario (obs: não é um inventario da classe inventario)
-        self.inventario = Botao(10 * 8, 71 * 8, 140 * 8, 20 * 8, "imagens/inventario.png", self.janela, None)
+        self.inventario = Botao(10 * 8, 70 * 8, 140 * 8, 20 * 8, "imagens/inventario.png", self.janela, None)
 
         #itens (obs: não são itens da classe item)
         self.cal = Botao(40 * 8, 74 * 8, 16 * 8, 16 * 8, "imagens/cal.png", self.janela, None)
@@ -177,7 +177,7 @@ class Fase5:
                         if teclas[pygame.K_RIGHT]:
                             self.transicao.setX(self.transicao.getX() - 3)
                     else:
-                        self.proximaFase = transicao_2.Transicao_2(self.janela, self.gerenciador, self.mouse)
+                        self.proximaFase = transicao_4.Transicao_4(self.janela, self.gerenciador, self.mouse)
                         self.gerenciador.set_fase(self.proximaFase)
 
         else:
