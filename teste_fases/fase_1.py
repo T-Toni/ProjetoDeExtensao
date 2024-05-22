@@ -44,7 +44,9 @@ class Fase1:
         self.represa.update()
         self.botao.desenha()
 
-        if self.botao.clicado(self.mouse.getX(), self.mouse.getY(), self.mouse.getPressionado()):
+        teclas = pygame.key.get_pressed()
+
+        if self.botao.clicado(self.mouse.getX(), self.mouse.getY(), self.mouse.getPressionado()) or teclas[pygame.K_SPACE]:
             self.represa.setVelocidade(0.15)
 
         if self.represa.getFrame() >= self.represa_sheet_obj.numeroDeFrames - 1 or self.permitir_transicao:

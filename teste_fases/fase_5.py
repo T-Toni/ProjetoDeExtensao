@@ -124,11 +124,9 @@ class Fase5:
                             self.usando_cal = True
                             self.animacao_cal.update()
                             if self.animacao_cal.getFrame() > 13:
-                                print("sabado")
                                 self.animacao_cal.setFrame(8)
                             self.opacidade = self.opacidade - 0.8
                         else:
-                            print("facada")
                             self.usando_cal = False
                             self.cal_usado = True
                     else:

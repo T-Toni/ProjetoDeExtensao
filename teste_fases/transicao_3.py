@@ -48,6 +48,16 @@ class Transicao_3:
         self.indo = True
         self.completo = False
 
+        # ponteiro da fase 4
+        imagem_ponteiro = pygame.image.load("imagens/ponteiro.png")
+        self.ponteiro = pygame.transform.scale(imagem_ponteiro, (2 * 8, 20 * 8))
+        self.ponteiro_rect = self.ponteiro.get_rect(center=(18 * 8, 17 * 8))
+        # copia o ponteiro
+        self.copia = self.ponteiro.copy()
+        self.copia_rect = self.copia.get_rect(center=(18 * 8, 17 * 8))  # rect da copia do ponteiro
+
+        self.decrescimo = 162 * 8
+
 
     def run(self):
 
@@ -126,11 +136,13 @@ class Transicao_3:
 
         else:
             self.imagem_completo.desenha()
+            self.janela.blit((self.copia), (15 * 8 + self.decrescimo, 7 * 8))
 
             velocidade = 3
 
             if teclas[pygame.K_RIGHT]:
                 self.imagem_completo.setX(self.imagem_completo.getX() - velocidade)
+                self.decrescimo -= velocidade
 
             if self.imagem_completo.getX() == -159 * 8:
                 self.gerenciador.set_fase(self.proximaFase)

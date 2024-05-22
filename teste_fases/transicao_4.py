@@ -50,10 +50,8 @@ class Transicao_4:
 
 
     def run(self):
-
         #recebe todas a teclas pressionadas
         teclas = pygame.key.get_pressed()
-
         if not self.completo:
 
             #desenha
@@ -123,7 +121,6 @@ class Transicao_4:
 
                     if self.cano_baixo_dir.getY() == self.pos:
                         self.completo = True
-
         else:
             self.imagem_completo.desenha()
 
