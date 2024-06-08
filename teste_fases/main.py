@@ -31,7 +31,7 @@ class Jogo:
         #self.faseAtual = asteroids.Asteroids(self.janela, self.gerenciador, self.mouse)
         #self.faseAtual = transicao_4.Transicao_4(self.janela, self.gerenciador, self.mouse)
         #self.faseAtual = fase_3.Fase3(self.janela, self.gerenciador, self.mouse)
-        #self.faseAtual = fase_4.Fase4(self.janela, self.gerenciador, self.mouse)
+        self.faseAtual = fase_5.Fase5(self.janela, self.gerenciador, self.mouse)
         self.gerenciador.set_fase(self.faseAtual)                       #a atribui ao gerenciador de fases
 
         while True:     #loop principal

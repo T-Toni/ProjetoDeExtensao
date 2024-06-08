@@ -7,7 +7,7 @@ import cloro_fase5
 from sujeira import Sujeira
 from cloro import Cloro
 from rede_neural import RedeNeural
-import transicao_4
+import menu
 
 class Fase5:
     def __init__(self, janela, gerenciador, mouse):
@@ -78,7 +78,7 @@ class Fase5:
 
         #transição entre essa fase e a proxima
         self.permitir_transicao = False
-        self.transicao = Botao(0, 0, 480*8, 90*8, "imagens/transicao_2-3.png", self.janela, (243, 97, 255))
+        self.transicao = Botao(0, 0, 640*8, 90*8, "imagens/transicao_5-fim.png", self.janela, (243, 97, 255))
 
         #CLORO
         self.funcionamento_cloro = False    #determina se os cloros estão funcionando ainda na agua
@@ -86,6 +86,15 @@ class Fase5:
 
         #funcionamento zoom
         self.multiplicador = 1      #variavel que determina o aumento do tanque
+
+        #animação da agua indo para as casas
+        casas_sheet_img = pygame.image.load("imagens/animacao_casas-sheet.png")
+        casas_sheet_img = SpriteSheet(casas_sheet_img, 46)
+        self.animacao_casas = ObjAnimado(self.janela, casas_sheet_img, 160, 90, 8, (243, 97, 255), 0.3)
+
+        #tela final
+        self.tela_final = Botao(0, 0, 160*8, 90*8, "imagens/tela_final.png", self.janela, (243, 97, 255))
+        self.botao_menu = Botao(21 * 8, 51 * 8, 49*8, 13*8, "imagens/botao_menu.png", self.janela, (243, 97, 255))
 
     def run(self):
 
@@ -169,14 +178,21 @@ class Fase5:
                     self.multiplicador -= 0.05
                 else:
                     self.transicao.desenha()
-                    if self.transicao.getX() > (-160 * 8) - 1:
+                    if self.transicao.getX() > (-480 * 8) - 1:
 
                         #Verifica se a seta para a direita está sendo pressionada
                         if teclas[pygame.K_RIGHT]:
                             self.transicao.setX(self.transicao.getX() - 3)
                     else:
-                        self.proximaFase = transicao_4.Transicao_4(self.janela, self.gerenciador, self.mouse)
-                        self.gerenciador.set_fase(self.proximaFase)
+                        if self.animacao_casas.getFrame() >= 45:
+                            self.tela_final.desenha()
+                            self.botao_menu.desenha()
+                            if teclas[pygame.K_SPACE] or (self.botao_menu.mouse_dentro(self.mouse.getX(), self.mouse.getY()) and self.mouse.getPressionado()):
+                                self.proximaFase = menu.Menu(self.janela, self.gerenciador, self.mouse)
+                                self.gerenciador.set_fase(self.proximaFase)
+                        else:
+                            self.animacao_casas.anima(0, 0)
+                            self.animacao_casas.update()
 
         else:
                 if self.multiplicador < 2.7:
