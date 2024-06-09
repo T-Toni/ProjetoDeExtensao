@@ -45,6 +45,12 @@ class Asteroids:
         self.inicio_da_fase = True
         self.fim_da_fase = False
 
+    def carrega_audios(self):
+        morte_grave = pygame.mixer.Sound('sons/morte_grave.wav')
+        grito_grave = pygame.mixer.Sound('sons/grito_grave.wav')
+
+        return (morte_grave, grito_grave)
+
     def comunica_sujeiras(self):
 
         for sujeira in self.vetor_sujeiras:
@@ -93,6 +99,8 @@ class Asteroids:
         return vetor_sujeiras
 
     def run(self):
+
+        (morte_grave, grito_grave) = self.carrega_audios()
 
         self.janela.fill((62, 132, 119))
 
@@ -145,7 +153,7 @@ class Asteroids:
 
             self.desenha_particulas()
             sujeiras = self.desenha_sujeiras()
-            self.confere_colisao()
+            self.confere_colisao(morte_grave)
             self.comunica_sujeiras()
 
             #incrementa os timers
@@ -157,22 +165,6 @@ class Asteroids:
                 self.timer = 0
 
             if sujeiras == 0:
-                """if self.multiplicador > 0.01:
-                    #diminui a dimensão da nave (7 * 8, 5 * 8)
-                    largura_alternativa_nave = (7 * 8 * self.multiplicador)
-                    altura_alternativa_nave = (5 * 8 * self.multiplicador)
-                    self.nave.copia = pygame.transform.scale(self.nave.imagem, (largura_alternativa_nave, altura_alternativa_nave))
-
-                    #ajusta as posições e a dimensão das particulas (1 * 8, 1 * 8)
-                    for particula in self.vetor_particulas:
-                        largura_alternativa_part = (8 * self.multiplicador)
-                        altura_alternativa_part = (8 * self.multiplicador)
-                        particula.copia = pygame.transform.scale(particula.imagem, (largura_alternativa_part, altura_alternativa_part))
-
-                    self.multiplicador -= 0.01
-
-                    self.nave.desenha()
-                    self.desenha_particulas()"""
                 self.fim_da_fase = True
             else:
                 return True
@@ -241,10 +233,11 @@ class Asteroids:
 
         return num_sujeiras
 
-    def confere_colisao(self):
+    def confere_colisao(self, morte):
 
         for sujeira in self.vetor_sujeiras:
             if self.nave.mask.overlap(sujeira.mask, [sujeira.x - self.nave.imagem_rect.x, sujeira.y - self.nave.imagem_rect.y]):
+                morte.play()
                 self.vetor_sujeiras.remove(sujeira)
                 #reseta o timer
                 #self.timer = 0

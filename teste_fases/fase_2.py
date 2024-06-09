@@ -93,6 +93,8 @@ class Fase2:
         #funcionamento zoom
         self.multiplicador = 1      #variavel que determina o aumento do tanque
 
+
+
     def run(self):
 
         if self.funcionamento_cloro == False:

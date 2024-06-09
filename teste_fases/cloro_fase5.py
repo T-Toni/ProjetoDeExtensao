@@ -90,7 +90,14 @@ class Cloro:
         vetor_sujeiras = [Sujeira(None, None) for _ in range(self.tamanho_vetor)]
         return vetor_sujeiras
 
+
+    def carrega_audios(self):
+        morte = pygame.mixer.Sound('sons/morte_aguda.wav')
+        return (morte)
+
     def run(self):
+
+        (morte) = self.carrega_audios()
 
         self.janela.fill((67, 147, 183))
 
@@ -143,7 +150,7 @@ class Cloro:
 
             self.desenha_particulas()
             sujeiras = self.desenha_sujeiras()
-            self.confere_colisao()
+            self.confere_colisao(morte)
             self.comunica_sujeiras()
 
             #incrementa os timers
@@ -155,22 +162,6 @@ class Cloro:
                 self.timer = 0
 
             if sujeiras == 0:
-                """if self.multiplicador > 0.01:
-                    #diminui a dimensão da nave (7 * 8, 5 * 8)
-                    largura_alternativa_nave = (7 * 8 * self.multiplicador)
-                    altura_alternativa_nave = (5 * 8 * self.multiplicador)
-                    self.nave.copia = pygame.transform.scale(self.nave.imagem, (largura_alternativa_nave, altura_alternativa_nave))
-
-                    #ajusta as posições e a dimensão das particulas (1 * 8, 1 * 8)
-                    for particula in self.vetor_particulas:
-                        largura_alternativa_part = (8 * self.multiplicador)
-                        altura_alternativa_part = (8 * self.multiplicador)
-                        particula.copia = pygame.transform.scale(particula.imagem, (largura_alternativa_part, altura_alternativa_part))
-
-                    self.multiplicador -= 0.01
-
-                    self.nave.desenha()
-                    self.desenha_particulas()"""
                 self.fim_da_fase = True
             else:
                 return True
@@ -239,11 +230,12 @@ class Cloro:
 
         return num_sujeiras
 
-    def confere_colisao(self):
+    def confere_colisao(self, morte):
 
         for sujeira in self.vetor_sujeiras:
             if self.nave.mask.overlap(sujeira.mask, [sujeira.x - self.nave.imagem_rect.x, sujeira.y - self.nave.imagem_rect.y]):
                 self.vetor_sujeiras.remove(sujeira)
+                morte.play()
                 #reseta o timer
                 #self.timer = 0
 

@@ -56,13 +56,15 @@ class Asteroid:
         #variaveis para o bom funcionamento do sensor
         self.raio = 16 * 8  #determina o raio do sensor
 
+        #para o bom funcionamento do grito
+        self.grito = False
+
     def altera_sprite(self, nome):
         self.imagem = pygame.image.load(nome)
         self.imagem = pygame.transform.scale(self.imagem, (self.largura,self.altura))
         self.imagem.set_colorkey([243, 97, 255])   #torna transparente a cor dana no parametro
 
     def desenha(self, tela, offset, nave_rect):
-        tela.blit(self.mask.to_surface(), (0, 0))
 
         #atualiza a posição com o offset
         self.x -= offset.x
@@ -130,7 +132,23 @@ class Asteroid:
         # Se nenhum ponto estiver dentro do círculo, não há colisão
         return False
 
+    """def carrega_audios(self):
+        morte_aguda = pygame.mixer.Sound('sons/morte_aguda.wav')
+        grito_agudo = pygame.mixer.Sound('sons/grito_agudo.wav')
+
+        return (morte_aguda, grito_agudo)"""
+
+    def carrega_audios(self):
+        morte_grave = pygame.mixer.Sound('sons/morte_grave.wav')
+        grito_grave = pygame.mixer.Sound('sons/grito_grave.wav')
+
+        return (morte_grave, grito_grave)
+
     def update(self, nave_rect, timer):
+
+        #inicializa os sons
+        (morte, grito) = self.carrega_audios()
+
         #acrescenta a direção a sua posição para que ele se mova
         self.x += self.direcaox
         self.y += self.direcaoy
@@ -154,17 +172,22 @@ class Asteroid:
             self.y += self.altura_tela + acrecimoObjeto         #baixo
 
         #funcionamento do sensor
-        self.movimentacao(nave_rect, timer)
+        self.movimentacao(nave_rect, timer, grito)
 
         #funcionamento do movimento por propagação
         self.contato = False
 
 
-    def movimentacao(self, nave_rect, timer):
+    def movimentacao(self, nave_rect, timer, grito):
 
         if self.sensor(nave_rect):
 
             self.altera_sprite("imagens/sujeira_apavorada.png")
+            #toca o grito de medo
+            if not self.grito:
+                grito.play()
+            self.grito = True
+
 
             self.navex = nave_rect.center[0] - 7*4
             self.navey = nave_rect.center[1] - 5*4
@@ -176,6 +199,7 @@ class Asteroid:
         else:
             if self.navex != None:
                 self.altera_sprite("imagens/sujeira_preocupada.png")
+                self.grito = False
 
         if self.navex != None:
             #determina a velocidade da alteração do trajeto

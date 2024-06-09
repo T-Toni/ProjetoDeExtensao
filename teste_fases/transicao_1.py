@@ -49,7 +49,18 @@ class Transicao_1:
         self.completo = False
 
 
+        self.cano_errado = False
+
+    def carrega_audios(self):
+        click = pygame.mixer.Sound('sons/blipSelect.wav')
+        cano_errado = pygame.mixer.Sound('sons/cano errado.wav')
+        cano_correto = pygame.mixer.Sound('sons/cano_correto.wav')
+
+        return (click, cano_errado, cano_correto)
+
     def run(self):
+
+        (click, cano_errado, cano_correto) = self.carrega_audios()
 
         #recebe todas a teclas pressionadas
         teclas = pygame.key.get_pressed()
@@ -70,11 +81,13 @@ class Transicao_1:
             self.selecionado.desenha()
 
             if teclas[pygame.K_RIGHT] and self.pressionado == False and not self.permite_animacao:
+                click.play()
                 if self.posicao < 2:
                     self.posicao += 1
                     self.selecionado.setX(self.vetor_posicoes[self.posicao])
                     self.pressionado = True
             elif teclas[pygame.K_LEFT] and self.pressionado == False and not self.permite_animacao:
+                click.play()
                 if self.posicao > 0:
                     self.posicao -= 1
                     self.selecionado.setX(self.vetor_posicoes[self.posicao])
@@ -94,6 +107,7 @@ class Transicao_1:
                     self.cano_esq_baixo.desenha()
 
                     if self.cano_esq_baixo.getY() == self.pos:
+                        cano_correto.play()
                         self.completo = True
 
                 if self.posicao == 1:
@@ -103,12 +117,19 @@ class Transicao_1:
                         self.testa_cano(self.cano_esq_dir)
 
                     if self.cano_esq_dir.getY() == self.pos or self.indo == False:
+
+                        if not self.cano_errado:
+                            cano_errado.play()
+                        self.cano_errado = True
+
                         self.volta_cano(self.cano_esq_dir)
                         self.indo = False
 
                     if self.cano_esq_dir.getY() == self.pos_inicial:
                         self.permite_animacao = False
                         self.indo = True
+
+                        self.cano_errado = False
 
                 if self.posicao == 2:
                     self.cano_baixo_dir.desenha()
@@ -117,12 +138,19 @@ class Transicao_1:
                         self.testa_cano(self.cano_baixo_dir)
 
                     if self.cano_baixo_dir.getY() == self.pos or self.indo == False:
+
+                        if not self.cano_errado:
+                            cano_errado.play()
+                        self.cano_errado = True
+
                         self.volta_cano(self.cano_baixo_dir)
                         self.indo = False
 
                     if self.cano_baixo_dir.getY() == self.pos_inicial:
                         self.permite_animacao = False
                         self.indo = True
+
+                        self.cano_errado = False
 
         else:
             self.imagem_completo.desenha()
