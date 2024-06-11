@@ -81,13 +81,15 @@ class Transicao_1:
             self.selecionado.desenha()
 
             if teclas[pygame.K_RIGHT] and self.pressionado == False and not self.permite_animacao:
-                click.play()
+                if self.posicao != 2:
+                    click.play()
                 if self.posicao < 2:
                     self.posicao += 1
                     self.selecionado.setX(self.vetor_posicoes[self.posicao])
                     self.pressionado = True
             elif teclas[pygame.K_LEFT] and self.pressionado == False and not self.permite_animacao:
-                click.play()
+                if self.posicao != 0:
+                    click.play()
                 if self.posicao > 0:
                     self.posicao -= 1
                     self.selecionado.setX(self.vetor_posicoes[self.posicao])
