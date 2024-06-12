@@ -37,6 +37,10 @@ class Fase1:
         self.permitir_transicao = False
         self.transicao = Botao(0, 0, 480*8, 90*8, "imagens/transicao_1-2.png", self.janela, (243, 97, 255))
 
+        self.bolha = pygame.mixer.Sound('sons/loop_bolhas.ogg')
+
+        self.agua = pygame.mixer.Channel(0)
+        self.agua.stop()
 
     def run(self):
 
@@ -47,6 +51,7 @@ class Fase1:
         teclas = pygame.key.get_pressed()
 
         if self.botao.clicado(self.mouse.getX(), self.mouse.getY(), self.mouse.getPressionado()) or teclas[pygame.K_SPACE]:
+            self.agua.play(self.bolha, 0)
             self.represa.setVelocidade(0.15)
 
         if self.represa.getFrame() >= self.represa_sheet_obj.numeroDeFrames - 1 or self.permitir_transicao:

@@ -93,9 +93,22 @@ class Fase2:
         #funcionamento zoom
         self.multiplicador = 1      #variavel que determina o aumento do tanque
 
+        #para o bom funcionamento dos sons
+        self.toca = True
 
+    def carrega_audios(self):
+        click = pygame.mixer.Sound('sons/blipSelect.wav')
+        cano_errado = pygame.mixer.Sound('sons/cano errado.wav')
+        cano_correto = pygame.mixer.Sound('sons/cano_correto.wav')
+        erro_cal = pygame.mixer.Sound('sons/use_o_cal_primeiro.mp3')
+
+        return (click, cano_errado, cano_correto, erro_cal)
 
     def run(self):
+
+        (click, erro, acerto, erro_cal) = self.carrega_audios()
+
+        narracao = pygame.mixer.Channel(0)
 
         if self.funcionamento_cloro == False:
             #recebe todas a teclas pressionadas
@@ -135,7 +148,13 @@ class Fase2:
                         self.cal_usado = True
 
                     if teclas[pygame.K_SPACE] or self.usando_cal:
+
                         if self.medidor.getY() < 48 * 8:
+
+                            if self.toca:
+                                acerto.play()
+                            self.toca = False
+
                             self.usando_cal = True
                             self.animacao_cal.update()
                             if self.animacao_cal.getFrame() > 13:
@@ -146,6 +165,7 @@ class Fase2:
                         else:
                             self.usando_cal = False
                     else:
+                        self.toca = True
                         if self.medidor.getY() >= 48 * 8:
                             self.animacao_cal.setRepetir()
                             self.animacao_cal.update()
@@ -153,6 +173,7 @@ class Fase2:
                             """self.brilho.setVelocidade(10)
                             self.brilho.update()"""
                         if teclas[pygame.K_RIGHT]:
+                            click.play()
                             self.selecionado = self.borda_cloro
                 else:
 
@@ -161,12 +182,19 @@ class Fase2:
 
                     if teclas[pygame.K_SPACE]:
                         if not self.cloro_usado and self.cal_usado:
+                            if self.toca:
+                                acerto.play()
+                            self.toca = False
                             self.funcionamento_cloro = True
                         else:
-                            print("use o cal primeiro")
+                            if narracao.get_busy() == False:
+                                narracao.play(erro_cal)
+                                erro.play()
+                            #print("use o cal primeiro")
 
 
                     if teclas[pygame.K_LEFT] and not self.funcionamento_cloro:
+                        click.play()
                         self.selecionado = self.borda_cal
 
 

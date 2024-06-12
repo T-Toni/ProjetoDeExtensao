@@ -150,6 +150,22 @@ class Menu:
         self.obj_botao_voltar = ObjAnimado(self.janela, fase5_sheet_obj, 9, 10, 8, (243, 97, 255), 0)
         self.obj_botao_voltar.anima(self.botao_voltar.getX(), self.botao_voltar.getY())
 
+        #incialização dos audios e mixer
+        self.click = pygame.mixer.Sound('sons/blipSelect.wav')
+        self.loop_agua = pygame.mixer.Sound('sons/loop_agua1.ogg')
+        self.bolha = pygame.mixer.Sound('sons/loop_bolhas.ogg')
+
+        self.agua = pygame.mixer.Channel(0)
+
+    """def carrega_audios(self):
+        click = pygame.mixer.Sound('sons/blipSelect.wav')
+        loop_agua = pygame.mixer.Sound('sons/loop_agua1.ogg')
+        bolhas = pygame.mixer.Sound('sons/loop_bolhas.ogg')
+
+        agua = pygame.mixer.Channel(0)
+
+        return (click, loop_agua, bolhas, agua)"""
+
     #função que percorre todos os objetos animados da tela de fases para conferir que nenhum está sendo animado
     def podeDescer(self):
         i = self.obj_fase10
@@ -165,6 +181,13 @@ class Menu:
 
 
     def run(self):
+
+        """if not self.audios_carregados:
+            (click, loop_agua, bolha, agua) = self.carrega_audios()"""
+
+        if not self.agua.get_busy():
+            self.agua.set_volume(0.5)
+            self.agua.play(self.loop_agua, -1)
 
         # desenha todos os objetos graficos
         # menu
@@ -212,20 +235,24 @@ class Menu:
 
         # inicia as animações dos botões
         if self.botao_jogar.clicado(self.mouse.getX(), self.mouse.getY(), self.mouse.getPressionado()):
+            self.bolha.play()
             # permite a animação
             self.obj_jogar.anima(8 * 92, 8 * 48)
 
         if self.botao_opcoes.clicado(self.mouse.getX(), self.mouse.getY(), self.mouse.getPressionado()):
+            self.bolha.play()
             # permite a animação
             self.obj_opcoes.anima(8 * 13, 8 * 51)
 
         if self.botao_fases.clicado(self.mouse.getX(), self.mouse.getY(), self.mouse.getPressionado()):
+            self.bolha.play()
             # permite a animação
             self.obj_fases.anima(8 * 13, 8 * 36)
             self.descendo = True
             self.subindo = False
 
         if self.botao_sair.clicado(self.mouse.getX(), self.mouse.getY(), self.mouse.getPressionado()):
+            self.bolha.play()
             # permite a animação
             self.obj_sair.anima(8 * 13, 8 * 67)
 
@@ -237,6 +264,7 @@ class Menu:
 
         # continua a funcionalidade dos botões pós animação
         if self.obj_jogar.fim_da_animacao():
+            self.bolha.stop()
             proximaFase = fase_1.Fase1(self.janela, self.gerenciador, self.mouse)
             self.gerenciador.set_fase(proximaFase)
 
