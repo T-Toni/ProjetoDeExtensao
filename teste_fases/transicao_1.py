@@ -3,12 +3,16 @@ import fase_2
 from botao import Botao
 
 class Transicao_1:
-    def __init__(self, janela, gerenciador, mouse):
+    def __init__(self, janela, gerenciador, mouse, mixer):
+        #inicializa o mixer
+        self.mixer = mixer
+
+
         self.janela = janela
         self.gerenciador = gerenciador
         self.mouse = mouse
 
-        self.proximaFase = fase_2.Fase2(self.janela, self.gerenciador, self.mouse)
+        self.proximaFase = fase_2.Fase2(self.janela, self.gerenciador, self.mouse, self.mixer)
 
         self.imagem = Botao(0, 0, 160 * 8, 90 * 8, "imagens/background_1-2.png", self.janela, None)
 
@@ -51,16 +55,7 @@ class Transicao_1:
 
         self.cano_errado = False
 
-    def carrega_audios(self):
-        click = pygame.mixer.Sound('sons/blipSelect.wav')
-        cano_errado = pygame.mixer.Sound('sons/cano errado.wav')
-        cano_correto = pygame.mixer.Sound('sons/cano_correto.wav')
-
-        return (click, cano_errado, cano_correto)
-
     def run(self):
-
-        (click, cano_errado, cano_correto) = self.carrega_audios()
 
         #recebe todas a teclas pressionadas
         teclas = pygame.key.get_pressed()
@@ -82,14 +77,16 @@ class Transicao_1:
 
             if teclas[pygame.K_RIGHT] and self.pressionado == False and not self.permite_animacao:
                 if self.posicao != 2:
-                    click.play()
+                    #click.play()
+                    self.mixer.toca_som('click')
                 if self.posicao < 2:
                     self.posicao += 1
                     self.selecionado.setX(self.vetor_posicoes[self.posicao])
                     self.pressionado = True
             elif teclas[pygame.K_LEFT] and self.pressionado == False and not self.permite_animacao:
                 if self.posicao != 0:
-                    click.play()
+                    #click.play()
+                    self.mixer.toca_som('click')
                 if self.posicao > 0:
                     self.posicao -= 1
                     self.selecionado.setX(self.vetor_posicoes[self.posicao])
@@ -109,7 +106,8 @@ class Transicao_1:
                     self.cano_esq_baixo.desenha()
 
                     if self.cano_esq_baixo.getY() == self.pos:
-                        cano_correto.play()
+                        #cano_correto.play()
+                        self.mixer.toca_som('cano_certo')
                         self.completo = True
 
                 if self.posicao == 1:
@@ -121,7 +119,8 @@ class Transicao_1:
                     if self.cano_esq_dir.getY() == self.pos or self.indo == False:
 
                         if not self.cano_errado:
-                            cano_errado.play()
+                            #cano_errado.play()
+                            self.mixer.toca_som('cano_errado')
                         self.cano_errado = True
 
                         self.volta_cano(self.cano_esq_dir)

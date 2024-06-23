@@ -11,6 +11,7 @@ import fase_5
 import transicao_4
 import mouse
 import transicao_2
+import mixer
 
 #Dados relevantes pra inicialização do pygame
 LARGURA, ALTURA = 1280, 720
@@ -27,26 +28,18 @@ class Jogo:
         self.faseAtual = None
         self.mouse = mouse.Mouse()
 
-    def carrega_audios(self):
-        click = pygame.mixer.Sound('sons/blipSelect.wav')
-        cano_errado = pygame.mixer.Sound('sons/cano errado.wav')
-        cano_correto = pygame.mixer.Sound('sons/cano_correto.wav')
-        cano_movimento = pygame.mixer.Sound('sons/cano_movimento.wav')
-        morte_aguda = pygame.mixer.Sound('sons/morte_aguda.wav')
-        morte_grave = pygame.mixer.Sound('sons/morte_grave.wav')
-        grito_agudo = pygame.mixer.Sound('sons/grito_agudo.wav')
-        grito_grave = pygame.mixer.Sound('sons/grito_grave.wav')
+        self.mixer = mixer.Mixer()
 
-        return (click, cano_correto, cano_errado, cano_movimento, morte_grave, morte_aguda, grito_grave, grito_agudo)
 
     def rodar(self):
 
         #inicializa a classe (fase) menu
-        self.faseAtual = menu.Menu(self.janela, self.gerenciador, self.mouse)
-        #self.faseAtual = asteroids.Asteroids(self.janela, self.gerenciador, self.mouse)
-        #self.faseAtual = transicao_4.Transicao_4(self.janela, self.gerenciador, self.mouse)
-        #self.faseAtual = fase_2.Fase2(self.janela, self.gerenciador, self.mouse)
-        #self.faseAtual = fase_5.Fase5(self.janela, self.gerenciador, self.mouse)
+        self.faseAtual = menu.Menu(self.janela, self.gerenciador, self.mouse, self.mixer)
+        #self.faseAtual = asteroids.Asteroids(self.janela, self.gerenciador, self.mouse, self.mixer)
+        #self.faseAtual = transicao_4.Transicao_4(self.janela, self.gerenciador, self.mouse, self.mixer)
+        #self.faseAtual = fase_2.Fase2(self.janela, self.gerenciador, self.mouse, self.mixer)
+        self.faseAtual = fase_5.Fase5(self.janela, self.gerenciador, self.mouse, self.mixer)
+
         self.gerenciador.set_fase(self.faseAtual)                       #a atribui ao gerenciador de fases
 
         while True:     #loop principal

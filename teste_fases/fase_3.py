@@ -5,7 +5,10 @@ from SpriteSheet import SpriteSheet
 from obj_animado import ObjAnimado
 
 class Fase3:
-    def __init__(self, janela, gerenciador, mouse):
+    def __init__(self, janela, gerenciador, mouse, mixer):
+        #inicializa o mixer
+        self.mixer = mixer
+
         #necessário pra desenhar
         self.janela = janela
         #necessario para a troca de fases
@@ -195,7 +198,7 @@ class Fase3:
                     self.medidor.setX(self.medidor.getX() - velocidade)
 
             else:
-                self.proximaFase = transicao_3.Transicao_3(self.janela, self.gerenciador, self.mouse)
+                self.proximaFase = transicao_3.Transicao_3(self.janela, self.gerenciador, self.mouse, self.mixer)
                 self.gerenciador.set_fase(self.proximaFase)
 
 

@@ -10,7 +10,11 @@ from rede_neural import RedeNeural
 import transicao_2
 
 class Fase2:
-    def __init__(self, janela, gerenciador, mouse):
+    def __init__(self, janela, gerenciador, mouse, mixer):
+        #inicializa o mixer
+        self.mixer = mixer
+
+
         #necessário pra desenhar
         self.janela = janela
         #necessario para a troca de fases
@@ -224,7 +228,7 @@ class Fase2:
                         if teclas[pygame.K_RIGHT]:
                             self.transicao.setX(self.transicao.getX() - 3)
                     else:
-                        self.proximaFase = transicao_2.Transicao_2(self.janela, self.gerenciador, self.mouse)
+                        self.proximaFase = transicao_2.Transicao_2(self.janela, self.gerenciador, self.mouse, self.mixer)
                         self.gerenciador.set_fase(self.proximaFase)
 
         else:

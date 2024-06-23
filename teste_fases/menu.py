@@ -1,5 +1,4 @@
 import pygame
-from pygame import QUIT
 
 
 import fase_1
@@ -13,7 +12,10 @@ import math
 
 
 class Menu:
-    def __init__(self, janela, gerenciador, mouse):
+    def __init__(self, janela, gerenciador, mouse, mixer):
+        #inicializa o mixer
+        self.mixer = mixer
+
         # necessário para desenhar
         self.janela = janela
 
@@ -265,7 +267,7 @@ class Menu:
         # continua a funcionalidade dos botões pós animação
         if self.obj_jogar.fim_da_animacao():
             self.bolha.stop()
-            proximaFase = fase_1.Fase1(self.janela, self.gerenciador, self.mouse)
+            proximaFase = fase_1.Fase1(self.janela, self.gerenciador, self.mouse, self.mixer)
             self.gerenciador.set_fase(proximaFase)
 
         if self.obj_sair.fim_da_animacao():
@@ -378,15 +380,15 @@ class Menu:
                             self.subindo = True
 
             if self.obj_fase1.fim_da_animacao():
-                proximaFase = fase_1.Fase1(self.janela, self.gerenciador, self.mouse)
+                proximaFase = fase_1.Fase1(self.janela, self.gerenciador, self.mouse, self.mixer)
                 self.gerenciador.set_fase(proximaFase)
 
             if self.obj_fase2.fim_da_animacao():
-                proximaFase = fase_2.Fase2(self.janela, self.gerenciador, self.mouse)
+                proximaFase = fase_2.Fase2(self.janela, self.gerenciador, self.mouse, self.mixer)
                 self.gerenciador.set_fase(proximaFase)
 
             if self.obj_fase3.fim_da_animacao():
-                proximaFase = fase_3.Fase3(self.janela, self.gerenciador, self.mouse)
+                proximaFase = fase_3.Fase3(self.janela, self.gerenciador, self.mouse, self.mixer)
                 self.gerenciador.set_fase(proximaFase)
 
                 '''else:

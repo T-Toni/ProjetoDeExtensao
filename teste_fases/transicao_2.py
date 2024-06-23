@@ -3,12 +3,16 @@ from botao import Botao
 import fase_3
 
 class Transicao_2:
-    def __init__(self, janela, gerenciador, mouse):
+    def __init__(self, janela, gerenciador, mouse, mixer):
+        #inicializa o mixer
+        self.mixer = mixer
+
+
         self.janela = janela
         self.gerenciador = gerenciador
         self.mouse = mouse
 
-        self.proximaFase = fase_3.Fase3(self.janela, self.gerenciador, self.mouse)
+        self.proximaFase = fase_3.Fase3(self.janela, self.gerenciador, self.mouse, self.mixer)
 
         self.imagem = Botao(0, 0, 160 * 8, 90 * 8, "imagens/background_2-3.png", self.janela, None)
 
@@ -50,15 +54,8 @@ class Transicao_2:
 
         self.cano_errado = False
 
-    def carrega_audios(self):
-        click = pygame.mixer.Sound('sons/blipSelect.wav')
-        cano_errado = pygame.mixer.Sound('sons/cano errado.wav')
-        cano_correto = pygame.mixer.Sound('sons/cano_correto.wav')
-        return (click, cano_errado, cano_correto)
 
     def run(self):
-
-        (click, cano_errado, cano_correto) = self.carrega_audios()
 
         #recebe todas a teclas pressionadas
         teclas = pygame.key.get_pressed()
@@ -80,14 +77,14 @@ class Transicao_2:
 
             if teclas[pygame.K_RIGHT] and self.pressionado == False and not self.permite_animacao:
                 if self.posicao != 2:
-                    click.play()
+                    self.mixer.toca_som('click')
                 if self.posicao < 2:
                     self.posicao += 1
                     self.selecionado.setX(self.vetor_posicoes[self.posicao])
                     self.pressionado = True
             elif teclas[pygame.K_LEFT] and self.pressionado == False and not self.permite_animacao:
                 if self.posicao != 0:
-                    click.play()
+                    self.mixer.toca_som('click')
                 if self.posicao > 0:
                     self.posicao -= 1
                     self.selecionado.setX(self.vetor_posicoes[self.posicao])
@@ -110,7 +107,7 @@ class Transicao_2:
 
                     if self.cano_esq_cima.getY() == self.pos or self.indo == False:
                         if not self.cano_errado:
-                            cano_errado.play()
+                            self.mixer.toca_som('cano_errado')
                         self.cano_errado = True
                         self.volta_cano(self.cano_esq_cima)
                         self.indo = False
@@ -128,7 +125,7 @@ class Transicao_2:
 
                     if self.cano_cima_dir.getY() == self.pos or self.indo == False:
                         if not self.cano_errado:
-                            cano_errado.play()
+                            self.mixer.toca_som('cano_errado')
                         self.cano_errado = True
                         self.volta_cano(self.cano_cima_dir)
                         self.indo = False
@@ -143,7 +140,7 @@ class Transicao_2:
                     self.testa_cano(self.cano_baixo_dir)
 
                     if self.cano_baixo_dir.getY() == self.pos:
-                        cano_correto.play()
+                        self.mixer.toca_som('cano_certo')
                         self.completo = True
 
         else:

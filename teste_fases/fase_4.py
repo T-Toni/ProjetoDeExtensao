@@ -6,7 +6,11 @@ from obj_animado import ObjAnimado
 import transicao_4
 
 class Fase4:
-    def __init__(self, janela, gerenciador, mouse):
+    def __init__(self, janela, gerenciador, mouse, mixer):
+        #inicializa o mixer
+        self.mixer = mixer
+
+
         #necessário pra desenhar
         self.janela = janela
         #necessario para a troca de fases
@@ -235,7 +239,7 @@ class Fase4:
                     self.decrescimo -= velocidade
 
             else:
-                proximaFase = transicao_4.Transicao_4(self.janela, self.gerenciador, self.mouse)
+                proximaFase = transicao_4.Transicao_4(self.janela, self.gerenciador, self.mouse, self.mixer)
                 self.gerenciador.set_fase(proximaFase)  # muda a fase do gerenciador para a proxima
 
 

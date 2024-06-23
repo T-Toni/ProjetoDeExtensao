@@ -10,7 +10,11 @@ from rede_neural import RedeNeural
 import menu
 
 class Fase5:
-    def __init__(self, janela, gerenciador, mouse):
+    def __init__(self, janela, gerenciador, mouse, mixer):
+        #inicializa o mixer
+        self.mixer = mixer
+
+
         #necessário pra desenhar
         self.janela = janela
         #necessario para a troca de fases
@@ -217,7 +221,7 @@ class Fase5:
                             self.tela_final.desenha()
                             self.botao_menu.desenha()
                             if teclas[pygame.K_SPACE] or (self.botao_menu.mouse_dentro(self.mouse.getX(), self.mouse.getY()) and self.mouse.getPressionado()):
-                                self.proximaFase = menu.Menu(self.janela, self.gerenciador, self.mouse)
+                                self.proximaFase = menu.Menu(self.janela, self.gerenciador, self.mouse, self.mixer)
                                 self.gerenciador.set_fase(self.proximaFase)
                         else:
                             self.animacao_casas.anima(0, 0)

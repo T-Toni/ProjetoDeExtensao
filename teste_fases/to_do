@@ -1,9 +1,9 @@
 (inicio)
-A agua começa aqui, na represa, aperte espaço para liberar a passagem da água da represa para a estação de tratamento
+Olá, eu trabalho aqui na estação de tratamento de água! e vou te guiar por todas as etapas do tratamento, desde a represa até a sua casa!
+A agua começa aqui, na represa, mas ela está suja e precisa ser limpa antes de pode ser utilizada! aperte espaço para liberar a passagem da água da represa para a estação de tratamento
 
 (pós pressionamento do botão)
-a água é transportada por canos
-pressione a seta para a direita seguir com o tratamento
+a água é transportada por canos! pressione a seta para a direita seguir com o tratamento.
 
 (transição1)
 oh não, está faltando um cano, você pode ajudar?
@@ -66,6 +66,115 @@ Use as setas para cima e para baixo para agitar o tanque
 Muito bem! Agora a agua deve ficar um pouco em repouso para a sujeira se juntar no fundo do tanque
 e a agua da parte de cima pode seguir para a proxima etapa
 pressione a seta para a direita seguir com o tratamento
+
+(transição4)
+Não é possivel!! outro cano faltando..
+selecione o cano correto para que a agua possa passar
+[erro]
+parece que esse não é o cano correto...
+[acerto]
+Muito Bem!!
+pressione a seta para a direita seguir com o tratamento
+
+(Fase 5)
+Muito bem!, nós chegamos na ultima etapa do tratamento!!
+Nessa etapa nos devemos adicionar novamente o cal e o cloro na agua, para garantir que fique totalmente limpa para o consumo
+[cal adicionado]
+Muito bem!!
+agora adicione o Cloro
+[fase do cloro]
+Voce controla o cloro como na ultima fase, mas cuidado, as sujeiras restante são menores e mais dificeis de serem pegas
+(caso demore)
+Use as setas da esquerda e direita para controlar a nave, e se aproxime das sujeiras para elimina-las.
+[eliminando todas as sujeiras]
+MUITO BEM!!!!
+agora que voce eliminou as sujeiras a agua ja está bem mais limpa
+pressione a seta para a direita seguir com o tratamento
+
+(reservatório)
+Esse é o reservatório, onde a agua limpa fica guardada para ser direcionada as nossas casas
+
+(fim)
+e por fim a agua é enviada por meio de canos para as casas!
+
+
+
+//////// OBS: adicionar o nome das estapas no seu início
+
+(fase1)
+olá, eu me chamo fulano e eu trabalho aqui na estação de tratamento de agua! e eu vou te mostrar todas as etapas do tratamento da agua, desde a represa até
+água chegar em sua casa!
+Essa água que está na represa está suja, e precisa ser limpa, para se tornar potável e poder ser utilizada.
+Aperte espaço para liberar a passagem da água da represa para a estação de tratamento.
+[pos pressionamento]
+Para transportar a agua, existem tubulações hidráulicas ou canos! presione a seta para a direita para seguir com o tratamento
+
+(transição 1)
+oh não, está faltando um cano, você pode ajudar?
+selecione o cano correto para que a agua possa passar
+[erro]
+parece que esse não é o cano correto...
+[acerto]
+Muito Bem!!
+pressione a seta para a direita seguir com o tratamento
+
+(fase2)
+Essa é a etapa de Pré-cloração e Ajuste de PH.
+E nessa etapa nós adicionamos o cal e o cloro na agua suja.
+o cal para controlar o ph e o cloro para eliminar as sujeiras.
+Adicione primeiro o cal, que é esse pó branco na esquerda.
+[cal adicionado]
+Muito bem!!
+agora adicione o Cloro
+[fase do cloro]
+Agora voce controla o Cloro, use as setas da esquerda e direita para controlar a nave, e se aproxime das sujeiras para elimina-las.
+(caso demore)
+Use as setas da esquerda e direita para controlar a nave, e se aproxime das sujeiras para elimina-las.
+[eliminando todas as sujeiras]
+MUITO BEM!!!!
+agora que voce eliminou as sujeiras a agua ja está mais limpa
+pressione a seta para a direita seguir com o tratamento
+
+(fase 3)
+Essa etapa é conhecida como Coagulação e se resume em agitar vigorosamente o tanque para garantir a mistura dos quimicos adicionados na etapa anterior à água
+pressiona as setas da direita e depois a da esquerda rapidamente para agitar o tanque.
+[demora]
+pressiona as setas da direita e depois a da esquerda rapidamente para agitar o tanque.
+[conclusão]
+Parabens!!!, a agua foi agitada corretamente
+pressione a seta para a direita seguir com o tratamento
+
+(fase 4)
+Essa etapa chama-se Floculação, e é parecida com a anterior, mas agora voce deve agitar o tanque em uma velocidade moderada, nem muito rapido nem muito devagar, tente manter o medidor no canto superior esquerdo da tela no verde
+Pressione as setas para cima e para baixo para agitar o tanque.
+[demora]
+Use as setas para cima e para baixo para agitar o tanque
+[conclusão]
+Muito bem! Agora a agua deve ficar um pouco em repouso para a sujeira se juntar no fundo do tanque
+e a agua da parte de cima pode seguir para a proxima etapa
+pressione a seta para a direita seguir com o tratamento
+
+
+(Fase 5)
+Muito bem!, nós chegamos na ultima etapa do tratamento!!
+Nessa etapa chamada de Pós-cloração e Ajuste final do ph nos devemos adicionar uma pequena quantidade de cal e o cloro na agua, para garantir que fique potável.
+[cal adicionado]
+Muito bem!!
+agora adicione o Cloro
+[fase do cloro]
+Voce controla o cloro como na ultima fase, mas cuidado, as sujeiras restante são menores e mais dificeis de serem pegas
+(caso demore)
+Use as setas da esquerda e direita para controlar a nave, e se aproxime das sujeiras para elimina-las.
+[eliminando todas as sujeiras]
+MUITO BEM!!!!
+agora que voce eliminou as sujeiras a agua ja está limpa!
+pressione a seta para a direita seguir com o tratamento
+
+(reservatório)
+Esse é o reservatório, onde a agua limpa fica guardada para ser direcionada as nossas casas
+
+(fim)
+e por fim a agua é enviada por meio de canos para as casas!
 
 
 
