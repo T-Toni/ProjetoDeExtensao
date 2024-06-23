@@ -30,7 +30,7 @@ class Botao:
         #necessário para desenhar na tela
         self.tela = tela
 
-        # para fazer uma lista encadeada ser possivel
+
         self.proximo = None
 
         #bobagem

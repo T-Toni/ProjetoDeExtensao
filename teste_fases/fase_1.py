@@ -7,6 +7,7 @@ import fase_3
 import fase_2
 import transicao_1
 import narracao
+import texto
 
 
 class Fase1:
@@ -52,7 +53,13 @@ class Fase1:
 
         self.concluiu_fim = False
 
+        #teste fonte ( tamanho maximo: Essa água que está na represa está suja, e precisa ser limpa)
+        texto1 = 'Essa água que está na represa está suja, e precisa ser limpa'
+        texto2 = 'para se tornar potável e poder ser utilizada.'
+        texto3 = 'Aperte espaço para liberar a passagem da água da represa'
+        texto4 = 'para a estação de tratamento.'
 
+        self.texto = texto.Texto(texto1, texto2, texto3, texto4, 1, self.janela)
 
     def run(self):
 
@@ -101,6 +108,9 @@ class Fase1:
                     else:
                         self.gerenciador.set_fase(self.proximaFase)
 
+
+            else:
+                self.texto.escreve()
 
 
 
