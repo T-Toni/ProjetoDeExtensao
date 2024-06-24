@@ -3,9 +3,12 @@ import pygame
 class Texto:
 
     def __init__(self, texto1, texto2, texto3, texto4, posicao, tela):
-        #inicializa
+
+        #0 caso seja em baixo da tela e 1 caso seja no canto superior da tela
         self.posicao = posicao
-        self.fonte = pygame.font.Font('fontes/minecraft.ttf', 32)
+
+
+        self.fonte = pygame.font.Font('fontes/Commodore Pixeled.ttf', 25)
         self.tela = tela
 
         #inicializa o texto
@@ -32,11 +35,31 @@ class Texto:
 
 
     def escreve(self):
-        #desenha a caixa de diálogo
-        self.tela.blit(self.caixa, (0, 0))
 
-        x = 19 * 8
-        y = 51 * 8
+        x = 18 * 8
+        #parte superior
+        if self.posicao == 2:
+            #posicao do texto
+            y = 9 * 8
+            #posicao da caixa
+            yc = -42 * 8
+
+        #parte central
+        if self.posicao == 1:
+            #posicao do texto
+            y = 33 * 8
+            #posicao da caixa
+            yc = -18 * 8
+
+        #parte Inferior
+        if self.posicao == 0:
+            #posicao do texto
+            y = 58 * 8
+            #posicao da caixa
+            yc = 7 * 8
+
+        #desenha a caixa de diálogo
+        self.tela.blit(self.caixa, (0, yc))
 
         distancia = 7*8
 

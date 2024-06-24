@@ -5,11 +5,16 @@ class Mixer:
         self.sons = {}
         self.falas = {}
         self.musicas = {}
+        #lista de sons sendo tocados
+        self.tocando_agora = {}
 
         self.adicionaSons()
         self.adicionaFalas()
 
         self.mixer_falas = pygame.mixer.Channel(0)
+
+        #variável que permite que o jogador pule um dialogo por vez
+        self.pulou = False
 
 
     def adicionaSons(self):
@@ -26,8 +31,19 @@ class Mixer:
 
     def adicionaFalas(self):
 
-        self.falas['introducao'] = pygame.mixer.Sound('narracao/introducao.wav')
-        self.falas['pos_pressionamento'] = pygame.mixer.Sound('narracao/pos_pressionamento_fase1.wav')
+        #genericos
+        self.falas['erro_transicao'] = pygame.mixer.Sound('narracao/erro_transicoes.wav')
+        self.falas['acerto_transicao'] = pygame.mixer.Sound('narracao/acerto_transicoes.wav')
+
+        #fase1
+        self.falas['introducao1'] = pygame.mixer.Sound('narracao/introducao1.wav')
+        self.falas['introducao2'] = pygame.mixer.Sound('narracao/introducao2.wav')
+        self.falas['introducao3'] = pygame.mixer.Sound('narracao/introducao3.wav')
+        self.falas['pos_pressionamento'] = pygame.mixer.Sound('narracao/pos_pressionamento.wav')
+
+        #transicao1
+        self.falas['transicao1'] = pygame.mixer.Sound('narracao/trans1_intro.wav')
+
 
 
     def toca_som(self, som):
@@ -39,6 +55,7 @@ class Mixer:
     def toca_fala(self, fala):
         if fala in self.falas:
             self.mixer_falas.play(self.falas[fala])
+            self.tocando_agora[0] = fala
         else:
             print("audio não encontrado2")
 
@@ -51,8 +68,22 @@ class Mixer:
 
     #função que faz qualquer fala tocada parar com o pressionamento de enter esquerdo
     def update(self, teclas):
-        if teclas[pygame.K_KP_ENTER] and self.mixer_falas.get_busy():
-            self.mixer_falas.stop()
+        if teclas[pygame.K_KP_ENTER]:
+            if not self.pulou and self.mixer_falas.get_busy():
+                self.mixer_falas.stop()
+            self.pulou = True
+        else:
+            self.pulou = False
+
+        #LIMPA O DICIONARIO "tocando agora"
+        if not self.mixer_falas.get_busy():
+            self.tocando_agora[0] = None
+
+    #OBS: canal está ai para facilitar a modificação caso seja necessário o controle dos sons de das musicas alem das falas
+    def get_audio_atual(self, canal):
+        return self.tocando_agora[canal]
+
+
 
 
 

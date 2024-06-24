@@ -1,6 +1,7 @@
 import pygame
 import fase_2
 from botao import Botao
+import texto
 
 class Transicao_1:
     def __init__(self, janela, gerenciador, mouse, mixer):
@@ -55,10 +56,44 @@ class Transicao_1:
 
         self.cano_errado = False
 
+
+        #falas
+        texto1_1 = 'Oh não, está faltando um cano. Você pode ajudar?'
+        texto1_2 = 'Selecione o cano correto para que'
+        texto1_3 = 'a água possa passar.!'
+        texto1_4 = None
+
+        texto2_1 = 'Parece que esse não é o cano correto...'
+        texto2_2 = None
+        texto2_3 = None
+        texto2_4 = None
+
+        texto3_1 = 'Muito bem!'
+        texto3_2 = 'Pressione a [SETA->] para a direita'
+        texto3_3 = 'para seguir com o tratamento.'
+        texto3_4 = None
+
+        self.intro = texto.Texto(texto1_1, texto1_2, texto1_3, texto1_4, 0, self.janela)
+        self.erro = texto.Texto(texto2_1, texto2_2, texto2_3, texto2_4, 0, self.janela)
+        self.acerto = texto.Texto(texto3_1, texto3_2, texto3_3, texto3_4, 0, self.janela)
+
+        #booleanos para controlar as falas
+        self.tocou_intro = False
+
+
     def run(self):
 
         #recebe todas a teclas pressionadas
         teclas = pygame.key.get_pressed()
+
+        #atualiza o mixer
+        self.mixer.update(teclas)
+
+        #toca a intro
+        if not self.tocou_intro:
+            self.mixer.toca_fala('transicao1')
+            self.tocou_intro = True
+
 
         if not self.completo:
 
@@ -108,6 +143,7 @@ class Transicao_1:
                     if self.cano_esq_baixo.getY() == self.pos:
                         #cano_correto.play()
                         self.mixer.toca_som('cano_certo')
+                        self.mixer.toca_fala('acerto_transicao')
                         self.completo = True
 
                 if self.posicao == 1:
@@ -121,6 +157,7 @@ class Transicao_1:
                         if not self.cano_errado:
                             #cano_errado.play()
                             self.mixer.toca_som('cano_errado')
+                            self.mixer.toca_fala('erro_transicao')
                         self.cano_errado = True
 
                         self.volta_cano(self.cano_esq_dir)
@@ -141,7 +178,9 @@ class Transicao_1:
                     if self.cano_baixo_dir.getY() == self.pos or self.indo == False:
 
                         if not self.cano_errado:
-                            cano_errado.play()
+                            #cano_errado.play()
+                            self.mixer.toca_som('cano_errado')
+                            self.mixer.toca_fala('erro_transicao')
                         self.cano_errado = True
 
                         self.volta_cano(self.cano_baixo_dir)
@@ -165,9 +204,15 @@ class Transicao_1:
                 self.gerenciador.set_fase(self.proximaFase)
 
 
+        #escreve as falas
+        if self.mixer.get_audio_atual(0) == 'transicao1':
+            self.intro.escreve()
 
+        if self.mixer.get_audio_atual(0) == 'erro_transicao':
+            self.erro.escreve()
 
-
+        if self.mixer.get_audio_atual(0) == 'acerto_transicao':
+            self.acerto.escreve()
 
 
     def testa_cano(self, cano):

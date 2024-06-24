@@ -49,17 +49,44 @@ class Fase1:
         self.agua = pygame.mixer.Channel(0)
         self.agua.stop()    #para o som da tela anterior
 
+        #variaveis booleanas para controlar os eventos
+        self.concluiu_intro1 = False
+        self.concluiu_intro2 = False
+        self.concluiu_intro3 = False
         self.concluiu_intro = False
+
+        self.pressionou = False
+
 
         self.concluiu_fim = False
 
-        #teste fonte ( tamanho maximo: Essa água que está na represa está suja, e precisa ser limpa)
-        texto1 = 'Essa água que está na represa está suja, e precisa ser limpa'
-        texto2 = 'para se tornar potável e poder ser utilizada.'
-        texto3 = 'Aperte espaço para liberar a passagem da água da represa'
-        texto4 = 'para a estação de tratamento.'
+        #INTRODUCAO ( tamanho maximo(para25): 'água, desde a represa até água chegar em sua casa!')
+        texto1_1 = 'Olá, eu me chamo Sabrino e eu trabalho aqui'
+        texto1_2 = 'na estação de tratamento de agua!'
+        texto1_3 = 'E vou te mostrar todas as etapas do tratamento da'
+        texto1_4 = 'água, desde a represa até água chegar em sua casa!'
 
-        self.texto = texto.Texto(texto1, texto2, texto3, texto4, 1, self.janela)
+        texto2_1 = 'Essa água que está na represa está suja,'
+        texto2_2 = 'e precisa ser limpa, para se tornar'
+        texto2_3 = 'potável e poder ser utilizada.'
+        texto2_4 = None
+
+        texto3_1 = 'Aperte [ESPAÇO] para liberar a passagem da água'
+        texto3_2 = 'da represa para a estação de tratamento.'
+        texto3_3 = None
+        texto3_4 = None
+
+        texto4_1 = 'Para transportar a água, são usados canos chamados'
+        texto4_2 = 'de tubulação hidráulica! Pressione a [SETA->]'
+        texto4_3 = 'para a direita para seguir com o tratamento.'
+        texto4_4 = None
+
+
+        self.intro1 = texto.Texto(texto1_1, texto1_2, texto1_3, texto1_4, 0, self.janela)
+        self.intro2 = texto.Texto(texto2_1, texto2_2, texto2_3, texto2_4, 0, self.janela)
+        self.intro3 = texto.Texto(texto3_1, texto3_2, texto3_3, texto3_4, 0, self.janela)
+
+        self.pos_pressionamento = texto.Texto(texto4_1, texto4_2, texto4_3, texto4_4, 0, self.janela)
 
     def run(self):
 
@@ -72,45 +99,66 @@ class Fase1:
         #função para pular falas
         self.mixer.update(teclas)
 
-        if not self.concluiu_intro:
-            #self.introducao.play()
-            self.mixer.toca_fala('introducao')
+        if not self.concluiu_intro1:
+            self.mixer.toca_fala('introducao1')
+            self.concluiu_intro1 = True
+        elif not self.concluiu_intro2 and not self.mixer.tocando_falas():
+            self.mixer.toca_fala('introducao2')
+            self.concluiu_intro2 = True
+        elif not self.concluiu_intro3 and not self.mixer.tocando_falas():
+            self.mixer.toca_fala('introducao3')
+            self.concluiu_intro3 = True
+
+
+        if not self.mixer.tocando_falas() and self.concluiu_intro3:
             self.concluiu_intro = True
+
+
+
+        if self.concluiu_intro:
+
+            if (self.botao.clicado(self.mouse.getX(), self.mouse.getY(), self.mouse.getPressionado()) or teclas[pygame.K_SPACE]) and not self.pressionou:
+                #self.agua.play(self.bolha, 0)
+                self.mixer.toca_som('bolhas1')
+                self.represa.setVelocidade(0.15)
+                self.pressionou = True
+
+            if self.represa.getFrame() >= self.represa_sheet_obj.numeroDeFrames - 1 or self.permitir_transicao:
+                self.permitir_transicao = True
+                self.transicao.desenha()
+
+
+                #toca o audio
+                if not self.concluiu_fim:
+                    #self.finalizacao.play()
+                    self.mixer.toca_fala('pos_pressionamento')
+                    self.concluiu_fim = True
+
+                if self.mixer.tocando_falas():
+                    self.pos_pressionamento.escreve()
+
+                #confere se ja chegou na proxima tela
+                if self.transicao.getX() > (-160 * 8) - 1:
+                    teclas = pygame.key.get_pressed()
+
+                    #Verifica se a seta para a direita está sendo pressionada
+                    if teclas[pygame.K_RIGHT]:
+                        self.transicao.setX(self.transicao.getX() - 3)
+
+                else:
+                    self.gerenciador.set_fase(self.proximaFase)
+
+
         else:
-            if not self.mixer.tocando_falas():
+            if not self.concluiu_intro2:
+                self.intro1.escreve()
 
-                if self.botao.clicado(self.mouse.getX(), self.mouse.getY(), self.mouse.getPressionado()) or teclas[pygame.K_SPACE]:
-                    #self.agua.play(self.bolha, 0)
-                    self.mixer.toca_som('bolhas1')
-                    self.represa.setVelocidade(0.15)
-
-                if self.represa.getFrame() >= self.represa_sheet_obj.numeroDeFrames - 1 or self.permitir_transicao:
-                    self.permitir_transicao = True
-                    self.transicao.desenha()
-
-
-                    #toca o audio
-                    if not self.concluiu_fim:
-                        #self.finalizacao.play()
-                        self.mixer.toca_fala('pos_pressionamento')
-                        self.concluiu_fim = True
-                    """else:
-                        if not self.finalizacao.tocando():"""
-
-                    #confere se ja chegou na proxima tela
-                    if self.transicao.getX() > (-160 * 8) - 1:
-                        teclas = pygame.key.get_pressed()
-
-                        #Verifica se a seta para a direita está sendo pressionada
-                        if teclas[pygame.K_RIGHT]:
-                            self.transicao.setX(self.transicao.getX() - 3)
-
-                    else:
-                        self.gerenciador.set_fase(self.proximaFase)
-
+            elif not self.concluiu_intro3:
+                self.intro2.escreve()
 
             else:
-                self.texto.escreve()
+                self.intro3.escreve()
+
 
 
 

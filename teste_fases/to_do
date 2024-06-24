@@ -102,21 +102,24 @@ e por fim a agua é enviada por meio de canos para as casas!
 //////// OBS: adicionar o nome das estapas no seu início
 
 (fase1)
-olá, eu me chamo fulano e eu trabalho aqui na estação de tratamento de agua! e eu vou te mostrar todas as etapas do tratamento da agua, desde a represa até
+Olá, eu me chamo Sabrino e eu trabalho aqui na estação de tratamento de agua! e vou te mostrar todas as etapas do tratamento da agua, desde a represa até
 água chegar em sua casa!
+
 Essa água que está na represa está suja, e precisa ser limpa, para se tornar potável e poder ser utilizada.
+
 Aperte espaço para liberar a passagem da água da represa para a estação de tratamento.
+
 [pos pressionamento]
-Para transportar a agua, existem tubulações hidráulicas ou canos! presione a seta para a direita para seguir com o tratamento
+Para transportar a água, são usados canos chamados de tubulação hidráulica! Pressione a seta para a direita para seguir com o tratamento.
 
 (transição 1)
-oh não, está faltando um cano, você pode ajudar?
-selecione o cano correto para que a agua possa passar
+Oh não, está faltando um cano. Você pode ajudar?
+Selecione o cano correto para que a água possa passar.
 [erro]
-parece que esse não é o cano correto...
+Parece que esse não é o cano correto...
 [acerto]
-Muito Bem!!
-pressione a seta para a direita seguir com o tratamento
+Muito bem!
+Pressione a seta para a direita para seguir com o tratamento.
 
 (fase2)
 Essa é a etapa de Pré-cloração e Ajuste de PH.
