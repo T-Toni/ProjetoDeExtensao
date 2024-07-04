@@ -100,13 +100,13 @@ class Fase1:
         self.mixer.update(teclas)
 
         if not self.concluiu_intro1:
-            self.mixer.toca_fala('introducao1')
+            self.mixer.toca_fala('introducao1.1')
             self.concluiu_intro1 = True
         elif not self.concluiu_intro2 and not self.mixer.tocando_falas():
-            self.mixer.toca_fala('introducao2')
+            self.mixer.toca_fala('introducao1.2')
             self.concluiu_intro2 = True
         elif not self.concluiu_intro3 and not self.mixer.tocando_falas():
-            self.mixer.toca_fala('introducao3')
+            self.mixer.toca_fala('introducao1.3')
             self.concluiu_intro3 = True
 
 

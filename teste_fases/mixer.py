@@ -27,7 +27,6 @@ class Mixer:
         self.sons['grito_grave'] = pygame.mixer.Sound('sons/grito_grave.wav')
         self.sons['grito_agudo'] = pygame.mixer.Sound('sons/grito_agudo.wav')
         self.sons['bolhas1'] = pygame.mixer.Sound('sons/bolha1.ogg')
-        self.sons['use_o_cal_primeiro'] = pygame.mixer.Sound('sons/use_o_cal_primeiro.mp3')
 
     def adicionaFalas(self):
 
@@ -36,13 +35,23 @@ class Mixer:
         self.falas['acerto_transicao'] = pygame.mixer.Sound('narracao/acerto_transicoes.wav')
 
         #fase1
-        self.falas['introducao1'] = pygame.mixer.Sound('narracao/introducao1.wav')
-        self.falas['introducao2'] = pygame.mixer.Sound('narracao/introducao2.wav')
-        self.falas['introducao3'] = pygame.mixer.Sound('narracao/introducao3.wav')
+        self.falas['introducao1.1'] = pygame.mixer.Sound('narracao/introducao1.wav')
+        self.falas['introducao1.2'] = pygame.mixer.Sound('narracao/introducao2.wav')
+        self.falas['introducao1.3'] = pygame.mixer.Sound('narracao/introducao3.wav')
         self.falas['pos_pressionamento'] = pygame.mixer.Sound('narracao/pos_pressionamento.wav')
 
         #transicao1
         self.falas['transicao1'] = pygame.mixer.Sound('narracao/trans1_intro.wav')
+
+        #fase2
+        self.falas['introducao2.1'] = pygame.mixer.Sound('narracao/introducao2.1.wav')
+        self.falas['introducao2.2'] = pygame.mixer.Sound('narracao/introducao2.2.wav')
+        self.falas['pos_cal_fase2'] = pygame.mixer.Sound('narracao/pos_cal_fase2.wav')
+        self.falas['intro_cloro_fase2'] = pygame.mixer.Sound('narracao/intro_cloro_fase2.wav')
+        self.falas['fim_fase2'] = pygame.mixer.Sound('narracao/fim_fase2.wav')
+
+        self.falas['use_o_cal_primeiro'] = pygame.mixer.Sound('narracao/use_o_cal_primeiro.wav')
+
 
 
 
