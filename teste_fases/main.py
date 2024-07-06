@@ -5,7 +5,7 @@ from sys import exit
 import gerenciador_de_fases
 import menu
 import asteroids
-import transicao_1
+import transicao_3
 import fase_2
 import fase_5
 import transicao_4
@@ -36,10 +36,10 @@ class Jogo:
         #inicializa a classe (fase) menu
         self.faseAtual = menu.Menu(self.janela, self.gerenciador, self.mouse, self.mixer)
         #self.faseAtual = asteroids.Asteroids(self.janela, self.gerenciador, self.mouse, self.mixer)
-        #self.faseAtual = transicao_4.Transicao_4(self.janela, self.gerenciador, self.mouse, self.mixer)
-        self.faseAtual = fase_2.Fase2(self.janela, self.gerenciador, self.mouse, self.mixer)
+        self.faseAtual = transicao_4.Transicao_4(self.janela, self.gerenciador, self.mouse, self.mixer)
+        #self.faseAtual = fase_2.Fase2(self.janela, self.gerenciador, self.mouse, self.mixer)
         #self.faseAtual = fase_5.Fase5(self.janela, self.gerenciador, self.mouse, self.mixer)
-        #self.faseAtual = transicao_1.Transicao_1(self.janela, self.gerenciador, self.mouse, self.mixer)
+        #self.faseAtual = transicao_3.Transicao_3(self.janela, self.gerenciador, self.mouse, self.mixer)
 
         self.gerenciador.set_fase(self.faseAtual)                       #a atribui ao gerenciador de fases
 

@@ -58,9 +58,11 @@ class Transicao_1:
 
 
         #falas
+        # tamanho maximo(para25):
+        #          'água, desde a represa até água chegar em sua casa!'
         texto1_1 = 'Oh não, está faltando um cano. Você pode ajudar?'
-        texto1_2 = 'Selecione o cano correto para que'
-        texto1_3 = 'a água possa passar.!'
+        texto1_2 = 'Use as SETAS e pressione [ESPAÇO] para selecionar'
+        texto1_3 = 'o cano correto para que a água possa passar.'
         texto1_4 = None
 
         texto2_1 = 'Parece que esse não é o cano correto...'
@@ -95,7 +97,7 @@ class Transicao_1:
             self.tocou_intro = True
 
 
-        if not self.completo:
+        if not self.completo and not self.mixer.get_audio_atual(0) == 'transicao1':
 
             #desenha
             self.imagem.desenha()
@@ -142,8 +144,8 @@ class Transicao_1:
 
                     if self.cano_esq_baixo.getY() == self.pos:
                         #cano_correto.play()
-                        self.mixer.toca_som('cano_certo')
                         self.mixer.toca_fala('acerto_transicao')
+                        self.mixer.toca_som('cano_certo')
                         self.completo = True
 
                 if self.posicao == 1:
@@ -156,8 +158,8 @@ class Transicao_1:
 
                         if not self.cano_errado:
                             #cano_errado.play()
-                            self.mixer.toca_som('cano_errado')
                             self.mixer.toca_fala('erro_transicao')
+                            self.mixer.toca_som('cano_errado')
                         self.cano_errado = True
 
                         self.volta_cano(self.cano_esq_dir)
@@ -179,8 +181,8 @@ class Transicao_1:
 
                         if not self.cano_errado:
                             #cano_errado.play()
-                            self.mixer.toca_som('cano_errado')
                             self.mixer.toca_fala('erro_transicao')
+                            self.mixer.toca_som('cano_errado')
                         self.cano_errado = True
 
                         self.volta_cano(self.cano_baixo_dir)
@@ -192,7 +194,7 @@ class Transicao_1:
 
                         self.cano_errado = False
 
-        else:
+        elif self.completo:
             self.imagem_completo.desenha()
 
             velocidade = 3
