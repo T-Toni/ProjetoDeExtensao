@@ -4,6 +4,7 @@ from botao import Botao
 from SpriteSheet import SpriteSheet
 from obj_animado import ObjAnimado
 import transicao_4
+import texto
 
 class Fase4:
     def __init__(self, janela, gerenciador, mouse, mixer):
@@ -73,12 +74,53 @@ class Fase4:
         self.transicao = Botao(0, 0, 480*8, 90*8, "imagens/transicao_4-5.png", self.janela, (243, 97, 255))
         self.decrescimo = 0
 
+        # INTRODUCAO ( tamanho maximo(para25):
+        # ---------'água, desde a represa até água chegar em sua casa!')
+        texto1_1 = 'Essa etapa chama-se Floculação e é parecida com a'
+        texto1_2 = 'anterior, mas agora você deve agitar o tanque em'
+        texto1_3 = 'uma velocidade moderada, nem muito rápido nem'
+        texto1_4 = 'muito devagar.'
+
+        texto2_1 = 'Tente manter o medidor no canto superior esquerdo'
+        texto2_2 = 'da tela no verde. Pressione as setas para cima e'
+        texto2_3 = 'para baixo para agitar o tanque.'
+        texto2_4 = None
+
+        texto3_1 = 'Muito bem! Agora a água deve ficar um pouco em'
+        texto3_2 = 'repouso para a sujeira se juntar no fundo do'
+        texto3_3 = 'tanque e a água da parte de cima poder'
+        texto3_4 = 'seguir para a próxima etapa.'
+
+        texto4_1 = 'Pressione a seta para a direita para seguir com'
+        texto4_2 = 'o tratamento'
+        texto4_3 = None
+        texto4_4 = None
+
+        self.intro1 = texto.Texto(texto1_1, texto1_2, texto1_3, texto1_4, 0, self.janela)
+        self.intro2 = texto.Texto(texto2_1, texto2_2, texto2_3, texto2_4, 0, self.janela)
+        self.outro1 = texto.Texto(texto3_1, texto3_2, texto3_3, texto3_4, 0, self.janela)
+        self.outro2 = texto.Texto(texto4_1, texto4_2, texto4_3, texto4_4, 0, self.janela)
+
+        self.intro1_iniciada = False
+        self.intro2_iniciada = False
+        self.outro1_iniciado = False
+        self.outro2_iniciado = False
+
 
 
     def run(self):
 
-        # logica para a movimentação do tanque
         teclas = pygame.key.get_pressed()
+
+        # função para pular falas
+        self.mixer.update(teclas)
+
+        if not self.intro1_iniciada:
+            self.mixer.toca_fala('introducao4.1')
+            self.intro1_iniciada = True
+        elif not self.intro2_iniciada and not self.mixer.tocando_falas():
+            self.mixer.toca_fala('introducao4.2')
+            self.intro2_iniciada = True
 
         if not self.permite_Transicao:
 
@@ -115,7 +157,6 @@ class Fase4:
                     incremento = 120
                     divisor = 1.5         #valor que divide o offset para dar a velocidade de movimentacao do tanque
 
-                    print("agitacao: " + str(self.agitacao))
 
                     if teclas[pygame.K_UP] and self.posicao != -1 and not teclas[pygame.K_DOWN]:
 
@@ -180,6 +221,12 @@ class Fase4:
 
                 #retorna o tanque a posição original
                 else:
+
+                    #toca as falas do fim da fase
+                    if not self.outro1_iniciado:
+                        self.mixer.toca_fala('fim_fase4.1')
+                        self.outro1_iniciado = True
+
                     #inicia o loop alternativo de animação do medidor
                     self.medidor_progressao.altLoop(21, 24, 0.1)
 
@@ -227,6 +274,11 @@ class Fase4:
             self.medidor_velocidade.desenha()
             self.janela.blit((self.copia), (15 * 8 + self.decrescimo, 7 * 8))
 
+            #toca a ultima fala da fase
+            if not self.outro2_iniciado and not self.mixer.tocando_falas() and self.outro1_iniciado:
+                self.mixer.toca_fala('fim_fase4.2')
+                self.outro2_iniciado = True
+
             if self.transicao.getX() > (-160 * 8) - 1:
 
                 #Verifica se a seta para a direita está sendo pressionada
@@ -241,6 +293,20 @@ class Fase4:
             else:
                 proximaFase = transicao_4.Transicao_4(self.janela, self.gerenciador, self.mouse, self.mixer)
                 self.gerenciador.set_fase(proximaFase)  # muda a fase do gerenciador para a proxima
+
+
+
+        if self.mixer.get_audio_atual(0) == 'introducao4.1':
+            self.intro1.escreve()
+
+        if self.mixer.get_audio_atual(0) == 'introducao4.2':
+            self.intro2.escreve()
+
+        if self.mixer.get_audio_atual(0) == 'fim_fase4.1':
+            self.outro1.escreve()
+
+        if self.mixer.get_audio_atual(0) == 'fim_fase4.2':
+            self.outro2.escreve()
 
 
 
