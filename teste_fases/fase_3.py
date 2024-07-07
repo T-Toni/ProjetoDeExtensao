@@ -3,6 +3,7 @@ import transicao_3
 from botao import Botao
 from SpriteSheet import SpriteSheet
 from obj_animado import ObjAnimado
+import texto
 
 class Fase3:
     def __init__(self, janela, gerenciador, mouse, mixer):
@@ -67,17 +68,57 @@ class Fase3:
         self.fase_completa = False
         self.transicao = Botao(0, 0, 480*8, 90*8, "imagens/transicao_3-4.png", self.janela, (243, 97, 255))
 
+        # INTRODUCAO ( tamanho maximo(para25):
+        # ---------'água, desde a represa até água chegar em sua casa!')
+        texto1_1 = 'Essa etapa é conhecida como Coagulação, e resume-'
+        texto1_2 = 'se em agitar vigorosamente o tanque para garantir'
+        texto1_3 = 'a mistura dos químicos adicionados na etapa'
+        texto1_4 = 'anterior à água.'
+
+        texto2_1 = 'Pressione as setas da direita e depois a da'
+        texto2_2 = 'esquerda rapidamente para agitar o tanque.'
+        texto2_3 = None
+        texto2_4 = None
+
+        texto3_1 = 'Parabéns!!! A água foi agitada corretamente.'
+        texto3_2 = 'Pressione a seta para a direita para continuar.'
+        texto3_3 = None
+        texto3_4 = None
+
+        self.intro1 = texto.Texto(texto1_1, texto1_2, texto1_3, texto1_4, 0, self.janela)
+        self.intro2 = texto.Texto(texto2_1, texto2_2, texto2_3, texto2_4, 0, self.janela)
+        self.outro = texto.Texto(texto3_1, texto3_2, texto3_3, texto3_4, 0, self.janela)
+
+        self.intro1_iniciada = False
+        self.intro2_iniciada = False
+        self.outro_iniciado = False
+
     def run(self):
         teclas = pygame.key.get_pressed()
 
+        # função para pular falas
+        self.mixer.update(teclas)
+
         #executa a animação dos canos ao inicio da fase
         if self.canos.spriteAtual < self.canos_sheet_obj.numeroDeFrames - 0.1 and self.canos.velocidade != 0:
+
+            #toca a intro
+            if not self.intro1_iniciada:
+                self.mixer.toca_fala('introducao3.1')
+                self.intro1_iniciada = True
+
             self.background.desenha()
             self.botao.desenha()
             self.tanque.update()
             self.medidor.update()
             self.canos.update()
             self.botao.desenha()
+
+        elif not self.intro2_iniciada:
+            if not self.mixer.tocando_falas():
+                self.mixer.toca_fala('introducao3.2')
+                self.intro2_iniciada = True
+
 
         #é executado após o fim da animação de inicio da fase
         elif not self.fase_completa:
@@ -168,6 +209,10 @@ class Fase3:
 
             else:
                 self.agitado = True
+                #toca o audio de fim da fase
+                if not self.outro_iniciado:
+                    self.mixer.toca_fala('fim_fase3')
+                    self.outro_iniciado = True
                 self.tanque.setFrame(self.tanque_sheet_obj.numeroDeFrames - 0.1)
                 self.medidor.altLoop(23, 26, 0.1)
 
@@ -201,6 +246,16 @@ class Fase3:
                 self.proximaFase = transicao_3.Transicao_3(self.janela, self.gerenciador, self.mouse, self.mixer)
                 self.gerenciador.set_fase(self.proximaFase)
 
+
+
+        if self.mixer.get_audio_atual(0) == 'introducao3.1':
+            self.intro1.escreve()
+
+        if self.mixer.get_audio_atual(0) == 'introducao3.2':
+            self.intro2.escreve()
+
+        if self.mixer.get_audio_atual(0) == 'fim_fase3':
+            self.outro.escreve()
 
 
 

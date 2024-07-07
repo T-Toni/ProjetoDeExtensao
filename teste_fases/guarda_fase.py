@@ -1,6 +1,6 @@
-class GuardaFase:
+"""class GuardaFase:
     def __init__(self, faseAtual, proximaFase):
         self.faseAtual = faseAtual
-        self.proximaFase = proximaFase
+        self.proximaFase = proximaFase"""
 
 
