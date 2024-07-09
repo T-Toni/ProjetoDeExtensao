@@ -65,6 +65,14 @@ class Mixer:
         self.falas['fim_fase4.1'] = pygame.mixer.Sound('narracao/fim_fase4.1.wav')
         self.falas['fim_fase4.2'] = pygame.mixer.Sound('narracao/fim_fase4.2.wav')
 
+        #fase5
+        self.falas['introducao5.1'] = pygame.mixer.Sound('narracao/introducao5.1.wav')
+        self.falas['introducao5.2'] = pygame.mixer.Sound('narracao/introducao5.2.wav')
+        #self.falas['pos_cal_fase2'] = pygame.mixer.Sound('narracao/pos_cal_fase2.wav')
+        self.falas['intro_cloro_fase5'] = pygame.mixer.Sound('narracao/intro_cloro_fase5.wav')
+        self.falas['fim_fase5'] = pygame.mixer.Sound('narracao/fim_fase5.wav')
+        #self.falas['use_o_cal_primeiro'] = pygame.mixer.Sound('narracao/use_o_cal_primeiro.wav')
+
     def toca_som(self, som):
         if som in self.sons:
             self.sons[som].play()

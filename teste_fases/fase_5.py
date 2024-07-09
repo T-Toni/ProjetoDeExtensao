@@ -8,6 +8,7 @@ from sujeira import Sujeira
 from cloro import Cloro
 from rede_neural import RedeNeural
 import menu
+import texto
 
 class Fase5:
     def __init__(self, janela, gerenciador, mouse, mixer):
@@ -103,26 +104,74 @@ class Fase5:
         #para o bom funcionamento dos efeitos sonoros
         self.toca = True
 
-    def carrega_audios(self):
-        click = pygame.mixer.Sound('sons/blipSelect.wav')
-        cano_errado = pygame.mixer.Sound('sons/cano errado.wav')
-        cano_correto = pygame.mixer.Sound('sons/cano_correto.wav')
-        erro_cal = pygame.mixer.Sound('sons/use_o_cal_primeiro.mp3')
+        # INTRODUCAO ( tamanho maximo(para25):
+        # ---------'água, desde a represa até água chegar em sua casa!')
+        texto1_1 = 'Muito bem, nós chegamos na ultima etapa do'
+        texto1_2 = 'tratamento!!'
+        texto1_3 = None
+        texto1_4 = None
 
-        return (click, cano_errado, cano_correto, erro_cal)
+        texto2_1 = 'Nessa etapa, chamada de Pós-cloração e Ajuste final'
+        texto2_2 = 'do pH, nós devemos adicionar uma pequena quantidade'
+        texto2_3 = 'de cal e cloro na água, para garantir que fique'
+        texto2_4 = 'potável.'
+
+        texto3_1 = 'Muito bem, o pH foi regulado com sucesso!'
+        texto3_2 = 'Agora adicione o cloro.'
+        texto3_3 = None
+        texto3_4 = None
+
+        texto4_1 = 'Você deve usar o cal primeiro.'
+        texto4_2 = None
+        texto4_3 = None
+        texto4_4 = None
+
+        # etapa do cloro
+        texto5_1 = 'Você controla o cloro como na última fase,'
+        texto5_2 = 'mas cuidado, as sujeiras restantes são menores'
+        texto5_3 = 'e mais difíceis de serem pegas.'
+        texto5_4 = None
+
+        # fim do cloro
+        texto6_1 = 'Muito bem!!!!'
+        texto6_2 = 'Agora que você eliminou as sujeiras, a água já'
+        texto6_3 = 'está limpa. Pressione a seta para a direita'
+        texto6_4 = 'para seguir.'
+
+        self.intro1 = texto.Texto(texto1_1, texto1_2, texto1_3, texto1_4, 2, self.janela)
+        self.intro2 = texto.Texto(texto2_1, texto2_2, texto2_3, texto2_4, 2, self.janela)
+        self.pos_cal = texto.Texto(texto3_1, texto3_2, texto3_3, texto3_4, 2, self.janela)
+        self.intro_cloro = texto.Texto(texto5_1, texto5_2, texto5_3, texto5_4, 2, self.janela)
+        self.fim = texto.Texto(texto6_1, texto6_2, texto6_3, texto6_4, 2, self.janela)
+        self.erro = texto.Texto(texto4_1, texto4_2, texto4_3, texto4_4, 2, self.janela)
+
+        #booleanos para controlar as falas
+        self.concluiu_intro1 = False
+        self.concluiu_intro2 = False
+        self.concluiu_cal = False
+        self.concluiu_intro_cloro = False
+        self.concluiu_fim = False
+
 
     def run(self):
 
-        (click, erro, acerto, erro_cal) = self.carrega_audios()
+        # recebe todas a teclas pressionadas
+        teclas = pygame.key.get_pressed()
 
-        narracao = pygame.mixer.Channel(0)
+        # função para pular falas
+        self.mixer.update(teclas)
 
-        if self.funcionamento_cloro == False:
-            #recebe todas a teclas pressionadas
-            teclas = pygame.key.get_pressed()
+        # aplica a opacidade a sujeira
+        self.sujeira.setAlpha(self.opacidade)
 
-            #aplica a opacidade a sujeira
-            self.sujeira.setAlpha(self.opacidade)
+        if not self.concluiu_intro1:
+            self.mixer.toca_fala('introducao5.1')
+            self.concluiu_intro1 = True
+        elif not self.concluiu_intro2 and not self.mixer.tocando_falas():
+            self.mixer.toca_fala('introducao5.2')
+            self.concluiu_intro2 = True
+
+        if self.funcionamento_cloro == False and not self.mixer.get_audio_atual(0) == 'introducao5.2' and self.concluiu_intro2:
 
             if not self.cloro_usado or not self.cal_usado:
 
@@ -138,6 +187,9 @@ class Fase5:
 
                 self.selecionado.desenha()
                 if self.cal_usado:
+                    if not self.concluiu_cal:
+                        self.mixer.toca_fala('pos_cal_fase2')
+                        self.concluiu_cal = True
                     self.concluido_cal.desenha()
                 if self.cloro_usado:
                     self.concluido_cloro.desenha()
@@ -150,7 +202,8 @@ class Fase5:
                     if (teclas[pygame.K_SPACE] or self.usando_cal) and not self.cal_usado:
 
                         if self.toca:
-                            acerto.play()
+                            self.mixer.toca_som('acerto')
+                            #acerto.play()
                         self.toca = False
 
                         if self.opacidade > 25:
@@ -169,30 +222,40 @@ class Fase5:
                             self.animacao_cal.update()
                             self.opacidade = 20
                         if teclas[pygame.K_RIGHT]:
-                            click.play()
+                            self.mixer.toca_som('click')
+                            #click.play()
                             self.selecionado = self.borda_cloro
                 else:
 
                     if teclas[pygame.K_SPACE]:
                         if not self.cloro_usado and self.cal_usado:
                             if self.toca:
-                                acerto.play()
+                                self.mixer.toca_som('acerto')
+                                #acerto.play()
                             self.toca = False
                             self.funcionamento_cloro = True
                         else:
-                            if narracao.get_busy() == False:
-                                narracao.play(erro_cal)
-                                erro.play()
+                            if self.mixer.toca_falas() == False:
+                                self.mixer.toca_fala('use_o_cal_primero')
+                                #narracao.play(erro_cal)
+                                self.mixer.toca_som('erro')
+                                #erro.play()
                             print("use o cal primeiro")
 
 
                     if teclas[pygame.K_LEFT] and not self.funcionamento_cloro:
-                        click.play()
+                        self.mixer.toca_som('click')
+                        #click.play()
                         self.selecionado = self.borda_cal
 
 
             #transição
             else:
+
+                if not self.concluiu_fim:
+                    self.mixer.toca_fala('fim_fase5')
+                    self.concluiu_fim = True
+
                 if self.multiplicador > 1:
                     #desenha os outros objetos da fase
                     self.background.desenha()
@@ -227,16 +290,50 @@ class Fase5:
                             self.animacao_casas.anima(0, 0)
                             self.animacao_casas.update()
 
-        else:
-                if self.multiplicador < 2.7:
-                    self.agua.desenha()
-                    self.sujeira.desenha()
-                    self.tanque.desenha()
-                    self.tanque.redimencionar(self.multiplicador)
-                    self.sujeira.redimencionar(self.multiplicador)
-                    self.agua.redimencionar(self.multiplicador)
-                    self.multiplicador += 0.05
-                else:
-                    self.funcionamento_cloro = self.fase_cloro.run()
-                    self.cloro_usado = not self.funcionamento_cloro
+        elif not self.mixer.get_audio_atual(0) == 'introducao5.2' and self.concluiu_intro2:
+            if self.multiplicador < 2.7:
+                self.agua.desenha()
+                self.sujeira.desenha()
+                self.tanque.desenha()
+                self.tanque.redimencionar(self.multiplicador)
+                self.sujeira.redimencionar(self.multiplicador)
+                self.agua.redimencionar(self.multiplicador)
+                self.multiplicador += 0.05
+            else:
+                if not self.concluiu_intro_cloro:
+                    self.mixer.toca_fala('intro_cloro_fase5')
+                    self.concluiu_intro_cloro = True
+                self.funcionamento_cloro = self.fase_cloro.run()
+                self.cloro_usado = not self.funcionamento_cloro
 
+        #desenha o fundo para a introdução:
+        else:
+            self.background.desenha()
+            self.agua.desenha()
+            self.sujeira.desenha()
+            self.tanque.desenha()
+            self.canos.desenha()
+            self.inventario.desenha()
+            self.cloro.desenha()
+            self.cal.desenha()
+
+
+
+        # escreve as falas
+        if self.mixer.get_audio_atual(0) == 'introducao5.1':
+            self.intro1.escreve()
+
+        if self.mixer.get_audio_atual(0) == 'introducao5.2':
+            self.intro2.escreve()
+
+        if self.mixer.get_audio_atual(0) == 'pos_cal_fase2':
+            self.pos_cal.escreve()
+
+        if self.mixer.get_audio_atual(0) == 'intro_cloro_fase5':
+            self.intro_cloro.escreve()
+
+        if self.mixer.get_audio_atual(0) == 'fim_fase5':
+            self.fim.escreve()
+
+        if self.mixer.get_audio_atual(0) == 'use_o_cal_primeiro':
+            self.erro.escreve()
