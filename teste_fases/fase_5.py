@@ -138,12 +138,26 @@ class Fase5:
         texto6_3 = 'está limpa. Pressione a seta para a direita'
         texto6_4 = 'para seguir.'
 
+        # resevatorio
+        texto7_1 = 'Esse é o reservatório, onde a água limpa fica'
+        texto7_2 = 'guardada para ser direcionada às nossas casas.'
+        texto7_3 = None
+        texto7_4 = None
+
+        # fim do jogo
+        texto8_1 = 'E por fim, a água é enviada por meio de canos'
+        texto8_2 = 'para as casas!'
+        texto8_3 = None
+        texto8_4 = None
+
         self.intro1 = texto.Texto(texto1_1, texto1_2, texto1_3, texto1_4, 2, self.janela)
         self.intro2 = texto.Texto(texto2_1, texto2_2, texto2_3, texto2_4, 2, self.janela)
         self.pos_cal = texto.Texto(texto3_1, texto3_2, texto3_3, texto3_4, 2, self.janela)
         self.intro_cloro = texto.Texto(texto5_1, texto5_2, texto5_3, texto5_4, 2, self.janela)
         self.fim = texto.Texto(texto6_1, texto6_2, texto6_3, texto6_4, 2, self.janela)
         self.erro = texto.Texto(texto4_1, texto4_2, texto4_3, texto4_4, 2, self.janela)
+        self.reservatorio = texto.Texto(texto7_1, texto7_2, texto7_3, texto7_4, 0, self.janela)
+        self.conclusao = texto.Texto(texto8_1, texto8_2, texto8_3, texto8_4, 2, self.janela)
 
         #booleanos para controlar as falas
         self.concluiu_intro1 = False
@@ -151,6 +165,8 @@ class Fase5:
         self.concluiu_cal = False
         self.concluiu_intro_cloro = False
         self.concluiu_fim = False
+        self.concluiu_reservatorio = False
+        self.concluiu_conclusao = False
 
 
     def run(self):
@@ -274,13 +290,25 @@ class Fase5:
                     self.multiplicador -= 0.05
                 else:
                     self.transicao.desenha()
+
+                    if self.transicao.getX() < (-140 * 8) - 1 and not self.concluiu_reservatorio:
+                        print("safado")
+                        self.mixer.toca_fala('reservatorio')
+                        self.concluiu_reservatorio = True
+
+
+                    if self.transicao.getX() < (-440 * 8) - 1 and not self.concluiu_conclusao and not self.mixer.tocando_falas():
+                        self.mixer.toca_fala('conclusao')
+                        self.concluiu_conclusao = True
+
+
                     if self.transicao.getX() > (-480 * 8) - 1:
 
                         #Verifica se a seta para a direita está sendo pressionada
                         if teclas[pygame.K_RIGHT]:
                             self.transicao.setX(self.transicao.getX() - 3)
                     else:
-                        if self.animacao_casas.getFrame() >= 45:
+                        if self.animacao_casas.getFrame() >= 45 and not self.mixer.tocando_falas():
                             self.tela_final.desenha()
                             self.botao_menu.desenha()
                             if teclas[pygame.K_SPACE] or (self.botao_menu.mouse_dentro(self.mouse.getX(), self.mouse.getY()) and self.mouse.getPressionado()):
@@ -337,3 +365,9 @@ class Fase5:
 
         if self.mixer.get_audio_atual(0) == 'use_o_cal_primeiro':
             self.erro.escreve()
+
+        if self.mixer.get_audio_atual(0) == 'reservatorio':
+            self.reservatorio.escreve()
+
+        if self.mixer.get_audio_atual(0) == 'conclusao':
+            self.conclusao.escreve()
