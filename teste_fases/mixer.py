@@ -12,10 +12,41 @@ class Mixer:
         self.adicionaFalas()
 
         self.mixer_falas = pygame.mixer.Channel(0)
+        self.mixer_sons = pygame.mixer.Channel(1)
+        self.mixer_musica = pygame.mixer.Channel(2)
+
+        self.mixer_falas.set_volume(0.5)
+        self.mixer_sons.set_volume(0.5)
+        self.mixer_musica.set_volume(0.5)
 
         #variável que permite que o jogador pule um dialogo por vez
         self.pulou = False
 
+
+    def set_volume_falas(self, volume):  #valores validos de 0 - 1
+        valor = self.arredonda(volume)
+        self.mixer_falas.set_volume(valor)
+
+    def get_volume_falas(self):
+        return self.arredonda(self.mixer_falas.get_volume())
+
+
+    def set_volume_sons(self, volume):  # valores validos de 0 - 1
+        valor = self.arredonda(volume)
+        print(valor)
+        self.mixer_sons.set_volume(valor)
+        print(self.mixer_sons.get_volume())
+
+    def get_volume_sons(self):
+        return self.arredonda(self.mixer_sons.get_volume())
+
+
+    def set_volume_musica(self, volume):  # valores validos de 0 - 1
+        valor = self.arredonda(volume)
+        self.mixer_musica.set_volume(valor)
+
+    def get_volume_musica(self):
+        return self.arredonda(self.mixer_musica.get_volume())
 
     def adicionaSons(self):
         self.sons['click'] = pygame.mixer.Sound('sons/blipSelect.wav')
@@ -80,7 +111,8 @@ class Mixer:
 
     def toca_som(self, som):
         if som in self.sons:
-            self.sons[som].play()
+            self.mixer_sons.play((self.sons[som]))
+            self.tocando_agora[1] = som
         else:
             print("audio não encontrado")
 
@@ -98,6 +130,10 @@ class Mixer:
         if self.mixer_falas.get_busy():
             self.mixer_falas.stop()
 
+    def para_sons(self):
+        if self.mixer_sons.get_busy():
+            self.mixer_sons.stop()
+
     #função que faz qualquer fala tocada parar com o pressionamento de enter esquerdo
     def update(self, teclas):
         if teclas[pygame.K_KP_ENTER]:
@@ -114,6 +150,11 @@ class Mixer:
     #OBS: canal está ai para facilitar a modificação caso seja necessário o controle dos sons de das musicas alem das falas
     def get_audio_atual(self, canal):
         return self.tocando_agora[canal]
+
+
+    #para garantir a manipulação correta dos volumes
+    def arredonda(self, volume):
+        return round(volume * 10) / 10
 
 
 
