@@ -181,9 +181,10 @@ class Menu:
         self.cloro2 = False
         self.funcionamento_cloro2 = False
 
+        self.fase_cloro1 = None
+        self.fase_cloro2 = None
 
-        self.fase_cloro1 = asteroids.Asteroids(self.janela, self.gerenciador, self.mouse)
-        self.fase_cloro2 = cloro_fase5.Cloro(self.janela, self.gerenciador, self.mouse)
+        self.jogando = False
 
     """def carrega_audios(self):
         click = pygame.mixer.Sound('sons/blipSelect.wav')
@@ -647,6 +648,12 @@ class Menu:
                         self.mixer.toca_som('cano_errado')
 
         if self.cloro1:
+
+            if self.jogando == False:
+                self.fase_cloro1 = asteroids.Asteroids(self.janela, self.gerenciador, self.mouse)
+                self.jogando = True
+
+
             self.funcionamento_cloro1 = self.fase_cloro1.run()
             if self.funcionamento_cloro1 == None:
                 self.cloro1 = True
@@ -658,9 +665,20 @@ class Menu:
             if not self.cloro1:
                 self.background.desenha()
                 self.canos.desenha()
+                self.obj_cloro1.setFrame(0)
+                #cancela a animação
+                self.obj_cloro1.setVelocidade(0)
+                self.obj_cloro1.update()
+                self.jogando = False
+                self.fase_cloro1 = None
 
 
         if self.cloro2:
+
+            if self.jogando == False:
+                self.fase_cloro2 = cloro_fase5.Cloro(self.janela, self.gerenciador, self.mouse)
+                self.jogando = True
+
             self.funcionamento_cloro2 = self.fase_cloro2.run()
             if self.funcionamento_cloro2 == None:
                 self.cloro2 = True
@@ -672,6 +690,13 @@ class Menu:
             if not self.cloro2:
                 self.background.desenha()
                 self.canos.desenha()
+                self.obj_cloro2.setFrame(0)
+                self.obj_cloro2.setVelocidade(0)
+                self.obj_cloro2.update()
+                self.jogando = False
+                self.fase_cloro2 = None
+
+
 
         #debug
 

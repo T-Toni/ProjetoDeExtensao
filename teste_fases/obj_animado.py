@@ -38,6 +38,7 @@ class ObjAnimado:
         self.x = x
         self.y = y
 
+
     #atualiza a imagem
     def update(self):
         if self.animacao == True:

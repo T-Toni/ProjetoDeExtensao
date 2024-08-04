@@ -70,7 +70,7 @@ class Sujeira:
 
     def desenha(self, tela, offset, nave_rect):
 
-        tela.blit(self.mask.to_surface(), (0, 0))
+        #tela.blit(self.mask.to_surface(), (0, 0))
 
         #atualiza a posição com o offset
         self.x -= offset.x
