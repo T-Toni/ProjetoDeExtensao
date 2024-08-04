@@ -32,11 +32,15 @@ class Texto:
         self.caixa = pygame.transform.scale(self.caixa, (160 * 8, 90 * 8))
         self.caixa.set_colorkey((243, 97, 255))  #torna transparente a cor dana no parametro
 
+        #carrega a caixa do narrador
+        self.caixa_narrador = pygame.image.load('imagens/caixa_narrador.png')
+        self.caixa_narrador = pygame.transform.scale(self.caixa_narrador, (32 * 8, 32 * 8))
+
 
 
     def escreve(self):
 
-        x = 18 * 8
+        x = 2 * 8
         #parte superior
         if self.posicao == 2:
             #posicao do texto
@@ -59,7 +63,9 @@ class Texto:
             yc = 7 * 8
 
         #desenha a caixa de diálogo
-        self.tela.blit(self.caixa, (0, yc))
+        self.tela.blit(self.caixa, (-16 * 8, yc))
+        #desenha a caixa do narrador
+        self.tela.blit(self.caixa_narrador, (128 * 8, yc + 48 * 8))
 
         distancia = 7*8
 
