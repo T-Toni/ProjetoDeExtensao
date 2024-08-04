@@ -251,8 +251,8 @@ class Fase5:
                             self.toca = False
                             self.funcionamento_cloro = True
                         else:
-                            if self.mixer.toca_falas() == False:
-                                self.mixer.toca_fala('use_o_cal_primero')
+                            if self.mixer.tocando_falas() == False:
+                                self.mixer.toca_fala('use_o_cal_primeiro')
                                 #narracao.play(erro_cal)
                                 self.mixer.toca_som('erro')
                                 #erro.play()

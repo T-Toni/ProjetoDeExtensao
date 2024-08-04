@@ -4,6 +4,10 @@ import pygame
 import fase_1
 import fase_2
 import fase_3
+import fase_4
+import fase_5
+import asteroids
+import cloro_fase5
 from botao import Botao
 from SpriteSheet import SpriteSheet
 from obj_animado import ObjAnimado
@@ -28,7 +32,7 @@ class Menu:
         #backgound (tambem é um botão, mas não clicavel)
         self.background = Botao(0, 0, 1280, 1440, "imagens/tijolo_background_longo.png", self.janela, None)
         #detalhes estéticos e titulo
-        self.canos = Botao(0, 0, 1280, 1440, "imagens/detalhes_menu+fases.png", self.janela, None)
+        self.canos = Botao(0, 0, 1280, 1440, "imagens/canos_menu+fases.png", self.janela, None)
 
         #botões                                                             OBS: cada pixel da pixel-art vale 8
         #                        X       Y     Largura  Altura              por isso a multiplicação na declaração
@@ -104,7 +108,7 @@ class Menu:
         self.obj_fase5.anima(self.botao_fase5.getX(), self.botao_fase5.getY())
         self.obj_fase5.proximo = self.obj_fase4
 
-        self.botao_central = Botao(75 * 8, 110 * 8, 8 * 10, 8 * 46, "imagens/botao_central.png", self.janela, None)
+        """self.botao_central = Botao(75 * 8, 110 * 8, 8 * 10, 8 * 46, "imagens/botao_central.png", self.janela, None)
         fase5_sheet_img = pygame.image.load("imagens/botao_central-sheet.png")
         fase5_sheet_obj = SpriteSheet(fase5_sheet_img, 49)
         self.obj_central = ObjAnimado(self.janela, fase5_sheet_obj, 10, 46, 8, (243, 97, 255), 0)
@@ -144,7 +148,21 @@ class Menu:
         fase5_sheet_obj = SpriteSheet(fase5_sheet_img, 20)
         self.obj_fase10 = ObjAnimado(self.janela, fase5_sheet_obj, 46, 13, 8, (243, 97, 255), 0)
         self.obj_fase10.anima(self.botao_fase10.getX(), self.botao_fase10.getY())
-        self.obj_fase10.proximo = self.obj_fase9
+        self.obj_fase10.proximo = self.obj_fase9"""
+
+        self.botao_cloro1 = Botao(100 * 8, 110 * 8, 8 * 10, 8 * 46, "imagens/botao_cloro1.png", self.janela, None)
+        cloro1_sheet_img = pygame.image.load("imagens/botao_central-sheet.png")
+        cloro1_sheet_obj = SpriteSheet(cloro1_sheet_img, 49)
+        self.obj_cloro1 = ObjAnimado(self.janela, cloro1_sheet_obj, 10, 46, 8, (243, 97, 255), 0)
+        self.obj_cloro1.anima(self.botao_cloro1.getX(), self.botao_cloro1.getY())
+        self.obj_cloro1.proximo = self.obj_fase5
+
+        self.botao_cloro2 = Botao(132 * 8, 110 * 8, 8 * 10, 8 * 46, "imagens/botao_cloro2.png", self.janela, None)
+        cloro2_sheet_img = pygame.image.load("imagens/botao_central-sheet.png")
+        cloro2_sheet_obj = SpriteSheet(cloro2_sheet_img, 49)
+        self.obj_cloro2 = ObjAnimado(self.janela, cloro2_sheet_obj, 10, 46, 8, (243, 97, 255), 0)
+        self.obj_cloro2.anima(self.botao_cloro2.getX(), self.botao_cloro2.getY())
+        self.obj_cloro2.proximo = self.obj_cloro1
 
         self.botao_voltar = Botao(1 * 8, 90 * 8, 8 * 9, 8 * 10, "imagens/botao_voltar.png", self.janela, None)
         fase5_sheet_img = pygame.image.load("imagens/botao_voltar-sheet.png")
@@ -157,6 +175,16 @@ class Menu:
         self.opcoes = False
         self.tela_opcoes = Botao(0, 0, 8 * 160, 8 * 90, "imagens/tela_opcoes.png", self.janela, None)
 
+        #logica para as fases dos cloros
+        self.cloro1 = False
+        self.funcionamento_cloro1 = False
+        self.cloro2 = False
+        self.funcionamento_cloro2 = False
+
+
+        self.fase_cloro1 = asteroids.Asteroids(self.janela, self.gerenciador, self.mouse)
+        self.fase_cloro2 = cloro_fase5.Cloro(self.janela, self.gerenciador, self.mouse)
+
     """def carrega_audios(self):
         click = pygame.mixer.Sound('sons/blipSelect.wav')
         loop_agua = pygame.mixer.Sound('sons/loop_agua1.ogg')
@@ -168,7 +196,7 @@ class Menu:
 
     #função que percorre todos os objetos animados da tela de fases para conferir que nenhum está sendo animado
     def podeDescer(self):
-        i = self.obj_fase10
+        i = self.obj_cloro2
 
         while i != None:
 
@@ -182,398 +210,478 @@ class Menu:
 
     def run(self):
 
-        if not self.opcoes:
+        if not self.cloro1 and not self.cloro2:
 
-            """if not self.audios_carregados:
-                (click, loop_agua, bolha, agua) = self.carrega_audios()"""
+            if not self.opcoes:
 
-            # desenha todos os objetos graficos
-            # menu
-            if self.deslocamento < 720:     #desenha caso eles estejam visiveis
-                self.background.desenha()
-                self.canos.desenha()
-                self.botao_fases.desenha()
-                self.botao_opcoes.desenha()
-                self.botao_sair.desenha()
-                self.botao_jogar.desenha()
+                """if not self.audios_carregados:
+                    (click, loop_agua, bolha, agua) = self.carrega_audios()"""
 
-            # menu_fases
-            if self.descendo:
-                #metade esquerda
-                self.obj_fase1.update()
-                self.botao_fase1.desenha()
-                self.obj_fase2.update()
-                self.botao_fase2.desenha()
-                self.obj_fase3.update()
-                self.botao_fase3.desenha()
-                self.obj_fase4.update()
-                self.botao_fase4.desenha()
-                self.obj_fase5.update()
-                self.botao_fase5.desenha()
+                # desenha todos os objetos graficos
+                # menu
+                if self.deslocamento < 720:     #desenha caso eles estejam visiveis
+                    self.background.desenha()
+                    self.canos.desenha()
+                    self.botao_fases.desenha()
+                    self.botao_opcoes.desenha()
+                    self.botao_sair.desenha()
+                    self.botao_jogar.desenha()
 
-                #botão do meio
-                self.obj_central.update()
-                self.botao_central.desenha()
+                # menu_fases
+                if self.descendo:
+                    #metade esquerda
+                    self.obj_fase1.update()
+                    self.botao_fase1.desenha()
+                    self.obj_fase2.update()
+                    self.botao_fase2.desenha()
+                    self.obj_fase3.update()
+                    self.botao_fase3.desenha()
+                    self.obj_fase4.update()
+                    self.botao_fase4.desenha()
+                    self.obj_fase5.update()
+                    self.botao_fase5.desenha()
 
-                #metade direita
-                self.obj_fase6.update()
-                self.botao_fase6.desenha()
-                self.obj_fase7.update()
-                self.botao_fase7.desenha()
-                self.obj_fase8.update()
-                self.botao_fase8.desenha()
-                self.obj_fase9.update()
-                self.botao_fase9.desenha()
-                self.obj_fase10.update()
-                self.botao_fase10.desenha()
+                    """#botão do meio
+                    self.obj_central.update()
+                    self.botao_central.desenha()
+    
+                    #metade direita
+                    self.obj_fase6.update()
+                    self.botao_fase6.desenha()
+                    self.obj_fase7.update()
+                    self.botao_fase7.desenha()
+                    self.obj_fase8.update()
+                    self.botao_fase8.desenha()
+                    self.obj_fase9.update()
+                    self.botao_fase9.desenha()
+                    self.obj_fase10.update()
+                    self.botao_fase10.desenha()"""
 
-                #botão voltar
-                self.botao_voltar.desenha()
-                self.obj_botao_voltar.update()
+                    self.obj_cloro1.update()
+                    self.botao_cloro1.desenha()
 
-            # inicia as animações dos botões
-            if self.botao_jogar.clicado(self.mouse.getX(), self.mouse.getY(), self.mouse.getPressionado()):
-                self.mixer.toca_som('bolhas1')
-                # permite a animação
-                self.obj_jogar.anima(8 * 92, 8 * 48)
+                    self.obj_cloro2.update()
+                    self.botao_cloro2.desenha()
 
-            if self.botao_opcoes.clicado(self.mouse.getX(), self.mouse.getY(), self.mouse.getPressionado()):
-                self.mixer.toca_som('bolhas1')
-                # permite a animação
-                self.obj_opcoes.anima(8 * 13, 8 * 51)
+                    #metade da direita
 
-            if self.botao_fases.clicado(self.mouse.getX(), self.mouse.getY(), self.mouse.getPressionado()):
-                self.mixer.toca_som('bolhas1')
-                # permite a animação
-                self.obj_fases.anima(8 * 13, 8 * 36)
-                self.descendo = True
-                self.subindo = False
 
-            if self.botao_sair.clicado(self.mouse.getX(), self.mouse.getY(), self.mouse.getPressionado()):
-                self.mixer.toca_som('bolhas1')
-                # permite a animação
-                self.obj_sair.anima(8 * 13, 8 * 67)
+                    #botão voltar
+                    self.botao_voltar.desenha()
+                    self.obj_botao_voltar.update()
 
-            # atualiza os objetos animados
-            self.obj_jogar.update()
-            self.obj_opcoes.update()
-            self.obj_fases.update()
-            self.obj_sair.update()
+                # inicia as animações dos botões
+                if self.botao_jogar.clicado(self.mouse.getX(), self.mouse.getY(), self.mouse.getPressionado()):
+                    self.mixer.toca_som('bolhas1')
+                    # permite a animação
+                    self.obj_jogar.anima(8 * 92, 8 * 48)
 
-            # continua a funcionalidade dos botões pós animação
-            if self.obj_jogar.fim_da_animacao():
-                self.mixer.para_sons()
-                proximaFase = fase_1.Fase1(self.janela, self.gerenciador, self.mouse, self.mixer)
-                self.gerenciador.set_fase(proximaFase)
+                if self.botao_opcoes.clicado(self.mouse.getX(), self.mouse.getY(), self.mouse.getPressionado()):
+                    self.mixer.toca_som('bolhas1')
+                    # permite a animação
+                    self.obj_opcoes.anima(8 * 13, 8 * 51)
 
-            if self.obj_opcoes.fim_da_animacao():
-                self.opcoes = True
+                if self.botao_fases.clicado(self.mouse.getX(), self.mouse.getY(), self.mouse.getPressionado()):
+                    self.mixer.toca_som('bolhas1')
+                    # permite a animação
+                    self.obj_fases.anima(8 * 13, 8 * 36)
+                    self.descendo = True
+                    self.subindo = False
 
-            if self.obj_sair.fim_da_animacao():
-                # sair do jogo
-                pygame.quit()
-                exit()
+                if self.botao_sair.clicado(self.mouse.getX(), self.mouse.getY(), self.mouse.getPressionado()):
+                    self.mixer.toca_som('bolhas1')
+                    # permite a animação
+                    self.obj_sair.anima(8 * 13, 8 * 67)
 
-            if self.descendo and not self.subindo:
-                # desce tudo para a parte das fases
+                # atualiza os objetos animados
+                self.obj_jogar.update()
+                self.obj_opcoes.update()
+                self.obj_fases.update()
+                self.obj_sair.update()
 
-                #função para determinar o valor do incremento
-                incremento = math.ceil((720 - self.deslocamento) / 45)
-
-                self.deslocamento += incremento
-                if self.deslocamento <= 720:
-                    #menu
-                    self.background.setY(self.background.getY() - incremento)
-                    self.canos.setY(self.canos.getY() - incremento)
-                    self.botao_fases.setY(self.botao_fases.getY() - incremento)
-                    self.obj_fases.setY(self.obj_fases.getY() - incremento)
-                    self.botao_opcoes.setY(self.botao_opcoes.getY() - incremento)
-                    if self.obj_opcoes.getY():
-                        self.obj_opcoes.setY(self.obj_opcoes.getY() - incremento)
-                    self.botao_sair.setY(self.botao_sair.getY() - incremento)
-                    if self.obj_sair.getY():
-                        self.obj_sair.setY(self.obj_sair.getY() - incremento)
-                    self.botao_jogar.setY(self.botao_jogar.getY() - incremento)
-                    if self.obj_jogar.getY():
-                        self.obj_jogar.setY(self.obj_jogar.getY() - incremento)
-
-                    #botões das fases
-                    self.botao_fase1.setY(self.botao_fase1.getY() - incremento)
-                    self.obj_fase1.setY(self.obj_fase1.getY() - incremento)
-                    self.botao_fase2.setY(self.botao_fase2.getY() - incremento)
-                    self.obj_fase2.setY(self.obj_fase2.getY() - incremento)
-                    self.botao_fase3.setY(self.botao_fase3.getY() - incremento)
-                    self.obj_fase3.setY(self.obj_fase3.getY() - incremento)
-                    self.botao_fase4.setY(self.botao_fase4.getY() - incremento)
-                    self.obj_fase4.setY(self.obj_fase4.getY() - incremento)
-                    self.botao_fase5.setY(self.botao_fase5.getY() - incremento)
-                    self.obj_fase5.setY(self.obj_fase5.getY() - incremento)
-
-                    self.botao_central.setY(self.botao_central.getY() - incremento)
-                    self.obj_central.setY(self.obj_central.getY() - incremento)
-
-                    self.botao_fase6.setY(self.botao_fase6.getY() - incremento)
-                    self.obj_fase6.setY(self.obj_fase6.getY() - incremento)
-                    self.botao_fase7.setY(self.botao_fase7.getY() - incremento)
-                    self.obj_fase7.setY(self.obj_fase7.getY() - incremento)
-                    self.botao_fase8.setY(self.botao_fase8.getY() - incremento)
-                    self.obj_fase8.setY(self.obj_fase8.getY() - incremento)
-                    self.botao_fase9.setY(self.botao_fase9.getY() - incremento)
-                    self.obj_fase9.setY(self.obj_fase9.getY() - incremento)
-                    self.botao_fase10.setY(self.botao_fase10.getY() - incremento)
-                    self.obj_fase10.setY(self.obj_fase10.getY() - incremento)
-
-                    self.botao_voltar.setY(self.botao_voltar.getY() - incremento)
-                    self.obj_botao_voltar.setY(self.obj_botao_voltar.getY() - incremento)
-
-                    #pressionamento dos botões
-                    if self.deslocamento == 720:
-                        if self.botao_fase1.clicado(self.mouse.getX(), self.mouse.getY(), self.mouse.getPressionado()):
-                            self.obj_fase1.anima(self.obj_fase1.getX(), self.obj_fase1.getY())
-                            self.obj_fase1.setVelocidade(self.vel_botoes)
-
-                        if self.botao_fase2.clicado(self.mouse.getX(), self.mouse.getY(), self.mouse.getPressionado()):
-                            self.obj_fase2.letAnima()
-                            self.obj_fase2.setVelocidade(self.vel_botoes)
-
-                        if self.botao_fase3.clicado(self.mouse.getX(), self.mouse.getY(), self.mouse.getPressionado()):
-                            self.obj_fase3.letAnima()
-                            self.obj_fase3.setVelocidade(self.vel_botoes)
-
-                        if self.botao_fase4.clicado(self.mouse.getX(), self.mouse.getY(), self.mouse.getPressionado()):
-                            self.obj_fase4.letAnima()
-                            self.obj_fase4.setVelocidade(self.vel_botoes)
-
-                        if self.botao_fase5.clicado(self.mouse.getX(), self.mouse.getY(), self.mouse.getPressionado()):
-                            self.obj_fase5.letAnima()
-                            self.obj_fase5.setVelocidade(self.vel_botoes)
-
-                        if self.botao_central.clicado(self.mouse.getX(), self.mouse.getY(), self.mouse.getPressionado()):
-                            self.obj_central.letAnima()
-                            self.obj_central.setVelocidade(self.vel_botoes)
-
-                        if self.botao_fase6.clicado(self.mouse.getX(), self.mouse.getY(), self.mouse.getPressionado()):
-                            self.obj_fase6.letAnima()
-                            self.obj_fase6.setVelocidade(self.vel_botoes)
-
-                        if self.botao_fase7.clicado(self.mouse.getX(), self.mouse.getY(), self.mouse.getPressionado()):
-                            self.obj_fase7.letAnima()
-                            self.obj_fase7.setVelocidade(self.vel_botoes)
-
-                        if self.botao_fase8.clicado(self.mouse.getX(), self.mouse.getY(), self.mouse.getPressionado()):
-                            self.obj_fase8.letAnima()
-                            self.obj_fase8.setVelocidade(self.vel_botoes)
-
-                        if self.botao_fase9.clicado(self.mouse.getX(), self.mouse.getY(), self.mouse.getPressionado()):
-                            self.obj_fase9.letAnima()
-                            self.obj_fase9.setVelocidade(self.vel_botoes)
-
-                        if self.botao_fase10.clicado(self.mouse.getX(), self.mouse.getY(), self.mouse.getPressionado()):
-                            self.obj_fase10.letAnima()
-                            self.obj_fase10.setVelocidade(self.vel_botoes)
-
-                        if self.botao_voltar.clicado(self.mouse.getX(), self.mouse.getY(), self.mouse.getPressionado()):
-                            if self.podeDescer():
-                                self.obj_botao_voltar.letAnima()
-                                self.obj_botao_voltar.setVelocidade(self.vel_botoes)
-                                self.subindo = True
-
-                if self.obj_fase1.fim_da_animacao():
+                # continua a funcionalidade dos botões pós animação
+                if self.obj_jogar.fim_da_animacao():
+                    self.mixer.para_sons()
                     proximaFase = fase_1.Fase1(self.janela, self.gerenciador, self.mouse, self.mixer)
                     self.gerenciador.set_fase(proximaFase)
 
-                if self.obj_fase2.fim_da_animacao():
-                    proximaFase = fase_2.Fase2(self.janela, self.gerenciador, self.mouse, self.mixer)
-                    self.gerenciador.set_fase(proximaFase)
+                if self.obj_opcoes.fim_da_animacao():
+                    self.opcoes = True
 
-                if self.obj_fase3.fim_da_animacao():
-                    proximaFase = fase_3.Fase3(self.janela, self.gerenciador, self.mouse, self.mixer)
-                    self.gerenciador.set_fase(proximaFase)
+                if self.obj_sair.fim_da_animacao():
+                    # sair do jogo
+                    pygame.quit()
+                    exit()
 
-                    '''else:
-                        self.obj_fase1.setVelocidade(0)
-                        self.obj_fase2.setVelocidade(0)
-                        self.obj_fase3.setVelocidade(0)
-                        self.obj_fase4.setVelocidade(0)
-                        self.obj_fase5.setVelocidade(0)
-                        self.obj_central.setVelocidade(0)
-                        self.obj_fase6.setVelocidade(0)
-                        self.obj_fase7.setVelocidade(0)
-                        self.obj_fase8.setVelocidade(0)
-                        self.obj_fase9.setVelocidade(0)
-                        self.obj_fase10.setVelocidade(0)'''
+                if self.descendo and not self.subindo:
+                    # desce tudo para a parte das fases
 
-            if self.subindo:
-                # desce tudo para a parte das fases
+                    #função para determinar o valor do incremento
+                    incremento = math.ceil((720 - self.deslocamento) / 45)
 
-                #função para determinar o valor do incremento
-                incremento = math.ceil((self.deslocamento) / 45) * -1
+                    self.deslocamento += incremento
+                    if self.deslocamento <= 720:
+                        #menu
+                        self.background.setY(self.background.getY() - incremento)
+                        self.canos.setY(self.canos.getY() - incremento)
+                        self.botao_fases.setY(self.botao_fases.getY() - incremento)
+                        self.obj_fases.setY(self.obj_fases.getY() - incremento)
+                        self.botao_opcoes.setY(self.botao_opcoes.getY() - incremento)
+                        if self.obj_opcoes.getY():
+                            self.obj_opcoes.setY(self.obj_opcoes.getY() - incremento)
+                        self.botao_sair.setY(self.botao_sair.getY() - incremento)
+                        if self.obj_sair.getY():
+                            self.obj_sair.setY(self.obj_sair.getY() - incremento)
+                        self.botao_jogar.setY(self.botao_jogar.getY() - incremento)
+                        if self.obj_jogar.getY():
+                            self.obj_jogar.setY(self.obj_jogar.getY() - incremento)
 
-                self.deslocamento += incremento
-                if self.deslocamento > 0:
-                    #menu
-                    self.background.setY(self.background.getY() - incremento)
-                    self.canos.setY(self.canos.getY() - incremento)
-                    self.botao_fases.setY(self.botao_fases.getY() - incremento)
-                    self.obj_fases.setY(self.obj_fases.getY() - incremento)
-                    self.botao_opcoes.setY(self.botao_opcoes.getY() - incremento)
-                    if self.obj_opcoes.getY():
-                        self.obj_opcoes.setY(self.obj_opcoes.getY() - incremento)
-                    self.botao_sair.setY(self.botao_sair.getY() - incremento)
-                    if self.obj_sair.getY():
-                        self.obj_sair.setY(self.obj_sair.getY() - incremento)
-                    self.botao_jogar.setY(self.botao_jogar.getY() - incremento)
-                    if self.obj_jogar.getY():
-                        self.obj_jogar.setY(self.obj_jogar.getY() - incremento)
+                        #botões das fases
+                        self.botao_fase1.setY(self.botao_fase1.getY() - incremento)
+                        self.obj_fase1.setY(self.obj_fase1.getY() - incremento)
+                        self.botao_fase2.setY(self.botao_fase2.getY() - incremento)
+                        self.obj_fase2.setY(self.obj_fase2.getY() - incremento)
+                        self.botao_fase3.setY(self.botao_fase3.getY() - incremento)
+                        self.obj_fase3.setY(self.obj_fase3.getY() - incremento)
+                        self.botao_fase4.setY(self.botao_fase4.getY() - incremento)
+                        self.obj_fase4.setY(self.obj_fase4.getY() - incremento)
+                        self.botao_fase5.setY(self.botao_fase5.getY() - incremento)
+                        self.obj_fase5.setY(self.obj_fase5.getY() - incremento)
 
-                    #botões das fases
-                    self.botao_fase1.setY(self.botao_fase1.getY() - incremento)
-                    self.obj_fase1.setY(self.obj_fase1.getY() - incremento)
-                    self.botao_fase2.setY(self.botao_fase2.getY() - incremento)
-                    self.obj_fase2.setY(self.obj_fase2.getY() - incremento)
-                    self.botao_fase3.setY(self.botao_fase3.getY() - incremento)
-                    self.obj_fase3.setY(self.obj_fase3.getY() - incremento)
-                    self.botao_fase4.setY(self.botao_fase4.getY() - incremento)
-                    self.obj_fase4.setY(self.obj_fase4.getY() - incremento)
-                    self.botao_fase5.setY(self.botao_fase5.getY() - incremento)
-                    self.obj_fase5.setY(self.obj_fase5.getY() - incremento)
+                        """self.botao_central.setY(self.botao_central.getY() - incremento)
+                        self.obj_central.setY(self.obj_central.getY() - incremento)
+    
+                        self.botao_fase6.setY(self.botao_fase6.getY() - incremento)
+                        self.obj_fase6.setY(self.obj_fase6.getY() - incremento)
+                        self.botao_fase7.setY(self.botao_fase7.getY() - incremento)
+                        self.obj_fase7.setY(self.obj_fase7.getY() - incremento)
+                        self.botao_fase8.setY(self.botao_fase8.getY() - incremento)
+                        self.obj_fase8.setY(self.obj_fase8.getY() - incremento)
+                        self.botao_fase9.setY(self.botao_fase9.getY() - incremento)
+                        self.obj_fase9.setY(self.obj_fase9.getY() - incremento)
+                        self.botao_fase10.setY(self.botao_fase10.getY() - incremento)
+                        self.obj_fase10.setY(self.obj_fase10.getY() - incremento)"""
 
-                    self.botao_central.setY(self.botao_central.getY() - incremento)
-                    self.obj_central.setY(self.obj_central.getY() - incremento)
+                        self.botao_cloro1.setY(self.botao_cloro1.getY() - incremento)
+                        self.obj_cloro1.setY(self.obj_cloro1.getY() - incremento)
+                        self.botao_cloro2.setY(self.botao_cloro2.getY() - incremento)
+                        self.obj_cloro2.setY(self.obj_cloro2.getY() - incremento)
 
-                    self.botao_fase6.setY(self.botao_fase6.getY() - incremento)
-                    self.obj_fase6.setY(self.obj_fase6.getY() - incremento)
-                    self.botao_fase7.setY(self.botao_fase7.getY() - incremento)
-                    self.obj_fase7.setY(self.obj_fase7.getY() - incremento)
-                    self.botao_fase8.setY(self.botao_fase8.getY() - incremento)
-                    self.obj_fase8.setY(self.obj_fase8.getY() - incremento)
-                    self.botao_fase9.setY(self.botao_fase9.getY() - incremento)
-                    self.obj_fase9.setY(self.obj_fase9.getY() - incremento)
-                    self.botao_fase10.setY(self.botao_fase10.getY() - incremento)
-                    self.obj_fase10.setY(self.obj_fase10.getY() - incremento)
+                        self.botao_voltar.setY(self.botao_voltar.getY() - incremento)
+                        self.obj_botao_voltar.setY(self.obj_botao_voltar.getY() - incremento)
 
-                    self.botao_voltar.setY(self.botao_voltar.getY() - incremento)
-                    self.obj_botao_voltar.setY(self.obj_botao_voltar.getY() - incremento)
+                        #pressionamento dos botões
+                        if self.deslocamento == 720:
+                            if self.botao_fase1.clicado(self.mouse.getX(), self.mouse.getY(), self.mouse.getPressionado()):
+                                self.obj_fase1.anima(self.obj_fase1.getX(), self.obj_fase1.getY())
+                                self.obj_fase1.setVelocidade(self.vel_botoes)
+                                self.mixer.toca_som('bolhas1')
 
-                    if self.deslocamento <= 0:
-                        self.descendo = False
-                        self.deslocamento = 0
+                            if self.botao_fase2.clicado(self.mouse.getX(), self.mouse.getY(), self.mouse.getPressionado()):
+                                self.obj_fase2.letAnima()
+                                self.obj_fase2.setVelocidade(self.vel_botoes)
+                                self.mixer.toca_som('bolhas1')
+
+                            if self.botao_fase3.clicado(self.mouse.getX(), self.mouse.getY(), self.mouse.getPressionado()):
+                                self.obj_fase3.letAnima()
+                                self.obj_fase3.setVelocidade(self.vel_botoes)
+                                self.mixer.toca_som('bolhas1')
+
+                            if self.botao_fase4.clicado(self.mouse.getX(), self.mouse.getY(), self.mouse.getPressionado()):
+                                self.obj_fase4.letAnima()
+                                self.obj_fase4.setVelocidade(self.vel_botoes)
+                                self.mixer.toca_som('bolhas1')
+
+                            if self.botao_fase5.clicado(self.mouse.getX(), self.mouse.getY(), self.mouse.getPressionado()):
+                                self.obj_fase5.letAnima()
+                                self.obj_fase5.setVelocidade(self.vel_botoes)
+                                self.mixer.toca_som('bolhas1')
+
+                            """if self.botao_central.clicado(self.mouse.getX(), self.mouse.getY(), self.mouse.getPressionado()):
+                                self.obj_central.letAnima()
+                                self.obj_central.setVelocidade(self.vel_botoes)
+    
+                            if self.botao_fase6.clicado(self.mouse.getX(), self.mouse.getY(), self.mouse.getPressionado()):
+                                self.obj_fase6.letAnima()
+                                self.obj_fase6.setVelocidade(self.vel_botoes)
+    
+                            if self.botao_fase7.clicado(self.mouse.getX(), self.mouse.getY(), self.mouse.getPressionado()):
+                                self.obj_fase7.letAnima()
+                                self.obj_fase7.setVelocidade(self.vel_botoes)
+    
+                            if self.botao_fase8.clicado(self.mouse.getX(), self.mouse.getY(), self.mouse.getPressionado()):
+                                self.obj_fase8.letAnima()
+                                self.obj_fase8.setVelocidade(self.vel_botoes)
+    
+                            if self.botao_fase9.clicado(self.mouse.getX(), self.mouse.getY(), self.mouse.getPressionado()):
+                                self.obj_fase9.letAnima()
+                                self.obj_fase9.setVelocidade(self.vel_botoes)
+    
+                            if self.botao_fase10.clicado(self.mouse.getX(), self.mouse.getY(), self.mouse.getPressionado()):
+                                self.obj_fase10.letAnima()
+                                self.obj_fase10.setVelocidade(self.vel_botoes)"""
+
+                            if self.botao_cloro1.clicado(self.mouse.getX(), self.mouse.getY(), self.mouse.getPressionado()):
+                                self.obj_cloro1.letAnima()
+                                self.obj_cloro1.setVelocidade(self.vel_botoes)
+                                self.mixer.toca_som('bolhas1')
+
+                            if self.botao_cloro2.clicado(self.mouse.getX(), self.mouse.getY(), self.mouse.getPressionado()):
+                                self.obj_cloro2.letAnima()
+                                self.obj_cloro2.setVelocidade(self.vel_botoes)
+                                self.mixer.toca_som('bolhas1')
+
+                            if self.botao_voltar.clicado(self.mouse.getX(), self.mouse.getY(), self.mouse.getPressionado()):
+                                if self.podeDescer():
+                                    self.obj_botao_voltar.letAnima()
+                                    self.obj_botao_voltar.setVelocidade(self.vel_botoes)
+                                    self.subindo = True
+                                    self.mixer.toca_som('bolhas1')
+
+                    if self.obj_fase1.fim_da_animacao():
+                        proximaFase = fase_1.Fase1(self.janela, self.gerenciador, self.mouse, self.mixer)
+                        self.gerenciador.set_fase(proximaFase)
+
+                    if self.obj_fase2.fim_da_animacao():
+                        proximaFase = fase_2.Fase2(self.janela, self.gerenciador, self.mouse, self.mixer)
+                        self.gerenciador.set_fase(proximaFase)
+
+                    if self.obj_fase3.fim_da_animacao():
+                        proximaFase = fase_3.Fase3(self.janela, self.gerenciador, self.mouse, self.mixer)
+                        self.gerenciador.set_fase(proximaFase)
+
+                    if self.obj_fase4.fim_da_animacao():
+                        proximaFase = fase_4.Fase4(self.janela, self.gerenciador, self.mouse, self.mixer)
+                        self.gerenciador.set_fase(proximaFase)
+
+                    if self.obj_fase5.fim_da_animacao():
+                        proximaFase = fase_5.Fase5(self.janela, self.gerenciador, self.mouse, self.mixer)
+                        self.gerenciador.set_fase(proximaFase)
+
+                    if self.obj_cloro1.fim_da_animacao_2():
+                        self.cloro1 = True
+                        print("fnaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaf")
+
+                    if self.obj_cloro2.fim_da_animacao_2():
+                        self.cloro2 = True
+                        print("fnaf2222222222222222222222222222222222222222")
+
+                        '''else:
+                            self.obj_fase1.setVelocidade(0)
+                            self.obj_fase2.setVelocidade(0)
+                            self.obj_fase3.setVelocidade(0)
+                            self.obj_fase4.setVelocidade(0)
+                            self.obj_fase5.setVelocidade(0)
+                            self.obj_central.setVelocidade(0)
+                            self.obj_fase6.setVelocidade(0)
+                            self.obj_fase7.setVelocidade(0)
+                            self.obj_fase8.setVelocidade(0)
+                            self.obj_fase9.setVelocidade(0)
+                            self.obj_fase10.setVelocidade(0)'''
+
+                if self.subindo:
+                    # desce tudo para a parte das fases
+
+                    #função para determinar o valor do incremento
+                    incremento = math.ceil((self.deslocamento) / 45) * -1
+
+                    self.deslocamento += incremento
+                    if self.deslocamento > 0:
+                        #menu
+                        self.background.setY(self.background.getY() - incremento)
+                        self.canos.setY(self.canos.getY() - incremento)
+                        self.botao_fases.setY(self.botao_fases.getY() - incremento)
+                        self.obj_fases.setY(self.obj_fases.getY() - incremento)
+                        self.botao_opcoes.setY(self.botao_opcoes.getY() - incremento)
+                        if self.obj_opcoes.getY():
+                            self.obj_opcoes.setY(self.obj_opcoes.getY() - incremento)
+                        self.botao_sair.setY(self.botao_sair.getY() - incremento)
+                        if self.obj_sair.getY():
+                            self.obj_sair.setY(self.obj_sair.getY() - incremento)
+                        self.botao_jogar.setY(self.botao_jogar.getY() - incremento)
+                        if self.obj_jogar.getY():
+                            self.obj_jogar.setY(self.obj_jogar.getY() - incremento)
+
+                        #botões das fases
+                        self.botao_fase1.setY(self.botao_fase1.getY() - incremento)
+                        self.obj_fase1.setY(self.obj_fase1.getY() - incremento)
+                        self.botao_fase2.setY(self.botao_fase2.getY() - incremento)
+                        self.obj_fase2.setY(self.obj_fase2.getY() - incremento)
+                        self.botao_fase3.setY(self.botao_fase3.getY() - incremento)
+                        self.obj_fase3.setY(self.obj_fase3.getY() - incremento)
+                        self.botao_fase4.setY(self.botao_fase4.getY() - incremento)
+                        self.obj_fase4.setY(self.obj_fase4.getY() - incremento)
+                        self.botao_fase5.setY(self.botao_fase5.getY() - incremento)
+                        self.obj_fase5.setY(self.obj_fase5.getY() - incremento)
+
+                        """self.botao_central.setY(self.botao_central.getY() - incremento)
+                        self.obj_central.setY(self.obj_central.getY() - incremento)
+    
+                        self.botao_fase6.setY(self.botao_fase6.getY() - incremento)
+                        self.obj_fase6.setY(self.obj_fase6.getY() - incremento)
+                        self.botao_fase7.setY(self.botao_fase7.getY() - incremento)
+                        self.obj_fase7.setY(self.obj_fase7.getY() - incremento)
+                        self.botao_fase8.setY(self.botao_fase8.getY() - incremento)
+                        self.obj_fase8.setY(self.obj_fase8.getY() - incremento)
+                        self.botao_fase9.setY(self.botao_fase9.getY() - incremento)
+                        self.obj_fase9.setY(self.obj_fase9.getY() - incremento)
+                        self.botao_fase10.setY(self.botao_fase10.getY() - incremento)
+                        self.obj_fase10.setY(self.obj_fase10.getY() - incremento)"""
+
+                        self.botao_cloro1.setY(self.botao_cloro1.getY() - incremento)
+                        self.obj_cloro1.setY(self.obj_cloro1.getY() - incremento)
+                        self.botao_cloro2.setY(self.botao_cloro2.getY() - incremento)
+                        self.obj_cloro2.setY(self.obj_cloro2.getY() - incremento)
+
+                        self.botao_voltar.setY(self.botao_voltar.getY() - incremento)
+                        self.obj_botao_voltar.setY(self.obj_botao_voltar.getY() - incremento)
+
+                        if self.deslocamento <= 0:
+                            self.descendo = False
+                            self.deslocamento = 0
+
+            else:
+                self.tela_opcoes.desenha()
+
+                #inicializa a fonte
+                fonte = pygame.font.Font('fontes/Commodore Pixeled.ttf', 25)
+
+                #cores
+                branco = (255, 255, 255)
+                preto = (0, 0, 0)
+
+                #botões
+                botao_voltar = Botao(43 * 8, 19 * 8, 8 * 23, 8 * 9, None, self.janela, None)
+
+                x = 98 * 8
+                y = 41 * 8
+                incrementox = 15 * 8
+                incrementoy = 14 * 8
+
+                au_sons = Botao(x, y, 8 * 3, 8 * 6, "imagens/botao_fases.png", self.janela, None)
+                ab_sons = Botao(x + incrementox, y, 8 * 3, 8 * 6, "imagens/botao_fases.png", self.janela, None)
+
+                au_musica = Botao(x, y + incrementoy, 8 * 3, 8 * 6, "imagens/botao_fases.png", self.janela, None)
+                ab_musica = Botao(x + incrementox, y + incrementoy, 8 * 3, 8 * 6, "imagens/botao_fases.png", self.janela, None)
+
+                au_falas = Botao(x, y + incrementoy * 2, 8 * 3, 8 * 6, "imagens/botao_fases.png", self.janela, None)
+                ab_falas = Botao(x + incrementox, y + incrementoy * 2, 8 * 3, 8 * 6, "imagens/botao_fases.png", self.janela, None)
+
+                #renderiza os textos
+                voltar = fonte.render("VOLTAR", 1, preto)
+
+                vol_sons = fonte.render("VOLUME DOS EFEITOS:", 1, preto)
+                vol_musica = fonte.render("VOLUME DA MUSICA:", 1, preto)
+                vol_narracao = fonte.render("VOLUME DA NARRAÇÃO:", 1, preto)
+
+                val_sons = fonte.render(str(self.mixer.get_volume_sons()), 1, preto)
+                val_musica = fonte.render(str(self.mixer.get_volume_musica()), 1, preto)
+                val_narracao = fonte.render(str(self.mixer.get_volume_falas()), 1, preto)
 
 
-        else:
-            self.tela_opcoes.desenha()
+                #escreve os textos
+                self.janela.blit(voltar, (54 * 8, 22 * 8))
 
-            #inicializa a fonte
-            fonte = pygame.font.Font('fontes/Commodore Pixeled.ttf', 25)
-
-            #cores
-            branco = (255, 255, 255)
-            preto = (0, 0, 0)
-
-            #botões
-            botao_voltar = Botao(43 * 8, 19 * 8, 8 * 23, 8 * 9, None, self.janela, None)
-
-            x = 98 * 8
-            y = 41 * 8
-            incrementox = 15 * 8
-            incrementoy = 14 * 8
-
-            au_sons = Botao(x, y, 8 * 3, 8 * 6, "imagens/botao_fases.png", self.janela, None)
-            ab_sons = Botao(x + incrementox, y, 8 * 3, 8 * 6, "imagens/botao_fases.png", self.janela, None)
-
-            au_musica = Botao(x, y + incrementoy, 8 * 3, 8 * 6, "imagens/botao_fases.png", self.janela, None)
-            ab_musica = Botao(x + incrementox, y + incrementoy, 8 * 3, 8 * 6, "imagens/botao_fases.png", self.janela, None)
-
-            au_falas = Botao(x, y + incrementoy * 2, 8 * 3, 8 * 6, "imagens/botao_fases.png", self.janela, None)
-            ab_falas = Botao(x + incrementox, y + incrementoy * 2, 8 * 3, 8 * 6, "imagens/botao_fases.png", self.janela, None)
-
-            #renderiza os textos
-            voltar = fonte.render("VOLTAR", 1, preto)
-
-            vol_sons = fonte.render("VOLUME DOS EFEITOS:", 1, preto)
-            vol_musica = fonte.render("VOLUME DA MUSICA:", 1, preto)
-            vol_narracao = fonte.render("VOLUME DA NARRAÇÃO:", 1, preto)
-
-            val_sons = fonte.render(str(self.mixer.get_volume_sons()), 1, preto)
-            val_musica = fonte.render(str(self.mixer.get_volume_musica()), 1, preto)
-            val_narracao = fonte.render(str(self.mixer.get_volume_falas()), 1, preto)
+                x = 45 * 8
+                y = 43 * 8
+                incremento = 14 * 8
 
 
-            #escreve os textos
-            self.janela.blit(voltar, (54 * 8, 22 * 8))
+                self.janela.blit(vol_sons, (x, y))
+                self.janela.blit(vol_musica, (x, y + incremento))
+                self.janela.blit(vol_narracao, (x, y + incremento * 2))
 
-            x = 45 * 8
-            y = 43 * 8
-            incremento = 14 * 8
+                x = 103 * 8
 
+                self.janela.blit(val_sons, (x, y - 1*8))
+                self.janela.blit(val_musica, (x, y + incremento - 1*8))
+                self.janela.blit(val_narracao, (x, y - 1*8 + incremento * 2))
 
-            self.janela.blit(vol_sons, (x, y))
-            self.janela.blit(vol_musica, (x, y + incremento))
-            self.janela.blit(vol_narracao, (x, y + incremento * 2))
+                #funcionnalidade dos botões
 
-            x = 103 * 8
-
-            self.janela.blit(val_sons, (x, y - 1*8))
-            self.janela.blit(val_musica, (x, y + incremento - 1*8))
-            self.janela.blit(val_narracao, (x, y - 1*8 + incremento * 2))
+                if botao_voltar.clicado(self.mouse.getX(), self.mouse.getY(), self.mouse.getPressionado()):
+                        self.opcoes = False
 
 
-            """#apagar
-            au_sons.desenha()
-            ab_sons.desenha()
-            au_musica.desenha()
-            ab_musica.desenha()
-            au_falas.desenha()
-            ab_falas.desenha()
-            """
-
-            #funcionnalidade dos botões
-
-            if botao_voltar.clicado(self.mouse.getX(), self.mouse.getY(), self.mouse.getPressionado()):
-                    self.opcoes = False
+                if au_sons.clicado(self.mouse.getX(), self.mouse.getY(), self.mouse.getPressionado()):
+                    if self.mixer.get_volume_sons() > 0:
+                        self.mixer.set_volume_sons(self.mixer.get_volume_sons() - 0.1)
+                        self.mixer.toca_som('click')
+                    else:
+                        self.mixer.toca_som('cano_errado')
 
 
-            if au_sons.clicado(self.mouse.getX(), self.mouse.getY(), self.mouse.getPressionado()):
-                if self.mixer.get_volume_sons() < 1:
-                    self.mixer.set_volume_sons(self.mixer.get_volume_sons() + 0.1)
-                    self.mixer.toca_som('click')
-                else:
-                    self.mixer.toca_som('cano_errado')
+                if ab_sons.clicado(self.mouse.getX(), self.mouse.getY(), self.mouse.getPressionado()):
+                    if self.mixer.get_volume_sons() < 1:
+                        self.mixer.set_volume_sons(self.mixer.get_volume_sons() + 0.1)
+                        self.mixer.toca_som('click')
+                    """else:
+                        self.mixer.toca_som('cano_errado')"""
+
+                if au_musica.clicado(self.mouse.getX(), self.mouse.getY(), self.mouse.getPressionado()):
+                    if self.mixer.get_volume_musica() > 0:
+                        self.mixer.set_volume_musica(self.mixer.get_volume_musica() - 0.1)
+                        self.mixer.toca_som('click')
+                    else:
+                        self.mixer.toca_som('cano_errado')
+
+                if ab_musica.clicado(self.mouse.getX(), self.mouse.getY(), self.mouse.getPressionado()):
+                    if self.mixer.get_volume_musica() < 1:
+                        self.mixer.set_volume_musica(self.mixer.get_volume_musica() + 0.1)
+                        self.mixer.toca_som('click')
+                    else:
+                        self.mixer.toca_som('cano_errado')
+
+                if au_falas.clicado(self.mouse.getX(), self.mouse.getY(), self.mouse.getPressionado()):
+                    if self.mixer.get_volume_falas() > 0:
+                        self.mixer.set_volume_falas(self.mixer.get_volume_falas() - 0.1)
+                        self.mixer.toca_som('click')
+                    else:
+                        self.mixer.toca_som('cano_errado')
+
+                if ab_falas.clicado(self.mouse.getX(), self.mouse.getY(), self.mouse.getPressionado()):
+                    if self.mixer.get_volume_falas() < 1:
+                        self.mixer.set_volume_falas(self.mixer.get_volume_falas() + 0.1)
+                        self.mixer.toca_som('click')
+                    else:
+                        self.mixer.toca_som('cano_errado')
+
+        if self.cloro1:
+            self.funcionamento_cloro1 = self.fase_cloro1.run()
+            if self.funcionamento_cloro1 == None:
+                self.cloro1 = True
+            else:
+                self.cloro1 = self.funcionamento_cloro1
 
 
-            if ab_sons.clicado(self.mouse.getX(), self.mouse.getY(), self.mouse.getPressionado()):
-                if self.mixer.get_volume_sons() > 0:
-                    self.mixer.set_volume_sons(self.mixer.get_volume_sons() - 0.1)
-                    self.mixer.toca_som('click')
-                """else:
-                    self.mixer.toca_som('cano_errado')"""
+            #para corrigir a parede
+            if not self.cloro1:
+                self.background.desenha()
+                self.canos.desenha()
 
-            if au_musica.clicado(self.mouse.getX(), self.mouse.getY(), self.mouse.getPressionado()):
-                if self.mixer.get_volume_musica() < 1:
-                    self.mixer.set_volume_musica(self.mixer.get_volume_musica() + 0.1)
-                    self.mixer.toca_som('click')
-                else:
-                    self.mixer.toca_som('cano_errado')
 
-            if ab_musica.clicado(self.mouse.getX(), self.mouse.getY(), self.mouse.getPressionado()):
-                if self.mixer.get_volume_musica() > 0:
-                    self.mixer.set_volume_musica(self.mixer.get_volume_musica() - 0.1)
-                    self.mixer.toca_som('click')
-                else:
-                    self.mixer.toca_som('cano_errado')
+        if self.cloro2:
+            self.funcionamento_cloro2 = self.fase_cloro2.run()
+            if self.funcionamento_cloro2 == None:
+                self.cloro2 = True
+            else:
+                self.cloro2 = self.funcionamento_cloro2
 
-            if au_falas.clicado(self.mouse.getX(), self.mouse.getY(), self.mouse.getPressionado()):
-                if self.mixer.get_volume_falas() < 1:
-                    self.mixer.set_volume_falas(self.mixer.get_volume_falas() + 0.1)
-                    self.mixer.toca_som('click')
-                else:
-                    self.mixer.toca_som('cano_errado')
 
-            if ab_falas.clicado(self.mouse.getX(), self.mouse.getY(), self.mouse.getPressionado()):
-                if self.mixer.get_volume_falas() > 0:
-                    self.mixer.set_volume_falas(self.mixer.get_volume_falas() - 0.1)
-                    self.mixer.toca_som('click')
-                else:
-                    self.mixer.toca_som('cano_errado')
+            #para corrigir a parede
+            if not self.cloro2:
+                self.background.desenha()
+                self.canos.desenha()
+
+        #debug
+
+        """print("cloro1: ")
+        print(self.fase_cloro1.run())
+        print("cloro2: ")
+        print(self.cloro2)"""
+
+
+
+
 
 

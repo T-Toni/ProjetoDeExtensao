@@ -13,6 +13,7 @@ import mouse
 import transicao_2
 import mixer
 
+
 #Dados relevantes pra inicialização do pygame
 LARGURA, ALTURA = 1280, 720
 FPS = 60

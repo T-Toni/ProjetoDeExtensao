@@ -67,6 +67,14 @@ class ObjAnimado:
         else:
             return 0
 
+    #remendo porco
+    def fim_da_animacao_2(self):
+        # confere se a animacao chegou ao fim
+        if self.spriteAtual + 0.1 >= self.sheet.numeroDeFrames - 2:
+            return 1
+        else:
+            return 0
+
     def setFrame(self, frame):
         self.spriteAtual = frame
 
