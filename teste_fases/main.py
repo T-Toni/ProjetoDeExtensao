@@ -31,6 +31,15 @@ class Jogo:
 
         self.mixer = mixer.Mixer()
 
+        # Muda o nome da janela
+        pygame.display.set_caption("Jornada D'água")
+
+        # Carrega o ícone
+        icon = pygame.image.load("imagens/ideia_narrador1.png")
+
+        # Define o ícone da janela
+        pygame.display.set_icon(icon)
+
 
     def rodar(self):
 

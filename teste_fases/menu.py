@@ -211,6 +211,9 @@ class Menu:
 
     def run(self):
 
+        #inicia a musica
+        self.mixer.update(None)
+
         if not self.cloro1 and not self.cloro2:
 
             if not self.opcoes:
@@ -461,11 +464,9 @@ class Menu:
 
                     if self.obj_cloro1.fim_da_animacao_2():
                         self.cloro1 = True
-                        print("fnaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaf")
 
                     if self.obj_cloro2.fim_da_animacao_2():
                         self.cloro2 = True
-                        print("fnaf2222222222222222222222222222222222222222")
 
                         '''else:
                             self.obj_fase1.setVelocidade(0)
@@ -650,7 +651,7 @@ class Menu:
         if self.cloro1:
 
             if self.jogando == False:
-                self.fase_cloro1 = asteroids.Asteroids(self.janela, self.gerenciador, self.mouse)
+                self.fase_cloro1 = asteroids.Asteroids(self.janela, self.gerenciador, self.mouse, self.mixer)
                 self.jogando = True
 
 
@@ -676,7 +677,7 @@ class Menu:
         if self.cloro2:
 
             if self.jogando == False:
-                self.fase_cloro2 = cloro_fase5.Cloro(self.janela, self.gerenciador, self.mouse)
+                self.fase_cloro2 = cloro_fase5.Cloro(self.janela, self.gerenciador, self.mouse, self.mixer)
                 self.jogando = True
 
             self.funcionamento_cloro2 = self.fase_cloro2.run()

@@ -82,11 +82,11 @@ class Fase1:
         texto4_4 = None
 
 
-        self.intro1 = texto.Texto(texto1_1, texto1_2, texto1_3, texto1_4, 2, self.janela)
-        self.intro2 = texto.Texto(texto2_1, texto2_2, texto2_3, texto2_4, 2, self.janela)
-        self.intro3 = texto.Texto(texto3_1, texto3_2, texto3_3, texto3_4, 2, self.janela)
+        self.intro1 = texto.Texto(texto1_1, texto1_2, texto1_3, texto1_4, 2, self.janela, 1)
+        self.intro2 = texto.Texto(texto2_1, texto2_2, texto2_3, texto2_4, 2, self.janela, 2)
+        self.intro3 = texto.Texto(texto3_1, texto3_2, texto3_3, texto3_4, 2, self.janela, 2)
 
-        self.pos_pressionamento = texto.Texto(texto4_1, texto4_2, texto4_3, texto4_4, 0, self.janela)
+        self.pos_pressionamento = texto.Texto(texto4_1, texto4_2, texto4_3, texto4_4, 0, self.janela, 2)
 
     def run(self):
 

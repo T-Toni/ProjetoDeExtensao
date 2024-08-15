@@ -10,17 +10,24 @@ class Mixer:
 
         self.adicionaSons()
         self.adicionaFalas()
+        self.adicionaMusicas()
+
+        #variavel para manipular as musicas
+        self.musica = 0
 
         self.mixer_falas = pygame.mixer.Channel(0)
         self.mixer_sons = pygame.mixer.Channel(1)
         self.mixer_musica = pygame.mixer.Channel(2)
 
         self.mixer_falas.set_volume(0.5)
-        self.mixer_sons.set_volume(0.5)
-        self.mixer_musica.set_volume(0.5)
+        self.mixer_sons.set_volume(0.3)
+        self.mixer_musica.set_volume(0.4)
 
         #variável que permite que o jogador pule um dialogo por vez
         self.pulou = False
+
+        #variável que decide qual musica deve ser tocada
+        self.acao = False
 
 
     def set_volume_falas(self, volume):  #valores validos de 0 - 1
@@ -33,9 +40,9 @@ class Mixer:
 
     def set_volume_sons(self, volume):  # valores validos de 0 - 1
         valor = self.arredonda(volume)
-        print(valor)
+        #print(valor)
         self.mixer_sons.set_volume(valor)
-        print(self.mixer_sons.get_volume())
+        #print(self.mixer_sons.get_volume())
 
     def get_volume_sons(self):
         return self.arredonda(self.mixer_sons.get_volume())
@@ -108,20 +115,25 @@ class Mixer:
         self.falas['conclusao'] = pygame.mixer.Sound('narracao/conclusao.wav')
 
 
+    def adicionaMusicas(self):
+        self.musicas['musica1'] = pygame.mixer.Sound('musicas/trilha_1.wav')
+        self.musicas['musica2'] = pygame.mixer.Sound('musicas/trilha_2.wav')
 
     def toca_som(self, som):
         if som in self.sons:
             self.mixer_sons.play((self.sons[som]))
             self.tocando_agora[1] = som
         else:
-            print("audio não encontrado")
+            pass
+            #print("audio não encontrado")
 
     def toca_fala(self, fala):
         if fala in self.falas:
             self.mixer_falas.play(self.falas[fala])
             self.tocando_agora[0] = fala
         else:
-            print("audio não encontrado2")
+            pass
+            #print("audio não encontrado2")
 
     def tocando_falas(self):
         return self.mixer_falas.get_busy()
@@ -136,12 +148,25 @@ class Mixer:
 
     #função que faz qualquer fala tocada parar com o pressionamento de enter esquerdo
     def update(self, teclas):
-        if teclas[pygame.K_KP_ENTER]:
-            if not self.pulou and self.mixer_falas.get_busy():
-                self.mixer_falas.stop()
-            self.pulou = True
+
+        if teclas:
+            if teclas[pygame.K_KP_ENTER]:
+                if not self.pulou and self.mixer_falas.get_busy():
+                    self.mixer_falas.stop()
+                self.pulou = True
+            else:
+                self.pulou = False
+
+        #faz com que a musica se repita
+        if not self.acao:
+            if not self.mixer_musica.get_busy() or self.tocando_agora[2] == 'musica2':
+                self.mixer_musica.play(self.musicas['musica1'])
+                self.tocando_agora[2] = 'musica1'
         else:
-            self.pulou = False
+            if self.tocando_agora[2] == 'musica1' or not self.mixer_musica.get_busy():
+                self.mixer_musica.play(self.musicas['musica2'])
+                self.tocando_agora[2] = 'musica2'
+
 
         #LIMPA O DICIONARIO "tocando agora"
         if not self.mixer_falas.get_busy():
@@ -155,6 +180,12 @@ class Mixer:
     #para garantir a manipulação correta dos volumes
     def arredonda(self, volume):
         return round(volume * 10) / 10
+
+    def toca_musica(self, musica):
+        if musica == 1 and not self.mixer_musica.get_busy():
+            self.mixer_musica.play(self.musicas['musica1'])
+        elif musica == 0:
+            self.mixer_musica.stop()
 
 
 

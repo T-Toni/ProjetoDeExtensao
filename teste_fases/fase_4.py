@@ -96,10 +96,10 @@ class Fase4:
         texto4_3 = None
         texto4_4 = None
 
-        self.intro1 = texto.Texto(texto1_1, texto1_2, texto1_3, texto1_4, 0, self.janela)
-        self.intro2 = texto.Texto(texto2_1, texto2_2, texto2_3, texto2_4, 0, self.janela)
-        self.outro1 = texto.Texto(texto3_1, texto3_2, texto3_3, texto3_4, 0, self.janela)
-        self.outro2 = texto.Texto(texto4_1, texto4_2, texto4_3, texto4_4, 0, self.janela)
+        self.intro1 = texto.Texto(texto1_1, texto1_2, texto1_3, texto1_4, 0, self.janela, 2)
+        self.intro2 = texto.Texto(texto2_1, texto2_2, texto2_3, texto2_4, 0, self.janela, 2)
+        self.outro1 = texto.Texto(texto3_1, texto3_2, texto3_3, texto3_4, 0, self.janela, 1)
+        self.outro2 = texto.Texto(texto4_1, texto4_2, texto4_3, texto4_4, 0, self.janela, 2)
 
         self.intro1_iniciada = False
         self.intro2_iniciada = False

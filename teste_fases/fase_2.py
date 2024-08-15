@@ -93,7 +93,7 @@ class Fase2:
 
         #CLORO
         self.funcionamento_cloro = False    #determina se os cloros estão funcionando ainda na agua
-        self.fase_cloro = asteroids.Asteroids(self.janela, self.gerenciador, self.mouse)
+        self.fase_cloro = asteroids.Asteroids(self.janela, self.gerenciador, self.mouse, mixer)
 
         #funcionamento zoom
         self.multiplicador = 1      #variavel que determina o aumento do tanque
@@ -135,12 +135,12 @@ class Fase2:
         texto6_3 = 'Pressione a [SETA->] para a direita'
         texto6_4 = 'para seguir com o tratamento.'
 
-        self.intro1 = texto.Texto(texto1_1, texto1_2, texto1_3, texto1_4, 2, self.janela)
-        self.intro2 = texto.Texto(texto2_1, texto2_2, texto2_3, texto2_4, 2, self.janela)
-        self.pos_cal = texto.Texto(texto3_1, texto3_2, texto3_3, texto3_4, 2, self.janela)
-        self.intro_cloro = texto.Texto(texto5_1, texto5_2, texto5_3, texto5_4, 2, self.janela)
-        self.fim = texto.Texto(texto6_1, texto6_2, texto6_3, texto6_4, 2, self.janela)
-        self.erro = texto.Texto(texto4_1, texto4_2, texto4_3, texto4_4, 2, self.janela)
+        self.intro1 = texto.Texto(texto1_1, texto1_2, texto1_3, texto1_4, 2, self.janela, 2)
+        self.intro2 = texto.Texto(texto2_1, texto2_2, texto2_3, texto2_4, 2, self.janela, 2)
+        self.pos_cal = texto.Texto(texto3_1, texto3_2, texto3_3, texto3_4, 2, self.janela, 1)
+        self.intro_cloro = texto.Texto(texto5_1, texto5_2, texto5_3, texto5_4, 2, self.janela, 3)
+        self.fim = texto.Texto(texto6_1, texto6_2, texto6_3, texto6_4, 2, self.janela, 1)
+        self.erro = texto.Texto(texto4_1, texto4_2, texto4_3, texto4_4, 2, self.janela, 2)
 
         #variaveis para o bom funcionamento da narração
         self.concluiu_intro1 = False
@@ -148,8 +148,6 @@ class Fase2:
         self.concluiu_cal = False
         self.concluiu_intro_cloro = False
         self.concluiu_fim = False
-
-
 
     def run(self):
 
@@ -259,6 +257,8 @@ class Fase2:
             #transição
             else:
                 if self.multiplicador > 1:
+                    #muda a trilha sonora
+                    self.mixer.acao = False
                     #desenha os outros objetos da fase
                     self.background.desenha()
                     self.canos.desenha()
@@ -301,6 +301,7 @@ class Fase2:
                 self.multiplicador += 0.05
             else:
                 if not self.concluiu_intro_cloro:
+                    self.mixer.acao = True      #muda a trilha sonora
                     self.mixer.toca_fala('intro_cloro_fase2')
                     self.concluiu_intro_cloro = True
                 self.funcionamento_cloro = self.fase_cloro.run()

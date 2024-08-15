@@ -2,7 +2,7 @@ import pygame
 
 class Texto:
 
-    def __init__(self, texto1, texto2, texto3, texto4, posicao, tela):
+    def __init__(self, texto1, texto2, texto3, texto4, posicao, tela, narrador):
 
         #0 caso seja em baixo da tela e 1 caso seja no canto superior da tela
         self.posicao = posicao
@@ -36,6 +36,18 @@ class Texto:
         self.caixa_narrador = pygame.image.load('imagens/caixa_narrador.png')
         self.caixa_narrador = pygame.transform.scale(self.caixa_narrador, (32 * 8, 32 * 8))
 
+        #define o sprite do narrador
+
+        self.narrador_feliz = pygame.image.load('imagens/ideia_narrador1.png')
+        self.narrador_feliz = pygame.transform.scale(self.narrador_feliz, (24 * 8, 24 * 8))
+        self.narrador_neutro = pygame.image.load('imagens/ideia_narrador2.png')
+        self.narrador_neutro = pygame.transform.scale(self.narrador_neutro, (24 * 8, 24 * 8))
+        self.narrador_empolgado = pygame.image.load('imagens/ideia_narrador3.png')
+        self.narrador_empolgado = pygame.transform.scale(self.narrador_empolgado, (24 * 8, 24 * 8))
+        self.narrador_chocado = pygame.image.load('imagens/ideia_narrador4.png')
+        self.narrador_chocado = pygame.transform.scale(self.narrador_chocado, (24 * 8, 24 * 8))
+
+        self.narrador = narrador
 
 
     def escreve(self):
@@ -64,14 +76,23 @@ class Texto:
 
         #desenha a caixa de diálogo
         self.tela.blit(self.caixa, (-16 * 8, yc))
+        #desenha narrador
+        if self.narrador == 1:
+            self.tela.blit(self.narrador_feliz,  (132 * 8, yc + 52 * 8))
+        if self.narrador == 2:
+            self.tela.blit(self.narrador_neutro,  (132 * 8, yc + 52 * 8))
+        if self.narrador == 3:
+            self.tela.blit(self.narrador_empolgado,  (132 * 8, yc + 52 * 8))
+        if self.narrador == 4:
+            self.tela.blit(self.narrador_chocado,  (132 * 8, yc + 52 * 8))
         #desenha a caixa do narrador
         self.tela.blit(self.caixa_narrador, (128 * 8, yc + 48 * 8))
+
 
         distancia = 7*8
 
         #desenha o primeiro texto
         self.tela.blit(self.texto1, (x, y))
-
         #desenha os seguintes textos caso eles existam
 
         if self.texto2:
@@ -80,6 +101,7 @@ class Texto:
             self.tela.blit(self.texto3, (x, y + distancia * 2))
         if self.texto4:
             self.tela.blit(self.texto4, (x, y + distancia * 3))
+
 
 
 

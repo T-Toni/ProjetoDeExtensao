@@ -72,9 +72,9 @@ class Transicao_4:
         texto3_3 = 'para seguir com o tratamento.'
         texto3_4 = None
 
-        self.intro = texto.Texto(texto1_1, texto1_2, texto1_3, texto1_4, 0, self.janela)
-        self.erro = texto.Texto(texto2_1, texto2_2, texto2_3, texto2_4, 0, self.janela)
-        self.acerto = texto.Texto(texto3_1, texto3_2, texto3_3, texto3_4, 0, self.janela)
+        self.intro = texto.Texto(texto1_1, texto1_2, texto1_3, texto1_4, 0, self.janela, 4)
+        self.erro = texto.Texto(texto2_1, texto2_2, texto2_3, texto2_4, 0, self.janela, 2)
+        self.acerto = texto.Texto(texto3_1, texto3_2, texto3_3, texto3_4, 0, self.janela, 1)
 
         # booleanos para controlar as falas
         self.tocou_intro = False

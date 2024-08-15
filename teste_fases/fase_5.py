@@ -83,19 +83,19 @@ class Fase5:
 
         #transição entre essa fase e a proxima
         self.permitir_transicao = False
-        self.transicao = Botao(0, 0, 640*8, 90*8, "imagens/transicao_5-fim.png", self.janela, (243, 97, 255))
+        self.transicao = Botao(0, 0, 640*8, 90*8, "imagens/transicao_5-fim(2).png", self.janela, (243, 97, 255))
 
         #CLORO
         self.funcionamento_cloro = False    #determina se os cloros estão funcionando ainda na agua
-        self.fase_cloro = cloro_fase5.Cloro(self.janela, self.gerenciador, self.mouse)
+        self.fase_cloro = cloro_fase5.Cloro(self.janela, self.gerenciador, self.mouse, self.mixer)
 
         #funcionamento zoom
         self.multiplicador = 1      #variavel que determina o aumento do tanque
 
         #animação da agua indo para as casas
-        casas_sheet_img = pygame.image.load("imagens/animacao_casas-sheet.png")
-        casas_sheet_img = SpriteSheet(casas_sheet_img, 46)
-        self.animacao_casas = ObjAnimado(self.janela, casas_sheet_img, 160, 90, 8, (243, 97, 255), 0.3)
+        casas_sheet_img = pygame.image.load("imagens/final_casa-sheet.png")
+        casas_sheet_img = SpriteSheet(casas_sheet_img, 23)
+        self.animacao_casas = ObjAnimado(self.janela, casas_sheet_img, 160, 90, 8, (243, 97, 255), 0.2)
 
         #tela final
         self.tela_final = Botao(0, 0, 160*8, 90*8, "imagens/tela_final.png", self.janela, (243, 97, 255))
@@ -150,14 +150,14 @@ class Fase5:
         texto8_3 = None
         texto8_4 = None
 
-        self.intro1 = texto.Texto(texto1_1, texto1_2, texto1_3, texto1_4, 2, self.janela)
-        self.intro2 = texto.Texto(texto2_1, texto2_2, texto2_3, texto2_4, 2, self.janela)
-        self.pos_cal = texto.Texto(texto3_1, texto3_2, texto3_3, texto3_4, 2, self.janela)
-        self.intro_cloro = texto.Texto(texto5_1, texto5_2, texto5_3, texto5_4, 2, self.janela)
-        self.fim = texto.Texto(texto6_1, texto6_2, texto6_3, texto6_4, 2, self.janela)
-        self.erro = texto.Texto(texto4_1, texto4_2, texto4_3, texto4_4, 2, self.janela)
-        self.reservatorio = texto.Texto(texto7_1, texto7_2, texto7_3, texto7_4, 0, self.janela)
-        self.conclusao = texto.Texto(texto8_1, texto8_2, texto8_3, texto8_4, 2, self.janela)
+        self.intro1 = texto.Texto(texto1_1, texto1_2, texto1_3, texto1_4, 2, self.janela, 1)
+        self.intro2 = texto.Texto(texto2_1, texto2_2, texto2_3, texto2_4, 2, self.janela, 2)
+        self.pos_cal = texto.Texto(texto3_1, texto3_2, texto3_3, texto3_4, 2, self.janela, 1)
+        self.intro_cloro = texto.Texto(texto5_1, texto5_2, texto5_3, texto5_4, 2, self.janela, 3)
+        self.fim = texto.Texto(texto6_1, texto6_2, texto6_3, texto6_4, 2, self.janela, 1)
+        self.erro = texto.Texto(texto4_1, texto4_2, texto4_3, texto4_4, 2, self.janela, 2)
+        self.reservatorio = texto.Texto(texto7_1, texto7_2, texto7_3, texto7_4, 0, self.janela, 2)
+        self.conclusao = texto.Texto(texto8_1, texto8_2, texto8_3, texto8_4, 2, self.janela, 1)
 
         #booleanos para controlar as falas
         self.concluiu_intro1 = False
@@ -167,7 +167,6 @@ class Fase5:
         self.concluiu_fim = False
         self.concluiu_reservatorio = False
         self.concluiu_conclusao = False
-
 
     def run(self):
 
@@ -256,7 +255,6 @@ class Fase5:
                                 #narracao.play(erro_cal)
                                 self.mixer.toca_som('erro')
                                 #erro.play()
-                            print("use o cal primeiro")
 
 
                     if teclas[pygame.K_LEFT] and not self.funcionamento_cloro:
@@ -267,6 +265,7 @@ class Fase5:
 
             #transição
             else:
+                self.mixer.acao = False #troca a trilha
 
                 if not self.concluiu_fim:
                     self.mixer.toca_fala('fim_fase5')
@@ -292,7 +291,6 @@ class Fase5:
                     self.transicao.desenha()
 
                     if self.transicao.getX() < (-140 * 8) - 1 and not self.concluiu_reservatorio:
-                        print("safado")
                         self.mixer.toca_fala('reservatorio')
                         self.concluiu_reservatorio = True
 
@@ -308,7 +306,7 @@ class Fase5:
                         if teclas[pygame.K_RIGHT]:
                             self.transicao.setX(self.transicao.getX() - 3)
                     else:
-                        if self.animacao_casas.getFrame() >= 45 and not self.mixer.tocando_falas():
+                        if self.animacao_casas.getFrame() >= 22 and not self.mixer.tocando_falas():
                             self.tela_final.desenha()
                             self.botao_menu.desenha()
                             if teclas[pygame.K_SPACE] or (self.botao_menu.mouse_dentro(self.mouse.getX(), self.mouse.getY()) and self.mouse.getPressionado()):
@@ -331,6 +329,7 @@ class Fase5:
                 if not self.concluiu_intro_cloro:
                     self.mixer.toca_fala('intro_cloro_fase5')
                     self.concluiu_intro_cloro = True
+                self.mixer.acao = True  #troca a trilha
                 self.funcionamento_cloro = self.fase_cloro.run()
                 self.cloro_usado = not self.funcionamento_cloro
 

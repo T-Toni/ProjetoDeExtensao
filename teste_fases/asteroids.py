@@ -9,13 +9,15 @@ from asteroid import Particula
 
 
 class Asteroids:
-    def __init__(self, janela, gerenciador, mouse):
+    def __init__(self, janela, gerenciador, mouse, mixer):
         #necessário pra desenhar
         self.janela = janela
         #necessario para a troca de fases
         self.gerenciador = gerenciador
         #necessário para açôes com o mouse
         self.mouse = mouse
+        #necessário para tocar sons
+        self.mixer = mixer
 
         self.proximaFase = None
 
@@ -45,11 +47,11 @@ class Asteroids:
         self.inicio_da_fase = True
         self.fim_da_fase = False
 
-    def carrega_audios(self):
+    """def carrega_audios(self):
         morte_grave = pygame.mixer.Sound('sons/morte_grave.wav')
         grito_grave = pygame.mixer.Sound('sons/grito_grave.wav')
 
-        return (morte_grave, grito_grave)
+        return (morte_grave, grito_grave)"""
 
     def comunica_sujeiras(self):
 
@@ -100,7 +102,7 @@ class Asteroids:
 
     def run(self):
 
-        (morte_grave, grito_grave) = self.carrega_audios()
+        #(morte_grave, grito_grave) = self.carrega_audios()
 
         self.janela.fill((62, 132, 119))
 
@@ -153,7 +155,7 @@ class Asteroids:
 
             self.desenha_particulas()
             sujeiras = self.desenha_sujeiras()
-            self.confere_colisao(morte_grave)
+            self.confere_colisao()
             self.comunica_sujeiras()
 
             #incrementa os timers
@@ -208,7 +210,7 @@ class Asteroids:
         for sujeira in self.vetor_sujeiras:
             #desenha as sujeiras
             sujeira.desenha(self.janela, self.nave.offset, self.nave.copia_rect)
-            sujeira.update(self.nave.copia_rect, self.tSujeiras)
+            sujeira.update(self.nave.copia_rect, self.tSujeiras, self.mixer)
             #incrementa i para cada sujeira
             num_sujeiras += 1
 
@@ -233,11 +235,11 @@ class Asteroids:
 
         return num_sujeiras
 
-    def confere_colisao(self, morte):
+    def confere_colisao(self):
 
         for sujeira in self.vetor_sujeiras:
             if self.nave.mask.overlap(sujeira.mask, [sujeira.x - self.nave.imagem_rect.x, sujeira.y - self.nave.imagem_rect.y]):
-                morte.play()
+                self.mixer.toca_som('morte_grave')
                 self.vetor_sujeiras.remove(sujeira)
                 #reseta o timer
                 #self.timer = 0

@@ -100,7 +100,7 @@ class Botao:
             self.largura_alternativa = (self.largura * valor)
             self.altura_alternativa = (self.altura * valor)
             self.imagem_alternativa = pygame.transform.scale(self.imagem, (self.largura_alternativa, self.altura_alternativa))
-            print(self.largura_alternativa)
-            print(self.altura_alternativa)
+            #print(self.largura_alternativa)
+            #print(self.altura_alternativa)
             #print(self.largura_alternativa / 8)
 

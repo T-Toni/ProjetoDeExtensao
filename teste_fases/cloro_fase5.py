@@ -8,13 +8,15 @@ from asteroid import Particula
 
 
 class Cloro:
-    def __init__(self, janela, gerenciador, mouse):
+    def __init__(self, janela, gerenciador, mouse, mixer):
         #necessário pra desenhar
         self.janela = janela
         #necessario para a troca de fases
         self.gerenciador = gerenciador
         #necessário para açôes com o mouse
         self.mouse = mouse
+        #necessário para tocar sons
+        self.mixer = mixer
 
         self.proximaFase = None
 
@@ -90,14 +92,13 @@ class Cloro:
         vetor_sujeiras = [Sujeira(None, None) for _ in range(self.tamanho_vetor)]
         return vetor_sujeiras
 
-
     def carrega_audios(self):
         morte = pygame.mixer.Sound('sons/morte_aguda.wav')
         return (morte)
 
     def run(self):
 
-        (morte) = self.carrega_audios()
+        #(morte) = self.carrega_audios()
 
         self.janela.fill((67, 147, 183))
 
@@ -150,7 +151,7 @@ class Cloro:
 
             self.desenha_particulas()
             sujeiras = self.desenha_sujeiras()
-            self.confere_colisao(morte)
+            self.confere_colisao()
             self.comunica_sujeiras()
 
             #incrementa os timers
@@ -205,7 +206,7 @@ class Cloro:
         for sujeira in self.vetor_sujeiras:
             #desenha as sujeiras
             sujeira.desenha(self.janela, self.nave.offset, self.nave.copia_rect)
-            sujeira.update(self.nave.copia_rect, self.tSujeiras)
+            sujeira.update(self.nave.copia_rect, self.tSujeiras, self.mixer)
             #incrementa i para cada sujeira
             num_sujeiras += 1
 
@@ -230,12 +231,12 @@ class Cloro:
 
         return num_sujeiras
 
-    def confere_colisao(self, morte):
+    def confere_colisao(self):
 
         for sujeira in self.vetor_sujeiras:
             if self.nave.mask.overlap(sujeira.mask, [sujeira.x - self.nave.imagem_rect.x, sujeira.y - self.nave.imagem_rect.y]):
                 self.vetor_sujeiras.remove(sujeira)
-                morte.play()
+                self.mixer.toca_som('morte_aguda')
                 #reseta o timer
                 #self.timer = 0
 

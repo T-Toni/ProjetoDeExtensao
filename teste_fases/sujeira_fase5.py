@@ -21,7 +21,7 @@ class Sujeira:
             self.x = x
             self.y = y
 
-        velocidade = random.uniform(1, 5)
+        velocidade = random.uniform(1, 4)
 
         self.direcaox = random.random()*-velocidade
         self.direcaoy = random.random()*velocidade
@@ -138,9 +138,9 @@ class Sujeira:
         # Se nenhum ponto estiver dentro do círculo, não há colisão
         return False
 
-    def update(self, nave_rect, timer):
+    def update(self, nave_rect, timer, mixer):
 
-        grito = self.carrega_audios()
+        #grito = self.carrega_audios()
 
         #acrescenta a direção a sua posição para que ele se mova
         self.x += self.direcaox
@@ -165,17 +165,17 @@ class Sujeira:
             self.y += self.altura_tela + acrecimoObjeto         #baixo
 
         #funcionamento do sensor
-        self.movimentacao(nave_rect, timer, grito)
+        self.movimentacao(nave_rect, timer, mixer)
 
         #funcionamento do movimento por propagação
         self.contato = False
 
-    def movimentacao(self, nave_rect, timer, grito):
+    def movimentacao(self, nave_rect, timer, mixer):
         if self.sensor(nave_rect):
 
             self.altera_sprite("imagens/mini_sujeira_apavorada.png")
             if not self.grito:
-                grito.play()
+                mixer.toca_som('grito_agudo')
                 self.grito = True
 
             self.navex = nave_rect.center[0] - 7*4

@@ -138,16 +138,10 @@ class Asteroid:
 
         return (morte_aguda, grito_agudo)"""
 
-    def carrega_audios(self):
-        morte_grave = pygame.mixer.Sound('sons/morte_grave.wav')
-        grito_grave = pygame.mixer.Sound('sons/grito_grave.wav')
-
-        return (morte_grave, grito_grave)
-
-    def update(self, nave_rect, timer):
+    def update(self, nave_rect, timer, mixer):
 
         #inicializa os sons
-        (morte, grito) = self.carrega_audios()
+        #(morte, grito) = self.carrega_audios()
 
         #acrescenta a direção a sua posição para que ele se mova
         self.x += self.direcaox
@@ -172,20 +166,20 @@ class Asteroid:
             self.y += self.altura_tela + acrecimoObjeto         #baixo
 
         #funcionamento do sensor
-        self.movimentacao(nave_rect, timer, grito)
+        self.movimentacao(nave_rect, timer, mixer)
 
         #funcionamento do movimento por propagação
         self.contato = False
 
 
-    def movimentacao(self, nave_rect, timer, grito):
+    def movimentacao(self, nave_rect, timer, mixer):
 
         if self.sensor(nave_rect):
 
             self.altera_sprite("imagens/sujeira_apavorada.png")
             #toca o grito de medo
             if not self.grito:
-                grito.play()
+                mixer.toca_som('grito_grave')
             self.grito = True
 
 
